@@ -1,0 +1,44 @@
+ANNEX D — TUTOR UI CONSTRAINT MAPPING (v1.0)
+PURPOSE: Defines how Tutor UI controls map to flight.schema.json. Tutor UI is PRIMARY GUARDIAN of schema correctness.
+
+D.1 ROOT-LEVEL METADATA CONTROLS:
+
+UI CONTROL	SCHEMA PATH	TYPE	CONSTRAINTS	UI ENFORCEMENT
+Lesson Name	lesson.name	string	Required, 3-64 chars, filename-safe	Inline validation, export disabled if invalid
+Callsign	lesson.callsign	string	Required, 3-8 chars, A-Z0-9 only	Auto-uppercase, reject invalid chars
+Route	lesson.route	string	Required, ICAO-ICAO format	Regex validation, export blocked if invalid
+Aircraft Type	lesson.aircraft_type	string	Required, free text, 2-12 chars	Length-limited input
+Difficulty	lesson.difficulty	enum	Required, must be from list	Dropdown only: beginner/intermediate/advanced
+
+D.2 STEP LIST CONTROLS:
+
+UI CONTROL	SCHEMA PATH	TYPE	CONSTRAINTS	UI ENFORCEMENT
+Step Number	steps[n].step	integer	Auto-generated, sequential, starts at 1	Non-editable, recalculated on reorder
+Phase	steps[n].phase	enum	Must be from locked list	Dropdown only with values: PREFLIGHT, PUSHBACK, TAXI, LINE-UP, TAKEOFF, CLIMB, ENROUTE, DESCENT, APPROACH, LANDING, TAXI-IN
+ATC Instruction	steps[n].atc	string	Required, non-empty	Cannot save step if empty
+Expected Readback	steps[n].expected_readback	string	Required, non-empty	Cannot save step if empty
+Strictness	steps[n].strictness	enum	Optional, guidance only	Dropdown: standard/critical/training/listen_only (default: standard)
+Tutor Notes	steps[n].notes	string	Optional, tutor-only	Free text field, not exported to student
+
+D.3 REQUIRED INPUT CONTROLS:
+
+UI CONTROL	SCHEMA PATH	TYPE	CONSTRAINTS	UI ENFORCEMENT
+Input Required Toggle	steps[n].required_input	boolean	If OFF → required_input omitted	Toggle gates sub-controls
+Input Type	steps[n].required_input.type	enum	Required when toggle ON	Dropdown only: none/com_frequency/squawk/heading/altitude
+Input Value	steps[n].required_input.value	string	Required when type ≠ "none"	Live regex validation per type, cannot save if invalid
+
+D.4 STEP CONTROL SAFETY RULES:
+
+At least one step required (cannot export with zero steps)
+Step must be internally complete (missing fields block export)
+Input Type and Value are inseparable (no orphaned fields)
+
+D.5 EXPORT GUARANTEES:
+Export button enabled ONLY if:
+
+All root fields valid
+All steps valid
+All required inputs valid (when applicable)
+schema_version "1.0" auto-injected
+
+D.6 AUTHORITATIVE STATUS: This annex is normative. Tutor UI must implement these constraints.

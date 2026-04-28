@@ -1,0 +1,399 @@
+# SkyTalk v1 — System Design Document
+
+## 1. System Overview
+
+SkyTalk consists of **two completely independent desktop applications**:
+
+* **Tutor App (ATC / Instructor Station)**
+* **Student App (Pilot / Cockpit Simulator)**
+
+The applications **do not connect to each other technically**.
+Synchronization happens through:
+
+1. **Human voice over Zoom (or similar)**
+2. **A shared, pre-authored `flight.json` file**
+
+This separation is deliberate and non-negotiable.
+SkyTalk is designed as a **human-in-the-loop training system**, not a networked simulator.
+
+---
+
+## 2. Core Design Principles
+
+* No runtime networking between Tutor and Student
+* Deterministic behavior driven by `flight.json`
+* Tutor controls lesson progression verbally
+* Student cannot force state transitions
+* UI enforces discipline, not convenience
+* Schema-validated data only
+
+---
+
+## 3. Shared Concepts (Both Apps)
+
+### 3.1 Flight Lesson File (`flight.json`)
+
+A single JSON file defines:
+
+* Lesson identity
+* Aircraft and route context
+* Ordered communication steps
+* Optional required pilot inputs
+
+Both apps load the **same file**, interpret it independently, and rely on verbal coordination.
+
+---
+
+### 3.2 Schema Versioning (Authoritative Contract)
+
+Every flight lesson file **MUST** declare a schema version.
+
+```json
+"schema_version": "1.0"
+```
+
+Rules:
+
+* Required field
+* Exact match only
+* No fallback or inference
+
+Responsibilities:
+
+* **Tutor App**: injects schema_version automatically
+* **Student App**: validates schema_version before loading
+
+Files with unsupported schema versions are rejected immediately.
+
+---
+
+## 4. flight.json — Locked Structure (v1)
+
+### 4.1 Top-Level Structure
+
+```json
+{
+  "schema_version": "1.0",
+  "lesson": { },
+  "steps": [ ]
+}
+```
+
+No additional top-level properties are allowed.
+
+---
+
+### 4.2 lesson Object
+
+Identity and display metadata only.
+Immutable during runtime.
+
+```json
+"lesson": {
+  "name": "JFK Tower Basics",
+  "callsign": "KLM641",
+  "route": "JFK-EHAM",
+  "aircraft": "B747-400",
+  "level": "Beginner"
+}
+```
+
+Rules:
+
+* `name` == filename (without .json)
+* No logic depends on lesson metadata
+
+---
+
+### 4.3 steps Array
+
+Ordered list of communication steps.
+
+Each step represents **one ATC–Pilot interaction unit**.
+
+Required fields:
+
+* id
+* phase
+* atc
+* expected_readback
+
+Optional fields:
+
+* required_input
+* notes
+
+---
+
+### 4.4 Flight Phases (Locked)
+
+```
+PREFLIGHT
+PUSHBACK
+TAXI
+LINE-UP
+TAKEOFF
+CLIMB
+ENROUTE
+DESCENT
+APPROACH
+LANDING
+TAXI-IN
+```
+
+---
+
+### 4.5 Required Input Object
+
+Used to simulate cockpit knob / dial interaction.
+
+```json
+"required_input": {
+  "type": "frequency",
+  "value": "118.7"
+}
+```
+
+Input types (v1):
+
+* frequency
+* squawk
+* heading
+* altitude
+
+---
+
+## 5. Tutor App — Design
+
+### 5.1 Purpose
+
+* Create and validate flight lessons
+* Execute lessons as ATC
+* Maintain lesson inventory
+
+---
+
+### 5.2 Tutor Flight Lesson UI (Execution)
+
+**Top Panel**
+
+* Flight Lesson Name (.json)
+* Callsign
+* Route
+* Aircraft Type
+* Difficulty Label
+* Step Progress Indicator
+
+**Main Panel**
+
+* ATC Phrase (semi-transparent, labeled "ATC")
+* Expected Pilot Readback (semi-transparent, labeled "Pilot")
+* Required Input (type + expected value, if any)
+* Current Phase
+
+**Bottom Panel**
+
+* Tutor Notes
+* End Flight Lesson
+
+---
+
+### 5.3 Tutor Step Control Actions
+
+| Action       | Control        |
+| ------------ | -------------- |
+| Advance Step | Right Arrow    |
+| Repeat Step  | Spacebar       |
+| Skip Step    | Right Arrow ×2 |
+| Pause        | No action      |
+
+Tutor controls pace verbally.
+UI never forces progression.
+
+---
+
+### 5.4 Tutor Create Flight Lesson UI
+
+**Lesson Metadata Inputs**
+
+* Lesson Name (filename)
+* Callsign
+* Route
+* Aircraft Type
+* Difficulty Level
+
+**Step Editor (Repeating Block)**
+
+For each step:
+
+* Step Number (auto)
+* Phase (dropdown)
+* ATC Phrase
+* Expected Pilot Readback
+* Required Input Toggle
+
+  * Input Type
+  * Expected Value
+* Notes (optional)
+
+---
+
+### 5.5 Tutor Validation Constraints
+
+Tutor App enforces:
+
+* Valid schema_version
+* All required fields present
+* Phase enum enforcement
+* Input-type-specific value validation
+* No duplicate step IDs
+
+Export is blocked if validation fails.
+
+---
+
+## 6. Student App — Design
+
+### 6.1 Purpose
+
+* Provide immersive cockpit context
+* Enforce disciplined student interaction
+* Validate pilot-required inputs locally
+
+---
+
+### 6.2 Student Flight Lesson UI Layout
+
+* Cockpit-style visual (static or lightly animated)
+* Callsign / Aircraft / Route (bottom-left)
+* Required Input Field (bottom-right)
+* End Flight Lesson (Esc, top-right, discreet)
+
+---
+
+### 6.3 Required Input Field (Core Element)
+
+**Always visible**
+
+* Semi-transparent
+* Fixed position
+* Styled as:
+
+  * COM frequency window
+  * Squawk box
+  * Heading selector
+  * Altitude window
+
+---
+
+### 6.4 Required Input Behavior
+
+* Accepts only expected input type
+* Enter submits input
+
+**Visual Feedback**
+
+* Input required → flashes every second
+* Wrong input → red flash
+* Correct input → green flash
+* Attempt to advance without input → red flash
+
+---
+
+### 6.5 Student Step Flow
+
+1. Tutor speaks ATC instruction
+2. Student presses spacebar → static
+3. Student speaks readback
+4. Student enters required value (if any)
+5. Presses Enter
+6. App validates locally
+7. Student waits
+8. Tutor gives verbal approval
+9. Student presses Right Arrow
+
+---
+
+### 6.6 Validation Logic
+
+* Local only
+* Exact match
+* No fuzzy logic
+* No hints
+
+Failure results in no progression.
+
+---
+
+### 6.7 Student State Machine
+
+```
+Read annex B
+```
+
+Student cannot force transitions.
+
+---
+
+## 7. Flashcards Feature (Student App)
+
+### 7.1 Purpose
+
+Self-study only.
+No interaction with simulator mode.
+
+---
+
+### 7.2 Flashcard UI (Simplified)
+
+**Front (Prompt)**
+
+* Card Number / Count
+* Callsign (toggle)
+* Destination (toggle)
+* Phase (toggle)
+* ATC Prompt
+* Optional Russian Translation
+
+Navigation:
+
+* Previous / Next
+
+**Back (Answer)**
+
+* Expected Pilot Response
+* Optional Russian Translation
+
+Student flips cards.
+Tutor does not interact during sessions.
+
+---
+
+## 8. Modes (Student App)
+
+* Simulator Mode
+* Flashcards Mode
+
+Modes are completely independent.
+
+---
+
+## 9. Non-Goals (v1)
+
+* No networking
+* No speech recognition
+* No fuzzy matching
+* No automated scoring
+* No AI tutor
+
+---
+
+## 10. v1 Is Locked
+
+This document defines SkyTalk v1.
+
+Changes require:
+
+* Schema version bump
+* Explicit migration plan
+* Updated validation rules

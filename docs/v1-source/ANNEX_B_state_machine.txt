@@ -1,0 +1,225 @@
+ANNEX B — STUDENT STATE MACHINE & TRANSITION TABLE v2.0
+
+AUTHORITATIVE STATEMENT: The Student App is a strict finite state machine. Tutor authority is external and verbal only.
+
+B.1 CORRECTED STUDENT STATES (CANONICAL)
+Core States (6 total):
+
+IDLE - App launched, no lesson active
+LISTENING - Tutor ATC instruction in progress
+INPUT_REQUIRED - Current step requires typed input
+INPUT_NOT_REQUIRED - Current step has no typed input
+READY_TO_ADVANCE - Correct response given, awaiting verbal cue to proceed
+COMPLETED - Lesson finished
+
+NOTES:
+
+Removed INPUT_ACCEPTED (merged into READY_TO_ADVANCE)
+Removed AWAITING_TUTOR_APPROVAL (unnecessary)
+
+Only ONE state may be active at any time
+
+B.2 INPUT FIELD LOCKING RULES (CRITICAL)
+
+Rule IF-01 (Input Field Locking):
+When spacebar is pressed, the input field is IMMEDIATELY DISABLED.
+When spacebar is released, the input field is RE-ENABLED (if applicable).
+
+This applies in ALL states except:
+- IDLE (spacebar disabled)
+- COMPLETED (spacebar disabled)
+
+Implementation:
+- keydown(spacebar) → disable input field
+- keyup(spacebar) → enable input field (if state allows)
+
+B.3 STATE TRANSITIONS (EXACT & CORRECTED)
+
+CURRENT STATE	        TRIGGER	                             CONDITION	                  RESULT STATE	              VISUAL FEEDBACK	          INPUT FIELD
+IDLE	                Flight loaded	                     Valid flight.json	          LISTENING	              None	                  Disabled
+LISTENING	        Spacebar (press)	             Any	                  LISTENING (stay)	      Static sound	          Disabled (while held)
+LISTENING	        Spacebar (release)	             Any	                  LISTENING (stay)	      Static stops	          Disabled
+LISTENING	        Tutor finishes speaking (external)   Step requires input          INPUT_REQUIRED	      Input field flashes (1Hz)	  Enabled
+LISTENING	        Tutor finishes speaking (external)   Step has no required input   INPUT_NOT_REQUIRED	      None	                  Disabled
+INPUT_REQUIRED	        Spacebar (press)	             Any	                  INPUT_REQUIRED (stay)	      Static sound	          Disabled (while held)
+INPUT_REQUIRED	        Spacebar (release)	             Any	                  INPUT_REQUIRED (stay)	      Static stops	          Enabled
+INPUT_REQUIRED	        Enter	                             Input = expected value	  READY_TO_ADVANCE	      Green flash (once)	  Locked (shows correct value)
+INPUT_REQUIRED	        Enter	                             Input ≠ expected value	  INPUT_REQUIRED (stay)	      Red flash (once)	          Enabled (cleared)
+INPUT_NOT_REQUIRED	Spacebar (press)	             Any	                  INPUT_NOT_REQUIRED (stay)   Static sound	          Disabled (while held)
+INPUT_NOT_REQUIRED	Spacebar (release)	             Any	                  INPUT_NOT_REQUIRED (stay)   Static stops	          Disabled
+INPUT_NOT_REQUIRED	Right Arrow	                     Tutor approval perceived	  READY_TO_ADVANCE	      None                        Disabled
+INPUT_NOT_REQUIRED	Right Arrow	                     No approval yet	          INPUT_NOT_REQUIRED (stay)   None	                  Disabled
+READY_TO_ADVANCE	Spacebar (press)	             Any	                  READY_TO_ADVANCE (stay)     Static sound	          Disabled (while held)
+READY_TO_ADVANCE	Spacebar (release)	             Any	                  READY_TO_ADVANCE (stay)     Static stops	          Disabled
+READY_TO_ADVANCE	Right Arrow	                     Steps remaining	          LISTENING (next step)	      None	                  Disabled
+READY_TO_ADVANCE	Right Arrow	                     No steps remaining	          COMPLETED	              Lesson end UI	          Disabled
+COMPLETED	        Esc	                             Any	                  IDLE	                      Exit lesson	          Disabled
+
+B.4 STEP NUMBER DISPLAY RULES
+
+Rule UI-01 (Step Display):
+
+Student UI MUST display current step number and total steps.
+
+Format: "Step: X/Y" where:
+- X = current step (1-indexed)
+- Y = total steps in lesson
+
+Position: Bottom status bar, always visible
+
+Updates: Immediately upon state transition to LISTENING (new step)
+
+State-Specific Display:
+IDLE → "Step: 0/0" or hidden
+LISTENING → "Step: X/Y" (X = current step)
+All other states → "Step: X/Y" (unchanged)
+
+B.5 RIGHT ARROW AUTHORITY MATRIX (UPDATED)
+
+STATE	             RIGHT ARROW	NOTES
+IDLE	             Blocked	
+LISTENING	     Blocked	
+INPUT_REQUIRED	     Blocked	        Red flash if attempted
+INPUT_NOT_REQUIRED   Conditional	Requires perceived tutor approval
+READY_TO_ADVANCE     Allowed	        Advances to next step or COMPLETED
+COMPLETED	     Blocked
+	
+B.6 INPUT FIELD STATE MATRIX
+
+STATE	             INPUT FIELD	SPACEBAR EFFECT
+IDLE	             Disabled	        Disabled (no static)
+LISTENING	     Disabled	        Enabled (static only)
+INPUT_REQUIRED	     Enabled	        Disables field while held
+INPUT_NOT_REQUIRED   Disabled	        Enabled (static only)
+READY_TO_ADVANCE     Disabled	        Enabled (static only)
+COMPLETED	     Disabled	        Disabled (no static)
+
+B.7 COMPLETE WORKFLOW EXAMPLE
+
+Tutor: (speaks) "KLM641, contact Tower on 118.70"
+
+Student App:
+- State: LISTENING → INPUT_REQUIRED (auto)
+- Display: "Step: 5/24" (bottom bar)
+- Input field: Starts flashing (1Hz), enabled
+
+Student:
+1. Presses spacebar (↓) → static starts, input field disabled
+2. Speaks: "One one eight decimal seven zero, KLM641"
+3. Releases spacebar (↑) → static stops, input field re-enabled
+4. Types: "118.70"
+5. Presses Enter
+
+App:
+- Validation: "118.70" == "118.70" ✓
+- State: INPUT_REQUIRED → READY_TO_ADVANCE
+- Visual: Green flash (once)
+- Input field: Locked with "118.70" (green text)
+
+Tutor:
+- Sees green flash via screen share
+- Says: "Roger"
+
+Student:
+1. Hears "Roger"
+2. Presses Right Arrow
+
+App:
+- State: READY_TO_ADVANCE → LISTENING (step 6)
+- Display: "Step: 6/24"
+- Input field: Disabled (awaiting next instruction)
+
+B.8 ERROR RECOVERY FLOW
+
+Scenario: Wrong input
+
+Student types: "118.7" (missing trailing zero)
+Presses Enter
+
+App:
+- Validation: "118.7" != "118.70" ✗
+- State: INPUT_REQUIRED (stay)
+- Visual: Red flash (once)
+- Input field: Cleared, enabled, resumes flashing
+
+Tutor:
+- Sees red flash via screen share
+- Says: "Correction. One one eight decimal seven zero"
+
+Student:
+- Re-attempts with correct value
+
+B.9 HARD GUARANTEES
+
+Student cannot skip steps - Right Arrow blocked except in READY_TO_ADVANCE
+No input during transmission - Spacebar disables input field
+No hidden state - Step number always visible
+No auto-advancement - Requires explicit Right Arrow in correct state
+No tutor override via software - All authority remains verbal
+
+B.10 IMPLEMENTATION PSEUDOCODE
+
+// State machine core
+class StudentStateMachine {
+  states = ['IDLE', 'LISTENING', 'INPUT_REQUIRED', 
+            'INPUT_NOT_REQUIRED', 'READY_TO_ADVANCE', 'COMPLETED'];
+  
+  currentState = 'IDLE';
+  
+  onSpacebarPress() {
+    if (this.currentState !== 'IDLE' && this.currentState !== 'COMPLETED') {
+      playStatic();
+      disableInputField();  // Rule IF-01
+    }
+  }
+  
+  onSpacebarRelease() {
+    stopStatic();
+    if (this.currentState === 'INPUT_REQUIRED') {
+      enableInputField();  // Re-enable after transmission
+    }
+  }
+  
+  onEnterPressed(inputValue) {
+    if (this.currentState === 'INPUT_REQUIRED') {
+      if (inputValue === expectedValue) {
+        flashGreen();
+        lockInputField(inputValue);
+        this.currentState = 'READY_TO_ADVANCE';
+      } else {
+        flashRed();
+        clearInputField();
+        // Stay in INPUT_REQUIRED
+      }
+    }
+  }
+  
+  onRightArrow() {
+    switch (this.currentState) {
+      case 'READY_TO_ADVANCE':
+        advanceStep();
+        this.currentState = 'LISTENING';
+        updateStepDisplay(currentStep, totalSteps);
+        disableInputField();
+        break;
+        
+      case 'INPUT_NOT_REQUIRED':
+        // Requires external tutor approval (not enforced in software)
+        this.currentState = 'READY_TO_ADVANCE';
+        break;
+        
+      default:
+        flashRed();  // Blocked in other states
+    }
+  }
+}
+
+B.11 DESIGN JUSTIFICATION
+
+This revised state machine:
+Eliminates redundant states - Cleaner, easier to implement
+Enforces radio discipline - Can't type while transmitting
+Provides clear visual feedback - Flashing, colors, step display
+Maintains tutor authority - All progression requires verbal coordination
+Is deterministic - Same behavior every time
+

@@ -1,0 +1,318 @@
+SKYTALK AVIATION RADIO SIMULATOR — OPERATIONAL RULES v1.0
+
+1. TUTOR AUTHORING RULES (Creating flight.json)
+
+1.1 Frequency Notation Rules
+
+Rule TA-01: All frequencies must be represented with explicit trailing zeros when applicable.
+Rule TA-02: Format must match aviation standard: ###.## (up to 3 decimal places).
+Rule TA-03: Examples:
+
+118.70 ✓ (correct - includes trailing zero)
+118.7 ✗ (incorrect - missing trailing zero)
+121.500 ✓ (correct)
+121.5 ✗ (incorrect)
+
+Rule TA-04: Decimal portion must match actual aviation frequency spacing:
+
+VHF COM: .00, .05, .10, .15, ..., .95, .00
+
+No arbitrary decimals (e.g., 118.73 invalid)
+
+1.2 Squawk Code Rules
+
+Rule TA-05: Must be 4 octal digits (0-7 only).
+Rule TA-06: Must represent valid transponder codes:
+
+1200 (VFR)
+7500 (Hijack)
+7600 (Radio failure)
+7700 (Emergency)
+
+1.3 Heading Rules
+
+Rule TA-07: Must be 3 digits with leading zeros when <100.
+Rule TA-08: Examples:
+
+090 ✓ (correct)
+90 ✗ (incorrect - must be 3 digits)
+360 ✓ (correct)
+005 ✓ (correct)
+
+1.4 Altitude Rules
+
+Rule TA-09: Must be in feet, digits only.
+Rule TA-10: Must use standard altitudes:
+
+3000, 5000, 7000, etc. (thousands)
+35000 (Flight Level 350)
+12000 (Transition altitude)
+
+1.5 Phraseology Consistency Rules
+
+Rule TA-11: ATC phrase text must match the verbal phrase exactly.
+Rule TA-12: If frequency is 118.70, ATC phrase must say: "contact Tower on one one eight decimal seven zero"
+Rule TA-13: Expected readback must match aviation phraseology:
+
+✓ "One one eight decimal seven zero, KLM641"
+✗ "118.7, KLM641" (if stored as 118.70)
+
+Rule TA-14: Numbers in phrases must use ICAO pronunciation:
+
+9 = "niner"
+5 = "fife"
+3 = "tree"
+4 = "fower"
+
+1.6 Step Design Rules
+
+Rule TA-15: Each step must have exactly one ATC instruction.
+Rule TA-16: Instructions must be procedurally correct for the phase.
+Rule TA-17: Required input must match the instruction:
+
+If instruction: "Squawk 4721" → Required input type: squawk, value: "4721"
+If instruction: "Turn left heading 270" → Required input type: heading, value: "270"
+
+2. TUTOR EXECUTION RULES (Conducting Flight Lesson)
+
+2.1 Verbal Delivery Rules
+
+Rule TE-01: Must pronounce numbers exactly as they appear in flight.json:
+
+118.70 → "one one eight decimal seven zero"
+121.50 → "one two one decimal five zero"
+
+NOT "one two one point five"
+
+Rule TE-02: Must use ICAO alphabet for letters:
+
+A = Alpha, B = Bravo, C = Charlie, etc.
+
+Rule TE-03: Must include all required elements:
+
+Callsign + instruction + frequency/squawk/heading
+
+2.2 Pacing Rules
+
+Rule TE-04: Must wait for student's spacebar static before speaking.
+Rule TE-05: Must allow natural pause after instruction for student response.
+Rule TE-06: Must not rush student - minimum 3-second wait time.
+Rule TE-07: Must give clear verbal approval: "Roger", "Correct", "Affirm"
+
+2.3 Monitoring Rules
+
+Rule TE-08: Must watch student's shared screen continuously.
+Rule TE-09: Must verify:
+
+Student pressed spacebar before speaking
+Student gave correct readback
+Input field shows correct value (if required)
+Student waited for approval before advancing
+
+Rule TE-10: Must NOT give approval until all 4 conditions met.
+
+2.4 Correction Rules
+
+Rule TE-11: If student error:
+
+State: "Correction"
+Repeat instruction clearly
+Wait for corrected response
+
+Rule TE-12: Do not accept partial correctness.
+Rule TE-13: Three attempts maximum per step, then demonstrate.
+
+2.5 Keyboard Control Rules
+
+Rule TE-14: Spacebar = static + repeat instruction
+Rule TE-15: Right Arrow = advance only after student has advanced
+Rule TE-16: Right Arrow ×2 = skip step (explain to student)
+Rule TE-17: No random key presses.
+
+3. STUDENT PARTICIPATION RULES
+
+3.1 Radio Discipline Rules
+
+Rule SP-01: Must press and hold spacebar BEFORE speaking.
+Rule SP-02: Must release spacebar AFTER finishing transmission.
+Rule SP-03: No "double keying" - one press per transmission.
+Rule SP-04: Must wait for ATC to finish before responding.
+
+3.2 Readback Rules
+
+Rule SP-05: Must include all elements:
+
+Instruction acknowledgment
+Numbers/frequencies repeated back
+Callsign at end
+
+Rule SP-06: Examples:
+
+ATC: "KLM641, contact Tower on 118.70"
+
+✓ "One one eight decimal seven zero, KLM641"
+✗ "118.7, KLM641" (missing zero)
+✗ "Roger" (incomplete)
+
+Rule SP-07: Must use proper pronunciation:
+
+"Niner" not "Nine"
+"Fife" not "Five"
+"Tree" not "Three"
+
+3.3 Input Entry Rules
+
+Rule SP-08: Must input EXACTLY what was heard:
+
+Heard: "one one eight decimal seven zero" → Input: 118.70
+Heard: "squawk four seven two one" → Input: 4721
+Heard: "heading two seven zero" → Input: 270
+
+Rule SP-09: Must press Enter to submit.
+Rule SP-10: Must NOT try to advance (Right Arrow) until:
+
+Input submitted AND correct (green flash)
+Tutor gave verbal approval
+
+Rule SP-11: If red flash: re-listen, re-enter, do NOT ask tutor for hint.
+
+3.4 Timing Rules
+
+Rule SP-12: Natural response time: 1-3 seconds after ATC finishes.
+Rule SP-13: No immediate "shotgun" responses.
+Rule SP-14: If unsure: "Say again" (press spacebar + phrase).
+Rule SP-15: Do NOT advance without explicit tutor approval.
+
+3.5 Procedural Rules
+
+Rule SP-16: Follow phases in order:
+
+Listen
+Static
+Readback
+Input (if required)
+Wait approval
+Advance
+
+Rule SP-17: No skipping ahead in lesson.
+Rule SP-18: No asking for next instruction.
+
+4. CROSS-VALIDATION RULES
+
+4.1 Frequency Alignment Rules
+
+Rule CV-01: Three-way match required:
+
+flight.json value (e.g., 118.70)
+Tutor verbal (e.g., "one one eight decimal seven zero")
+Student input (e.g., 118.70)
+
+Rule CV-02: Mismatch causes lesson failure.
+
+4.2 Number Pronunciation Table
+
+Digit | ICAO | Common Mistake | Acceptable?
+------|------|----------------|------------
+1     | One  | Won            | ✗
+2     | Two  | Too            | ✗
+3     | Tree | Three          | ✗
+4     | Fower| Four           | ✗
+5     | Fife | Five           | ✗
+6     | Six  | -              | ✓
+7     | Seven| -              | ✓
+8     | Ait  | Eight          | ✗
+9     | Niner| Nine           | ✗
+0     | Zero | Oh             | ✗
+.     | Decimal | Point        | ✗
+
+4.3 Common Error Patterns to Catch
+
+Error Pattern 1: Student drops trailing zero
+Expected: 121.50 → Student: 121.5
+Correction: "Include all digits: one two one decimal five zero"
+
+Error Pattern 2: Student uses wrong pronunciation
+Expected: "niner" → Student: "nine"
+Correction: "Use ICAO: niner"
+
+Error Pattern 3: Student advances without approval
+Correction: "Wait for my acknowledgment before advancing"
+
+5. SCENARIO-BASED EXAMPLES
+
+5.1 Complete Correct Interaction
+
+Tutor JSON: {"atc": "KLM641, contact Tower on 118.70", 
+             "expected_readback": "One one eight decimal seven zero, KLM641",
+             "required_input": {"type": "com_frequency", "value": "118.70"}}
+
+Tutor: (presses spacebar) "KLM641, contact Tower on one one eight decimal seven zero"
+Student: (presses spacebar) "One one eight decimal seven zero, KLM641"
+Student: types "118.70", presses Enter → green flash
+Tutor: (watches green flash) "Roger"
+Student: presses Right Arrow
+Tutor: presses Right Arrow
+→ STEP COMPLETE ✓
+
+5.2 Error Scenario - Missing Trailing Zero
+
+Tutor JSON: {"value": "121.50"}
+Tutor: says "one two one decimal five zero"
+Student: types "121.5" → red flash
+Tutor: "Correction. One two one decimal five zero"
+Student: types "121.50" → green flash
+→ CORRECTED ✓
+
+5.3 Error Scenario - Wrong Pronunciation
+
+Tutor: says "heading two niner zero"
+Student: (presses spacebar) "Heading two nine zero, KLM641"
+Tutor: "Correction. Use ICAO: niner"
+Student: (presses spacebar) "Heading two niner zero, KLM641"
+→ CORRECTED ✓
+
+6. COMPLIANCE CHECKLIST
+
+Tutor Pre-Lesson Checklist
+
+flight.json validated against schema
+All frequencies have trailing zeros where applicable
+Pronunciation guide reviewed
+Screen sharing tested
+Audio levels adjusted
+
+Student Pre-Lesson Checklist
+
+flight.json loaded successfully
+Spacebar static working
+Input field responsive
+Screen sharing active
+Microphone working
+
+During Lesson Verification Points
+
+Step | Tutor Said | Student Heard | Student Input | Match?
+-----|------------|---------------|---------------|--------
+1    | 118.70     | 118.7?        | 118.70        | ✓
+2    | 121.50     | 121.50        | 121.50        | ✓
+3    | 4721       | 4721          | 4721          | ✓
+
+7. ENFORCEMENT PRINCIPLES
+
+Zero Tolerance for Deviations: Exact match required
+Procedural Over Convenience: Realism > speed
+Consistency Above All: Same rules every lesson
+Verbal Authority: Tutor's word is final
+Technical Gatekeeping: App enforces, human judges
+
+Rule UI-01 (Step Visibility):
+
+Student UI MUST display current step number and total steps.
+Format: "Step: X/Y" where X = current (1-indexed), Y = total
+Position: Bottom status bar, always visible
+
+8. REMINDER
+
+The core philosophy: If it wouldn't be acceptable in a real cockpit, it's not acceptable in SkyTalk.
+
+These rules ensure the simulation maintains aviation-grade precision while serving its educational purpose. Any deviation from these rules compromises training value and must be corrected immediately.
