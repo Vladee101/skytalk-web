@@ -10,11 +10,11 @@ SkyTalk Web — an aviation radio communication training simulator. **One web ap
 
 ## The three packages and what they do
 
-| Package | Path | Purpose | Imports from |
-|---|---|---|---|
-| `@skytalk/core` | `packages/core` | Domain logic: types, validation rules (TA-01..TA-17), lesson state machine. Pure functions, no I/O, no UI. | nothing — leaf package |
-| `@skytalk/server` | `packages/server` | Fastify backend: REST API, WebSocket protocol, SQLite persistence, room management. | `@skytalk/core` |
-| `@skytalk/web` | `packages/web` | React + Vite SPA: tutor and student session UIs, Web Audio engine, PeerJS client. | `@skytalk/core` |
+| Package           | Path              | Purpose                                                                                                    | Imports from           |
+| ----------------- | ----------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `@skytalk/core`   | `packages/core`   | Domain logic: types, validation rules (TA-01..TA-17), lesson state machine. Pure functions, no I/O, no UI. | nothing — leaf package |
+| `@skytalk/server` | `packages/server` | Fastify backend: REST API, WebSocket protocol, SQLite persistence, room management.                        | `@skytalk/core`        |
+| `@skytalk/web`    | `packages/web`    | React + Vite SPA: tutor and student session UIs, Web Audio engine, PeerJS client.                          | `@skytalk/core`        |
 
 `@skytalk/core` is the foundation. Both `server` and `web` import from it. **When you change a type or a validation rule, you change it in `core` only — both other packages will pick it up via the workspace link.**
 
@@ -45,13 +45,13 @@ After adding any dependency, run `pnpm install` **at the repo root**, not inside
 
 When you finish changing files inside `packages/*`, before declaring done, check whether the change requires updates in root files. Common cases:
 
-| If you did this | Check this in root |
-|---|---|
-| Added a new package to `packages/` | `pnpm-workspace.yaml`, root `tsconfig.base.json` references, root scripts |
-| Changed export structure of `@skytalk/core` | `tsconfig.base.json` paths, ESLint config import resolution |
-| Added a new dev script in a package | Add a corresponding `pnpm -r` or `pnpm --filter` shortcut in root scripts if it benefits from running across packages |
-| Changed Node version requirement | Root `package.json` `engines`, `.nvmrc` if present, CI config |
-| Added/changed env vars | `.env.example` at root, `RUNBOOK.md`, deploy scripts in `infra/` |
+| If you did this                             | Check this in root                                                                                                    |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Added a new package to `packages/`          | `pnpm-workspace.yaml`, root `tsconfig.base.json` references, root scripts                                             |
+| Changed export structure of `@skytalk/core` | `tsconfig.base.json` paths, ESLint config import resolution                                                           |
+| Added a new dev script in a package         | Add a corresponding `pnpm -r` or `pnpm --filter` shortcut in root scripts if it benefits from running across packages |
+| Changed Node version requirement            | Root `package.json` `engines`, `.nvmrc` if present, CI config                                                         |
+| Added/changed env vars                      | `.env.example` at root, `RUNBOOK.md`, deploy scripts in `infra/`                                                      |
 
 This rule exists because a previous project I worked on had recurring bugs where agents edited per-package configs but missed the root, leading to broken builds that worked locally but failed at install time. **Do not repeat this.**
 

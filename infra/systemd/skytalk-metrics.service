@@ -1,0 +1,13 @@
+[Unit]
+Description=SkyTalk system metrics snapshot
+After=network.target
+
+[Service]
+Type=oneshot
+User=skytalk
+Group=skytalk
+ExecStart=/opt/skytalk/skytalk-metrics.sh
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=skytalk-metrics

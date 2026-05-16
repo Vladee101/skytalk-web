@@ -4,14 +4,14 @@ These documents are the **authoritative specification of SkyTalk v1** (the deskt
 
 ## What's in here
 
-| File | Authority level | Purpose |
-|---|---|---|
-| `Executive_Summary.txt` | High | System-design overview. Architecture intent, locked structure of `flight.json`, flight phases, tutor/student app design. |
+| File                         | Authority level                | Purpose                                                                                                                                    |
+| ---------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Executive_Summary.txt`      | High                           | System-design overview. Architecture intent, locked structure of `flight.json`, flight phases, tutor/student app design.                   |
 | `OPERATIONAL_RULES_v1_0.txt` | High (with caveat — see below) | Tutor authoring rules (TA-01..TA-17), tutor execution rules (TE-01..TE-17), student rules (SP-01..SP-18), pronunciation tables, scenarios. |
-| `ANNEX_A_flight_schema.txt` | **Highest (normative)** | Formal JSON Schema (draft-07) for `flight.json`. The single source of truth for file format. |
-| `ANNEX_B_state_machine.txt` | **Highest (normative)** | Student state machine: 6 states, transition table, input field locking rules, right-arrow authority matrix. |
-| `ANNEX_C_input_types.txt` | **Highest (normative)** | Input type definitions and validation regexes. |
-| `ANNEX_D_tutor_UI.txt` | **Highest (normative)** | Tutor UI to schema-path mapping, export guarantees. |
+| `ANNEX_A_flight_schema.txt`  | **Highest (normative)**        | Formal JSON Schema (draft-07) for `flight.json`. The single source of truth for file format.                                               |
+| `ANNEX_B_state_machine.txt`  | **Highest (normative)**        | Student state machine: 6 states, transition table, input field locking rules, right-arrow authority matrix.                                |
+| `ANNEX_C_input_types.txt`    | **Highest (normative)**        | Input type definitions and validation regexes.                                                                                             |
+| `ANNEX_D_tutor_UI.txt`       | **Highest (normative)**        | Tutor UI to schema-path mapping, export guarantees.                                                                                        |
 
 ## Conflict resolution rules
 
@@ -22,7 +22,7 @@ Where documents disagree, this is the resolution order:
 3. `OPERATIONAL_RULES_v1_0.txt` mixes two distinct concerns:
    - **Authoring guidance** (e.g. TA-01: "use trailing zeros") — recommendations for tutors writing lessons. NOT enforced in code.
    - **Procedural rules** (e.g. TE-13: "three attempts then demonstrate") — describe tutor behavior. NOT enforced in code either.
-   When Operational Rules suggest stricter validation than Annex C provides (e.g. frequency spacing on 5 kHz boundaries), **Annex C wins** — code validates per Annex C, the tutor follows Operational Rules verbally.
+     When Operational Rules suggest stricter validation than Annex C provides (e.g. frequency spacing on 5 kHz boundaries), **Annex C wins** — code validates per Annex C, the tutor follows Operational Rules verbally.
 
 ## Notable conflicts you'll see between v1 and the web version
 

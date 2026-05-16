@@ -1,1322 +1,1463 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SkyTalk - Руководство пользователя</title>
     <style>
-        /* ОСНОВНЫЕ СТИЛИ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a2980, #26d0ce);
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-        
-        /* ШАПКА */
-        header {
-            background: linear-gradient(135deg, #1e3a8a, #0f766e);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        header::before {
-            content: "✈";
-            font-size: 300px;
-            position: absolute;
-            opacity: 0.05;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* НАВИГАЦИЯ */
+      /* ОСНОВНЫЕ СТИЛИ */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #1a2980, #26d0ce);
+        color: #333;
+        line-height: 1.6;
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+      }
+
+      /* ШАПКА */
+      header {
+        background: linear-gradient(135deg, #1e3a8a, #0f766e);
+        color: white;
+        padding: 40px 30px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      header::before {
+        content: '✈';
+        font-size: 300px;
+        position: absolute;
+        opacity: 0.05;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      h1 {
+        font-size: 2.8rem;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* НАВИГАЦИЯ */
+      .nav-container {
+        background: #1f2937;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .nav-menu {
+        display: flex;
+        list-style: none;
+        overflow-x: auto;
+        padding: 0;
+        margin: 0;
+      }
+
+      .nav-menu::-webkit-scrollbar {
+        height: 6px;
+      }
+
+      .nav-menu::-webkit-scrollbar-track {
+        background: #374151;
+      }
+
+      .nav-menu::-webkit-scrollbar-thumb {
+        background: #0f766e;
+        border-radius: 3px;
+      }
+
+      .nav-item {
+        flex-shrink: 0;
+      }
+
+      .nav-link {
+        display: block;
+        padding: 15px 25px;
+        color: white;
+        text-decoration: none;
+        white-space: nowrap;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+        background: none;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-link:active,
+      .nav-link:focus {
+        background: #0f766e;
+        border-bottom-color: #16a34a;
+      }
+
+      /* КОНТЕНТ */
+      .section {
+        padding: 30px;
+        display: block;
+      }
+
+      h2 {
+        color: #1e3a8a;
+        margin: 25px 0 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e5e7eb;
+        font-size: 1.8rem;
+      }
+
+      h3 {
+        color: #0f766e;
+        margin: 20px 0 10px;
+        font-size: 1.4rem;
+      }
+
+      /* БЫСТРЫЙ СТАРТ */
+      .quick-start {
+        background: #f0f9ff;
+        border-left: 4px solid #3b82f6;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 0 10px 10px 0;
+      }
+
+      .quick-start ol {
+        margin-left: 25px;
+      }
+
+      .quick-start li {
+        margin: 12px 0;
+        font-size: 1.05rem;
+      }
+
+      /* ПРЕВЬЮ ИНТЕРФЕЙСА (ГЛОБАЛЬНЫЕ СТИЛИ) */
+      .ui-preview {
+        background: #111827;
+        color: #e5e7eb;
+        padding: 0; /* Removed padding for full mock-up */
+        border-radius: 10px;
+        margin: 20px 0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        position: relative;
+        border: 2px solid #374151;
+        overflow: hidden;
+      }
+
+      .ui-preview::before {
+        display: none; /* Скрываем текстовую метку, так как UI самодостаточен */
+      }
+
+      /* --- COCKPIT UI SPECIFIC STYLES --- */
+      .cp-container {
+        background-color: #050505;
+        color: #fff;
+        font-family: 'Consolas', 'Monaco', monospace;
+        padding: 20px;
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+      }
+
+      /* Top Bar */
+      .cp-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .cp-callsign {
+        color: #22c55e;
+        font-weight: bold;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+        text-shadow: 0 0 5px rgba(34, 197, 94, 0.4);
+      }
+
+      .cp-radios {
+        display: flex;
+        gap: 25px;
+        text-align: right;
+      }
+
+      .cp-radio-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .cp-label {
+        font-size: 0.75rem;
+        color: #22c55e;
+        font-weight: bold;
+      }
+
+      .cp-value {
+        font-size: 1.3rem;
+        color: #22c55e;
+        font-weight: bold;
+        line-height: 1.1;
+      }
+
+      /* Main PFD */
+      .cp-pfd-wrapper {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+      }
+
+      .cp-pfd {
+        width: 420px;
+        height: 340px;
+        background: #333;
+        border: 1px solid #555;
+        border-radius: 12px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      }
+
+      .pfd-sky {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 50%;
+        background: #0078d7;
+      }
+      .pfd-ground {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 50%;
+        background: #5d4037;
+        border-top: 2px solid white;
+      }
+
+      /* PFD Overlays */
+      .pfd-top-modes {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 10px;
+        color: #00ffff;
+        font-weight: bold;
+        font-size: 0.9rem;
+        background: rgba(0, 0, 0, 0.2);
+        z-index: 10;
+      }
+
+      .pfd-bank-arc {
+        position: absolute;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 160px;
+        height: 80px;
+        border-top: 3px solid white;
+        border-radius: 160px 160px 0 0;
+        z-index: 5;
+        opacity: 0.8;
+      }
+
+      .pfd-triangle {
+        position: absolute;
+        top: 26px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 10px solid #ffeb3b;
+        z-index: 6;
+      }
+
+      /* Tapes */
+      .pfd-tape {
+        position: absolute;
+        top: 15%;
+        bottom: 15%;
+        width: 55px;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(2px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        color: white;
+        font-weight: bold;
+        font-size: 0.9rem;
+        z-index: 20;
+      }
+      .tape-left {
+        left: 0;
+        border-right: 1px solid #777;
+      }
+      .tape-right {
+        right: 0;
+        border-left: 1px solid #777;
+      }
+
+      .tape-val {
+        padding: 2px;
+      }
+      .tape-box {
+        background: #000;
+        border: 2px solid #ffeb3b;
+        color: #ffeb3b;
+        padding: 2px 5px;
+        font-size: 1.1rem;
+      }
+
+      .pfd-hdg {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #000;
+        border: 1px solid white;
+        color: #22c55e;
+        padding: 2px 6px;
+        font-weight: bold;
+        z-index: 20;
+      }
+
+      .pfd-qnh {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        color: #00ffff;
+        font-size: 0.8rem;
+        font-weight: bold;
+        z-index: 20;
+      }
+
+      /* Center Crosshair */
+      .pfd-crosshair {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 140px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 15;
+      }
+      .ch-box {
+        width: 12px;
+        height: 12px;
+        border: 2px solid black;
+        background: #ffeb3b;
+      }
+      .ch-wing {
+        height: 4px;
+        width: 50px;
+        background: #ffeb3b;
+        border: 1px solid black;
+        position: absolute;
+      }
+      .ch-left {
+        left: 0;
+      }
+      .ch-right {
+        right: 0;
+      }
+
+      /* Bottom UI */
+      .cp-footer {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        position: relative;
+      }
+
+      .cp-input-box {
+        position: relative;
+        border: 2px solid #22c55e;
+        border-radius: 4px;
+        padding: 10px 50px;
+        background: rgba(34, 197, 94, 0.05);
+        text-align: center;
+        box-shadow: 0 0 15px rgba(34, 197, 94, 0.15);
+      }
+
+      .cp-input-label {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #050505;
+        color: #22c55e;
+        font-size: 0.7rem;
+        padding: 0 5px;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+
+      .cp-input-text {
+        color: #6b7280;
+        font-size: 1.8rem;
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+        letter-spacing: 2px;
+      }
+
+      .cp-step-info {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        text-align: right;
+      }
+      .cp-step-num {
+        font-size: 2rem;
+        font-weight: bold;
+        color: white;
+        line-height: 1;
+      }
+      .cp-step-text {
+        color: #22c55e;
+        font-size: 0.8rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+
+      .cp-debug {
+        position: absolute;
+        bottom: 80px;
+        right: 20px;
+        border: 1px solid #374151;
+        background: #000;
+        padding: 8px;
+        color: #4b5563;
+        font-size: 0.65rem;
+        font-family: monospace;
+        z-index: 0;
+      }
+
+      .cp-exit {
+        position: absolute;
+        bottom: 120px;
+        right: 20px;
+        border: 1px solid #dc2626;
+        color: #dc2626;
+        padding: 2px 8px;
+        font-size: 0.8rem;
+      }
+
+      /* --- END COCKPIT STYLES --- */
+
+      /* ШАГИ ПРОЦЕССА */
+      .process-steps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin: 25px 0;
+      }
+
+      .step {
+        background: white;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 20px;
+        transition: all 0.3s;
+      }
+
+      .step-number {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        background: #1e3a8a;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 32px;
+        margin-right: 12px;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+
+      /* РУКОВОДСТВО ПО ВВОДУ */
+      .input-guide {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .input-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        border: 2px solid #e5e7eb;
+      }
+
+      .input-card.blue {
+        border-color: #3b82f6;
+      }
+
+      .input-card.green {
+        border-color: #16a34a;
+      }
+
+      .input-card.red {
+        border-color: #dc2626;
+      }
+
+      /* УПРАВЛЕНИЕ КЛАВИШАМИ */
+      .key-controls {
+        background: #f8fafc;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+        border: 2px solid #e5e7eb;
+      }
+
+      .key-row {
+        display: flex;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      .key-row:last-child {
+        border-bottom: none;
+      }
+
+      .key {
+        background: #1f2937;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        min-width: 140px;
+        text-align: center;
+        margin-right: 25px;
+        font-weight: bold;
+        font-size: 1.05rem;
+        border: 1px solid #374151;
+      }
+
+      /* ТАБЛИЦЫ */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e5e7eb;
+      }
+
+      th {
+        background: #1e3a8a;
+        color: white;
+        padding: 18px;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      td {
+        padding: 18px;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      tr:hover {
+        background: #f8fafc;
+      }
+
+      /* СЦЕНАРИИ */
+      .scenario {
+        background: #fef3c7;
+        border-left: 5px solid #f59e0b;
+        padding: 25px;
+        margin: 25px 0;
+        border-radius: 0 10px 10px 0;
+        position: relative;
+      }
+
+      .scenario-error {
+        background: #fee2e2;
+        border-left-color: #dc2626;
+      }
+
+      .scenario-info {
+        background: #f0f9ff;
+        border-left-color: #0ea5e9;
+      }
+
+      .scenario h3 {
+        margin-top: 0;
+        color: inherit;
+      }
+
+      /* СОВЕТЫ И ОШИБКИ */
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin: 25px 0;
+      }
+
+      .tip-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        border-top: 4px solid #0f766e;
+        border: 2px solid #e5e7eb;
+      }
+
+      .mistake {
+        background: #fee2e2;
+        padding: 16px;
+        margin: 12px 0;
+        border-radius: 8px;
+        display: flex;
+        align-items: flex-start;
+        border-left: 4px solid #dc2626;
+      }
+
+      .mistake::before {
+        content: '❌';
+        margin-right: 12px;
+        color: #dc2626;
+        font-size: 1.2rem;
+        margin-top: 2px;
+      }
+
+      /* НАПОМИНАНИЯ */
+      .reminder {
+        background: linear-gradient(135deg, #dbeafe, #f0f9ff);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px 0;
+        position: relative;
+        overflow: hidden;
+        border: 2px solid #bfdbfe;
+      }
+
+      .reminder::before {
+        content: '💡';
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 70px;
+        opacity: 0.1;
+      }
+
+      .reminder h3 {
+        color: #1e3a8a;
+        margin-top: 0;
+      }
+
+      /* КАРТОЧКИ ФЛЭШ */
+      .flashcard-demo {
+        display: flex;
+        gap: 20px;
+        margin: 25px 0;
+      }
+
+      .flashcard-front,
+      .flashcard-back {
+        flex: 1;
+        padding: 25px;
+        border-radius: 10px;
+        min-height: 200px;
+        border: 2px solid;
+      }
+
+      .flashcard-front {
+        background: #f8fafc;
+        border-color: #3b82f6;
+      }
+
+      .flashcard-back {
+        background: #f0f9ff;
+        border-color: #0f766e;
+      }
+
+      /* ПОДВАЛ */
+      footer {
+        text-align: center;
+        padding: 40px;
+        background: #1f2937;
+        color: white;
+        margin-top: 40px;
+        border-radius: 0 0 20px 20px;
+      }
+
+      .footer-slogan {
+        font-size: 1.2rem;
+        color: #9ca3af;
+        margin-top: 10px;
+        font-style: italic;
+      }
+
+      /* КНОПКИ */
+      .print-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #1e3a8a;
+        color: white;
+        border: none;
+        padding: 16px 28px;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 5px 20px rgba(30, 58, 138, 0.4);
+        z-index: 1000;
+        font-size: 1.1rem;
+        font-weight: 600;
+        transition: all 0.3s;
+        border: 2px solid #3b82f6;
+      }
+
+      .print-btn:hover {
+        background: #0f766e;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(15, 118, 110, 0.4);
+      }
+
+      .print-btn:active {
+        transform: translateY(-1px);
+      }
+
+      /* ЯКОРИ ДЛЯ НАВИГАЦИИ */
+      :target {
+        scroll-margin-top: 80px;
+      }
+
+      /* СТИЛИ ДЛЯ ПЕЧАТИ */
+      @media print {
+        .print-btn,
         .nav-container {
-            background: #1f2937;
-            position: sticky;
-            top: 0;
-            z-index: 100;
+          display: none !important;
         }
-        
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            overflow-x: auto;
-            padding: 0;
-            margin: 0;
+
+        body {
+          background: white !important;
+          color: black !important;
+          padding: 0 !important;
         }
-        
-        .nav-menu::-webkit-scrollbar {
-            height: 6px;
+
+        .container {
+          box-shadow: none !important;
+          border-radius: 0 !important;
+          margin: 0 !important;
+          max-width: 100% !important;
         }
-        
-        .nav-menu::-webkit-scrollbar-track {
-            background: #374151;
+
+        header {
+          color: black !important;
+          background: white !important;
+          border-bottom: 3px solid black;
+          padding: 20px !important;
         }
-        
-        .nav-menu::-webkit-scrollbar-thumb {
-            background: #0f766e;
-            border-radius: 3px;
+
+        header::before {
+          opacity: 0.1 !important;
         }
-        
-        .nav-item {
-            flex-shrink: 0;
-        }
-        
-        .nav-link {
-            display: block;
-            padding: 15px 25px;
-            color: white;
-            text-decoration: none;
-            white-space: nowrap;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-            background: none;
-            border: none;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-        
-        .nav-link:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .nav-link:active,
-        .nav-link:focus {
-            background: #0f766e;
-            border-bottom-color: #16A34A;
-        }
-        
-        /* КОНТЕНТ */
+
         .section {
-            padding: 30px;
-            display: block;
-        }
-        
-        h2 {
-            color: #1e3a8a;
-            margin: 25px 0 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e5e7eb;
-            font-size: 1.8rem;
-        }
-        
-        h3 {
-            color: #0f766e;
-            margin: 20px 0 10px;
-            font-size: 1.4rem;
-        }
-        
-        /* БЫСТРЫЙ СТАРТ */
-        .quick-start {
-            background: #f0f9ff;
-            border-left: 4px solid #3b82f6;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 0 10px 10px 0;
-        }
-        
-        .quick-start ol {
-            margin-left: 25px;
-        }
-        
-        .quick-start li {
-            margin: 12px 0;
-            font-size: 1.05rem;
-        }
-        
-        /* ПРЕВЬЮ ИНТЕРФЕЙСА (ГЛОБАЛЬНЫЕ СТИЛИ) */
-        .ui-preview {
-            background: #111827;
-            color: #e5e7eb;
-            padding: 0; /* Removed padding for full mock-up */
-            border-radius: 10px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            position: relative;
-            border: 2px solid #374151;
-            overflow: hidden;
-        }
-        
-        .ui-preview::before {
-            display: none; /* Скрываем текстовую метку, так как UI самодостаточен */
+          padding: 20px !important;
+          page-break-inside: avoid;
         }
 
-        /* --- COCKPIT UI SPECIFIC STYLES --- */
-        .cp-container {
-            background-color: #050505;
-            color: #fff;
-            font-family: 'Consolas', 'Monaco', monospace;
-            padding: 20px;
-            height: 500px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-        }
-
-        /* Top Bar */
-        .cp-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        
-        .cp-callsign {
-            color: #22c55e;
-            font-weight: bold;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            text-shadow: 0 0 5px rgba(34, 197, 94, 0.4);
-        }
-
-        .cp-radios {
-            display: flex;
-            gap: 25px;
-            text-align: right;
-        }
-
-        .cp-radio-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .cp-label {
-            font-size: 0.75rem;
-            color: #22c55e;
-            font-weight: bold;
-        }
-
-        .cp-value {
-            font-size: 1.3rem;
-            color: #22c55e;
-            font-weight: bold;
-            line-height: 1.1;
-        }
-
-        /* Main PFD */
-        .cp-pfd-wrapper {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        .cp-pfd {
-            width: 420px;
-            height: 340px;
-            background: #333;
-            border: 1px solid #555;
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-
-        .pfd-sky {
-            position: absolute; top: 0; width: 100%; height: 50%;
-            background: #0078d7;
-        }
-        .pfd-ground {
-            position: absolute; bottom: 0; width: 100%; height: 50%;
-            background: #5d4037;
-            border-top: 2px solid white;
-        }
-
-        /* PFD Overlays */
-        .pfd-top-modes {
-            position: absolute; top: 0; width: 100%;
-            display: flex; justify-content: space-between;
-            padding: 5px 10px;
-            color: #00ffff; font-weight: bold; font-size: 0.9rem;
-            background: rgba(0,0,0,0.2);
-            z-index: 10;
-        }
-
-        .pfd-bank-arc {
-            position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
-            width: 160px; height: 80px;
-            border-top: 3px solid white;
-            border-radius: 160px 160px 0 0;
-            z-index: 5;
-            opacity: 0.8;
-        }
-        
-        .pfd-triangle {
-            position: absolute; top: 26px; left: 50%; transform: translateX(-50%);
-            width: 0; height: 0; 
-            border-left: 8px solid transparent; border-right: 8px solid transparent;
-            border-bottom: 10px solid #ffeb3b;
-            z-index: 6;
-        }
-
-        /* Tapes */
-        .pfd-tape {
-            position: absolute; top: 15%; bottom: 15%; width: 55px;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(2px);
-            display: flex; flex-direction: column;
-            justify-content: space-around; align-items: center;
-            color: white; font-weight: bold; font-size: 0.9rem;
-            z-index: 20;
-        }
-        .tape-left { left: 0; border-right: 1px solid #777; }
-        .tape-right { right: 0; border-left: 1px solid #777; }
-
-        .tape-val { padding: 2px; }
-        .tape-box {
-            background: #000;
-            border: 2px solid #ffeb3b;
-            color: #ffeb3b;
-            padding: 2px 5px;
-            font-size: 1.1rem;
-        }
-
-        .pfd-hdg {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: #000; border: 1px solid white; color: #22c55e;
-            padding: 2px 6px; font-weight: bold; z-index: 20;
-        }
-
-        .pfd-qnh {
-            position: absolute; bottom: 10px; right: 10px;
-            color: #00ffff; font-size: 0.8rem; font-weight: bold; z-index: 20;
-        }
-
-        /* Center Crosshair */
-        .pfd-crosshair {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 140px; display: flex; justify-content: center; align-items: center;
-            z-index: 15;
-        }
-        .ch-box { width: 12px; height: 12px; border: 2px solid black; background: #ffeb3b; }
-        .ch-wing { height: 4px; width: 50px; background: #ffeb3b; border: 1px solid black; position: absolute; }
-        .ch-left { left: 0; } .ch-right { right: 0; }
-
-        /* Bottom UI */
-        .cp-footer {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            position: relative;
-        }
-
-        .cp-input-box {
-            position: relative;
-            border: 2px solid #22c55e;
-            border-radius: 4px;
-            padding: 10px 50px;
-            background: rgba(34, 197, 94, 0.05);
-            text-align: center;
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.15);
-        }
-
-        .cp-input-label {
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
-            background: #050505; color: #22c55e;
-            font-size: 0.7rem; padding: 0 5px; font-weight: bold; letter-spacing: 1px;
-        }
-
-        .cp-input-text {
-            color: #6b7280;
-            font-size: 1.8rem;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 2px;
-        }
-
-        .cp-step-info {
-            position: absolute; right: 0; bottom: 0;
-            text-align: right;
-        }
-        .cp-step-num { font-size: 2rem; font-weight: bold; color: white; line-height: 1; }
-        .cp-step-text { color: #22c55e; font-size: 0.8rem; font-weight: bold; letter-spacing: 1px; }
-
-        .cp-debug {
-            position: absolute; bottom: 80px; right: 20px;
-            border: 1px solid #374151; background: #000;
-            padding: 8px; color: #4b5563; font-size: 0.65rem;
-            font-family: monospace; z-index: 0;
-        }
-
-        .cp-exit {
-            position: absolute; bottom: 120px; right: 20px;
-            border: 1px solid #dc2626; color: #dc2626;
-            padding: 2px 8px; font-size: 0.8rem;
-        }
-        
-        /* --- END COCKPIT STYLES --- */
-
-        /* ШАГИ ПРОЦЕССА */
-        .process-steps {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin: 25px 0;
-        }
-        
-        .step {
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
-            padding: 20px;
-            transition: all 0.3s;
-        }
-        
-        
-        
-        
-        .step-number {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            background: #1e3a8a;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 32px;
-            margin-right: 12px;
-            font-weight: bold;
-            font-size: 1rem;
-        }
-        
-        /* РУКОВОДСТВО ПО ВВОДУ */
-        .input-guide {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
+        .step,
+        .tip-card,
         .input-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            border: 2px solid #e5e7eb;
+          box-shadow: none !important;
+          border: 1px solid #ccc !important;
         }
-        
-        .input-card.blue {
-            border-color: #3b82f6;
+
+        .ui-preview {
+          background: white !important;
+          color: black !important;
+          border: 1px solid #ccc !important;
         }
-        
-        .input-card.green {
-            border-color: #16a34a;
+
+        .process-steps,
+        .tips-grid,
+        .input-guide {
+          grid-template-columns: 1fr !important;
+          gap: 15px !important;
         }
-        
-        .input-card.red {
-            border-color: #dc2626;
+      }
+
+      /* КОДЫ И ТЕКСТ */
+      code {
+        background: #f3f4f6;
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-family: 'Courier New', monospace;
+        color: #dc2626;
+        font-size: 0.95rem;
+        border: 1px solid #e5e7eb;
+      }
+
+      em {
+        color: #6b7280;
+        font-style: italic;
+      }
+
+      strong {
+        color: #1e3a8a;
+      }
+
+      /* ДЕСКТОП ОПТИМИЗАЦИЯ */
+      @media (min-width: 1024px) {
+        .container {
+          min-height: calc(100vh - 40px);
         }
-        
-        /* УПРАВЛЕНИЕ КЛАВИШАМИ */
-        .key-controls {
-            background: #f8fafc;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            border: 2px solid #e5e7eb;
+
+        .process-steps {
+          grid-template-columns: repeat(3, 1fr);
         }
-        
-        .key-row {
-            display: flex;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        .key-row:last-child {
-            border-bottom: none;
-        }
-        
-        .key {
-            background: #1f2937;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            min-width: 140px;
-            text-align: center;
-            margin-right: 25px;
-            font-weight: bold;
-            font-size: 1.05rem;
-            border: 1px solid #374151;
-        }
-        
-        /* ТАБЛИЦЫ */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border: 1px solid #e5e7eb;
-        }
-        
-        th {
-            background: #1e3a8a;
-            color: white;
-            padding: 18px;
-            text-align: left;
-            font-weight: 600;
-        }
-        
-        td {
-            padding: 18px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        tr:hover {
-            background: #f8fafc;
-        }
-        
-        /* СЦЕНАРИИ */
-        .scenario {
-            background: #fef3c7;
-            border-left: 5px solid #f59e0b;
-            padding: 25px;
-            margin: 25px 0;
-            border-radius: 0 10px 10px 0;
-            position: relative;
-        }
-        
-        .scenario-error {
-            background: #fee2e2;
-            border-left-color: #dc2626;
-        }
-        
-        .scenario-info {
-            background: #f0f9ff;
-            border-left-color: #0ea5e9;
-        }
-        
-        .scenario h3 {
-            margin-top: 0;
-            color: inherit;
-        }
-        
-        /* СОВЕТЫ И ОШИБКИ */
+
         .tips-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin: 25px 0;
+          grid-template-columns: repeat(2, 1fr);
         }
-        
-        .tip-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            border-top: 4px solid #0f766e;
-            border: 2px solid #e5e7eb;
+
+        .input-guide {
+          grid-template-columns: repeat(3, 1fr);
         }
-        
-        .mistake {
-            background: #fee2e2;
-            padding: 16px;
-            margin: 12px 0;
-            border-radius: 8px;
-            display: flex;
-            align-items: flex-start;
-            border-left: 4px solid #dc2626;
+      }
+
+      @media (max-width: 1023px) {
+        .process-steps,
+        .tips-grid,
+        .input-guide {
+          grid-template-columns: 1fr;
         }
-        
-        .mistake::before {
-            content: "❌";
-            margin-right: 12px;
-            color: #dc2626;
-            font-size: 1.2rem;
-            margin-top: 2px;
-        }
-        
-        /* НАПОМИНАНИЯ */
-        .reminder {
-            background: linear-gradient(135deg, #dbeafe, #f0f9ff);
-            border-radius: 15px;
-            padding: 30px;
-            margin: 30px 0;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid #bfdbfe;
-        }
-        
-        .reminder::before {
-            content: "💡";
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 70px;
-            opacity: 0.1;
-        }
-        
-        .reminder h3 {
-            color: #1e3a8a;
-            margin-top: 0;
-        }
-        
-        /* КАРТОЧКИ ФЛЭШ */
+
         .flashcard-demo {
-            display: flex;
-            gap: 20px;
-            margin: 25px 0;
+          flex-direction: column;
         }
-        
-        .flashcard-front,
-        .flashcard-back {
-            flex: 1;
-            padding: 25px;
-            border-radius: 10px;
-            min-height: 200px;
-            border: 2px solid;
+
+        h1 {
+          font-size: 2.2rem;
         }
-        
-        .flashcard-front {
-            background: #f8fafc;
-            border-color: #3b82f6;
+
+        .nav-link {
+          padding: 12px 18px;
+          font-size: 0.95rem;
         }
-        
-        .flashcard-back {
-            background: #f0f9ff;
-            border-color: #0f766e;
-        }
-        
-        /* ПОДВАЛ */
-        footer {
-            text-align: center;
-            padding: 40px;
-            background: #1f2937;
-            color: white;
-            margin-top: 40px;
-            border-radius: 0 0 20px 20px;
-        }
-        
-        .footer-slogan {
-            font-size: 1.2rem;
-            color: #9ca3af;
-            margin-top: 10px;
-            font-style: italic;
-        }
-        
-        /* КНОПКИ */
-        .print-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #1e3a8a;
-            color: white;
-            border: none;
-            padding: 16px 28px;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(30, 58, 138, 0.4);
-            z-index: 1000;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: 2px solid #3b82f6;
-        }
-        
-        .print-btn:hover {
-            background: #0f766e;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(15, 118, 110, 0.4);
-        }
-        
-        .print-btn:active {
-            transform: translateY(-1px);
-        }
-        
-        /* ЯКОРИ ДЛЯ НАВИГАЦИИ */
-        :target {
-            scroll-margin-top: 80px;
-        }
-        
-        /* СТИЛИ ДЛЯ ПЕЧАТИ */
-        @media print {
-            .print-btn,
-            .nav-container {
-                display: none !important;
-            }
-            
-            body {
-                background: white !important;
-                color: black !important;
-                padding: 0 !important;
-            }
-            
-            .container {
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                margin: 0 !important;
-                max-width: 100% !important;
-            }
-            
-            header {
-                color: black !important;
-                background: white !important;
-                border-bottom: 3px solid black;
-                padding: 20px !important;
-            }
-            
-            header::before {
-                opacity: 0.1 !important;
-            }
-            
-            .section {
-                padding: 20px !important;
-                page-break-inside: avoid;
-            }
-            
-            .step,
-            .tip-card,
-            .input-card {
-                box-shadow: none !important;
-                border: 1px solid #ccc !important;
-            }
-            
-            .ui-preview {
-                background: white !important;
-                color: black !important;
-                border: 1px solid #ccc !important;
-            }
-            
-            .process-steps,
-            .tips-grid,
-            .input-guide {
-                grid-template-columns: 1fr !important;
-                gap: 15px !important;
-            }
-        }
-        
-        /* КОДЫ И ТЕКСТ */
-        code {
-            background: #f3f4f6;
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            color: #dc2626;
-            font-size: 0.95rem;
-            border: 1px solid #e5e7eb;
-        }
-        
-        em {
-            color: #6b7280;
-            font-style: italic;
-        }
-        
-        strong {
-            color: #1e3a8a;
-        }
-        
-        /* ДЕСКТОП ОПТИМИЗАЦИЯ */
-        @media (min-width: 1024px) {
-            .container {
-                min-height: calc(100vh - 40px);
-            }
-            
-            .process-steps {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .tips-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .input-guide {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-        
-        @media (max-width: 1023px) {
-            .process-steps,
-            .tips-grid,
-            .input-guide {
-                grid-template-columns: 1fr;
-            }
-            
-            .flashcard-demo {
-                flex-direction: column;
-            }
-            
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            .nav-link {
-                padding: 12px 18px;
-                font-size: 0.95rem;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <header>
-            <h1>SkyTalk</h1>
-            <div class="subtitle">Полное руководство по использованию тренажера</div>
-        </header>
-        
-        <nav class="nav-container">
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="#start" class="nav-link">Быстрый старт</a></li>
-                <li class="nav-item"><a href="#simulator" class="nav-link">Симулятор</a></li>
-                <li class="nav-item"><a href="#flashcards" class="nav-link">Карточки</a></li>
-                <li class="nav-item"><a href="#scenarios" class="nav-link">Сценарии</a></li>
-                <li class="nav-item"><a href="#tips" class="nav-link">Советы</a></li>
-                <li class="nav-item"><a href="#troubleshoot" class="nav-link">Проблемы</a></li>
-            </ul>
-        </nav>
-        
-        <main>
-            <!-- БЫСТРЫЙ СТАРТ -->
-            <section id="start" class="section">
-                <h2>🚀 Быстрый старт</h2>
-                
-                <div class="quick-start">
-                    <ol>
-                        <li><strong>Загрузите и Установите</strong> SkyTalk .exe файл на ваш компьютер</li>
-                        <li><strong>Получите файл урока</strong> (.json) от вашего инструктора</li>
-                        <li><strong>Поместите файл</strong> в папку: <code>Downloads/</code> для Windows</li>
-                        <li><strong>Откройте приложение</strong>, загрузите урок</li>
-                        <li><strong>Подключитесь</strong> к инструктору через Zoom/Teams/Яндекс Телемост</li>
-                        <li><strong>Используйте Наушники</strong> для максимальной имитации</li>
-                        <li><strong>Начните тренировку</strong></li>
-                    </ol>
-                </div>
-                
-                <h3>Что такое SkyTalk?</h3>
-                <p>SkyTalk — это тренажер обучения пилотов авиационному английскому. Он имитирует реальные условия связи с Диспетчером и помогает развить навыки:</p>
-                <ul style="margin: 15px 0 15px 25px; font-size: 1.05rem;">
-                    <li>Понимания команд Диспетчера</li>
-                    <li>Правильного ответа по фразеологии ICAO</li>
-                    <li>Дисциплины радиообмена</li>
-                </ul>
-                
-                <div class="reminder">
-                    <h3>Важное напоминание</h3>
-                    <p>SkyTalk — это <strong>тренажер процедур</strong>, а не игровой симулятор. Все ограничения (одно поле ввода, отсутствие подсказок, необходимость подтверждения инструктора) намеренны и имитируют реальные условия работы в кабине.</p>
-                </div>
-            </section>
-            
-            <!-- СИМУЛЯТОР -->
-            <section id="simulator" class="section">
-                <h2>✈️ Режим симулятора</h2>
-                
-                <h3>Интерфейс кабины пилота</h3>
-                <div class="ui-preview">
-                    <!-- Pure CSS/HTML Recreation of the Screenshot -->
-                    <div class="cp-container">
-                        
-                        <!-- Top Header Info -->
-                        <div class="cp-header">
-                            <div class="cp-callsign">KLM641 | B747-400 | KJFK-EHAM</div>
-                            <div class="cp-radios">
-                                <div class="cp-radio-group">
-                                    <div class="cp-label">COM 1</div>
-                                    <div class="cp-value">122.800</div>
-                                </div>
-                                <div style="color: #22c55e; font-size: 1.5rem; align-self:center;">|</div>
-                                <div class="cp-radio-group">
-                                    <div class="cp-label">XPDR</div>
-                                    <div class="cp-value">2000</div>
-                                </div>
-                            </div>
-                        </div>
+      <header>
+        <h1>SkyTalk</h1>
+        <div class="subtitle">Полное руководство по использованию тренажера</div>
+      </header>
 
-                        <!-- Main PFD Area -->
-                        <div class="cp-pfd-wrapper">
-                            <div class="cp-pfd">
-                                <!-- Sky/Ground -->
-                                <div class="pfd-sky"></div>
-                                <div class="pfd-ground"></div>
-                                
-                                <!-- Top Modes -->
-                                <div class="pfd-top-modes">
-                                    <div>SPD</div>
-                                    <div style="flex:1; text-align:center;">NAV</div>
-                                    <div>AP1</div>
-                                    <div style="position:absolute; right:10px;">ALT</div>
-                                </div>
-                                
-                                <!-- Horizon Graphics -->
-                                <div class="pfd-bank-arc"></div>
-                                <div class="pfd-triangle"></div>
+      <nav class="nav-container">
+        <ul class="nav-menu">
+          <li class="nav-item"><a href="#start" class="nav-link">Быстрый старт</a></li>
+          <li class="nav-item"><a href="#simulator" class="nav-link">Симулятор</a></li>
+          <li class="nav-item"><a href="#flashcards" class="nav-link">Карточки</a></li>
+          <li class="nav-item"><a href="#scenarios" class="nav-link">Сценарии</a></li>
+          <li class="nav-item"><a href="#tips" class="nav-link">Советы</a></li>
+          <li class="nav-item"><a href="#troubleshoot" class="nav-link">Проблемы</a></li>
+        </ul>
+      </nav>
 
-                                <!-- Speed Tape (Left) -->
-                                <div class="pfd-tape tape-left">
-                                    <div class="tape-val">30</div>
-                                    <div class="tape-val">20</div>
-                                    <div class="tape-val">10</div>
-                                    <div class="tape-box">0</div>
-                                </div>
+      <main>
+        <!-- БЫСТРЫЙ СТАРТ -->
+        <section id="start" class="section">
+          <h2>🚀 Быстрый старт</h2>
 
-                                <!-- Alt Tape (Right) -->
-                                <div class="pfd-tape tape-right">
-                                    <div class="tape-val">500</div>
-                                    <div class="tape-val">400</div>
-                                    <div class="tape-val">300</div>
-                                    <div class="tape-val">200</div>
-                                    <div class="tape-val">100</div>
-                                    <div class="tape-box">000</div>
-                                </div>
-                                
-                                <!-- Heading -->
-                                <div class="pfd-hdg">000</div>
-                                <div style="position:absolute; bottom:22px; left:50%; transform:translateX(-50%); 
-                                            width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:8px solid #ffeb3b; z-index:21;"></div>
+          <div class="quick-start">
+            <ol>
+              <li><strong>Загрузите и Установите</strong> SkyTalk .exe файл на ваш компьютер</li>
+              <li><strong>Получите файл урока</strong> (.json) от вашего инструктора</li>
+              <li><strong>Поместите файл</strong> в папку: <code>Downloads/</code> для Windows</li>
+              <li><strong>Откройте приложение</strong>, загрузите урок</li>
+              <li><strong>Подключитесь</strong> к инструктору через Zoom/Teams/Яндекс Телемост</li>
+              <li><strong>Используйте Наушники</strong> для максимальной имитации</li>
+              <li><strong>Начните тренировку</strong></li>
+            </ol>
+          </div>
 
-                                <!-- QNH -->
-                                <div class="pfd-qnh">QNH <span style="color:white;">1013</span></div>
+          <h3>Что такое SkyTalk?</h3>
+          <p>
+            SkyTalk — это тренажер обучения пилотов авиационному английскому. Он имитирует реальные
+            условия связи с Диспетчером и помогает развить навыки:
+          </p>
+          <ul style="margin: 15px 0 15px 25px; font-size: 1.05rem">
+            <li>Понимания команд Диспетчера</li>
+            <li>Правильного ответа по фразеологии ICAO</li>
+            <li>Дисциплины радиообмена</li>
+          </ul>
 
-                                <!-- Crosshair -->
-                                <div class="pfd-crosshair">
-                                    <div class="ch-wing ch-left"></div>
-                                    <div class="ch-box"></div>
-                                    <div class="ch-wing ch-right"></div>
-                                </div>
-                            </div>
-                        </div>
+          <div class="reminder">
+            <h3>Важное напоминание</h3>
+            <p>
+              SkyTalk — это <strong>тренажер процедур</strong>, а не игровой симулятор. Все
+              ограничения (одно поле ввода, отсутствие подсказок, необходимость подтверждения
+              инструктора) намеренны и имитируют реальные условия работы в кабине.
+            </p>
+          </div>
+        </section>
 
-                        <!-- Bottom Controls -->
-                        <div class="cp-footer">
-                            <!-- Input Box -->
-                            <div class="cp-input-box">
-                                <div class="cp-input-label">SQUAWK</div>
-                                <div class="cp-input-text">ENTER VALUE</div>
-                            </div>
+        <!-- СИМУЛЯТОР -->
+        <section id="simulator" class="section">
+          <h2>✈️ Режим симулятора</h2>
 
-                            <!-- Step Info -->
-                            <div class="cp-step-info">
-                                <div class="cp-step-num">1 / 11</div>
-                                <div class="cp-step-text">PREFLIGHT</div>
-                            </div>
-                        </div>
+          <h3>Интерфейс кабины пилота</h3>
+          <div class="ui-preview">
+            <!-- Pure CSS/HTML Recreation of the Screenshot -->
+            <div class="cp-container">
+              <!-- Top Header Info -->
+              <div class="cp-header">
+                <div class="cp-callsign">KLM641 | B747-400 | KJFK-EHAM</div>
+                <div class="cp-radios">
+                  <div class="cp-radio-group">
+                    <div class="cp-label">COM 1</div>
+                    <div class="cp-value">122.800</div>
+                  </div>
+                  <div style="color: #22c55e; font-size: 1.5rem; align-self: center">|</div>
+                  <div class="cp-radio-group">
+                    <div class="cp-label">XPDR</div>
+                    <div class="cp-value">2000</div>
+                  </div>
+                </div>
+              </div>
 
-                        <!-- Debug Overlay -->
-                        <div class="cp-debug">
-                            STATE: INPUT_REQUIRED<br>
-                            LOCKED: false
-                        </div>
-                        
-                         <!-- Exit Button Mockup -->
-                        <div class="cp-exit">EXIT</div>
+              <!-- Main PFD Area -->
+              <div class="cp-pfd-wrapper">
+                <div class="cp-pfd">
+                  <!-- Sky/Ground -->
+                  <div class="pfd-sky"></div>
+                  <div class="pfd-ground"></div>
 
-                    </div>
+                  <!-- Top Modes -->
+                  <div class="pfd-top-modes">
+                    <div>SPD</div>
+                    <div style="flex: 1; text-align: center">NAV</div>
+                    <div>AP1</div>
+                    <div style="position: absolute; right: 10px">ALT</div>
+                  </div>
+
+                  <!-- Horizon Graphics -->
+                  <div class="pfd-bank-arc"></div>
+                  <div class="pfd-triangle"></div>
+
+                  <!-- Speed Tape (Left) -->
+                  <div class="pfd-tape tape-left">
+                    <div class="tape-val">30</div>
+                    <div class="tape-val">20</div>
+                    <div class="tape-val">10</div>
+                    <div class="tape-box">0</div>
+                  </div>
+
+                  <!-- Alt Tape (Right) -->
+                  <div class="pfd-tape tape-right">
+                    <div class="tape-val">500</div>
+                    <div class="tape-val">400</div>
+                    <div class="tape-val">300</div>
+                    <div class="tape-val">200</div>
+                    <div class="tape-val">100</div>
+                    <div class="tape-box">000</div>
+                  </div>
+
+                  <!-- Heading -->
+                  <div class="pfd-hdg">000</div>
+                  <div
+                    style="
+                      position: absolute;
+                      bottom: 22px;
+                      left: 50%;
+                      transform: translateX(-50%);
+                      width: 0;
+                      height: 0;
+                      border-left: 6px solid transparent;
+                      border-right: 6px solid transparent;
+                      border-top: 8px solid #ffeb3b;
+                      z-index: 21;
+                    "
+                  ></div>
+
+                  <!-- QNH -->
+                  <div class="pfd-qnh">QNH <span style="color: white">1013</span></div>
+
+                  <!-- Crosshair -->
+                  <div class="pfd-crosshair">
+                    <div class="ch-wing ch-left"></div>
+                    <div class="ch-box"></div>
+                    <div class="ch-wing ch-right"></div>
+                  </div>
                 </div>
-                
-                <h3>6-шаговый процесс радиообмена</h3>
-                <div class="process-steps">
-                    <div class="step">
-                        <span class="step-number">1</span><strong>СЛУШАТЬ</strong>
-                        <p>Инструктор дает команду Диспетчера через Zoom</p>
-                    </div>
-                    <div class="step">
-                        <span class="step-number">2</span><strong>НАЖАТЬ</strong>
-                        <p>Нажать ПРОБЕЛ для имитации начала передачи</p>
-                    </div>
-                    <div class="step">
-                        <span class="step-number">3</span><strong>ГОВОРИТЬ</strong>
-                        <p>Произнести правильный ответ по фразеологии ICAO</p>
-                    </div>
-                    <div class="step">
-                        <span class="step-number">4</span><strong>ВВОД</strong>
-                        <p>Ввести требуемое значение в поле (если нужно)</p>
-                    </div>
-                    <div class="step">
-                        <span class="step-number">5</span><strong>ПРОВЕРКА</strong>
-                        <p>Нажать ENTER → ждать зеленую/красную вспышку</p>
-                    </div>
-                    <div class="step">
-                        <span class="step-number">6</span><strong>ПРОДОЛЖИТЬ</strong>
-                        <p>После сигнала инструктора нажать СТРЕЛКУ ВПРАВО</p>
-                    </div>
+              </div>
+
+              <!-- Bottom Controls -->
+              <div class="cp-footer">
+                <!-- Input Box -->
+                <div class="cp-input-box">
+                  <div class="cp-input-label">SQUAWK</div>
+                  <div class="cp-input-text">ENTER VALUE</div>
                 </div>
-                
-                <h3>Поле ввода: что означают цвета</h3>
-                <div class="input-guide">
-                    <div class="input-card blue">
-                        <h4>🔵 Мигает синим</h4>
-                        <p><strong>Ожидается ввод</strong></p>
-                        <p>Введите требуемое значение и нажмите ENTER</p>
-                    </div>
-                    <div class="input-card green">
-                        <h4>🟢 Зеленое постоянно</h4>
-                        <p><strong>Ввод правильный</strong></p>
-                        <p>Ждите устного подтверждения инструктора</p>
-                    </div>
-                    <div class="input-card red">
-                        <h4>🔴 Красная вспышка</h4>
-                        <p><strong>Ввод неправильный</strong></p>
-                        <p>Переслушайте команду, введите заново</p>
-                    </div>
+
+                <!-- Step Info -->
+                <div class="cp-step-info">
+                  <div class="cp-step-num">1 / 11</div>
+                  <div class="cp-step-text">PREFLIGHT</div>
                 </div>
-                
-                <h3>Формат ввода данных</h3>
-                <table>
-                    <tr>
-                        <th>Тип данных</th>
-                        <th>Пример</th>
-                        <th>Правила</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Частота</strong></td>
-                        <td><code>121.50</code></td>
-                        <td>Обязательно с конечными нулями, точка как разделитель</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Код ответчика</strong></td>
-                        <td><code>4701</code></td>
-                        <td>4 цифры (0-7), без пробелов и букв</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Курс</strong></td>
-                        <td><code>270</code></td>
-                        <td>Всегда 3 цифры, 001-360</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Высота</strong></td>
-                        <td><code>5000</code></td>
-                        <td>Футы, без единиц измерения и пробелов</td>
-                    </tr>
-                </table>
-                
-                <div class="key-controls">
-                    <h3>Управление клавишами</h3>
-                    <div class="key-row">
-                        <div class="key">ПРОБЕЛ</div>
-                        <div>Передача по радио (удерживать во время речи, отключает ввод)</div>
-                    </div>
-                    <div class="key-row">
-                        <div class="key">ENTER</div>
-                        <div>Отправить введенное значение</div>
-                    </div>
-                    <div class="key-row">
-                        <div class="key">СТРЕЛКА →</div>
-                        <div>Следующий шаг (только после подтверждения инструктора)</div>
-                    </div>
-                    <div class="key-row">
-                        <div class="key">R</div>
-                        <div>Перезагрузить урок</div>
-                    </div>
-                    <div class="key-row">
-                        <div class="key">ESC</div>
-                        <div>Завершить урок</div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- КАРТОЧКИ -->
-            <section id="flashcards" class="section">
-                <h2>📚 Режим карточек</h2>
-                
-                <h3>Для чего нужны карточки?</h3>
-                <p>Карточки предназначены для <strong>самостоятельной тренировки</strong> словарного запаса, фразеологии и произношения. Идеально для подготовки к экзамену ICAO или повторения материала между сессиями с инструктором.</p>
-                
-                <h3>Как использовать</h3>
-                <div class="process-steps">
-                    <div class="step">
-                        <span class="step-number">1</span><strong>ДОСТУП</strong>
-                        <p>Главное меню → "Карточки" → Выберите колоду</p>
-                    </div>
-                    <div class="step">
-                        <span class="step-number">2</span><strong>ИЗУЧЕНИЕ</strong>
-                        <p>Читайте команду Диспетчера, пытайтесь вспомнить ответ</p>
-                    </div>
-                    <div class="step">
-                        <span class="step-number">3</span><strong>ПРОВЕРКА</strong>
-                        <p>Нажмите на карточку, чтобы увидеть правильный ответ</p>
-                    </div>
-                    <div class="step">
-                        <span class="step-number">4</span><strong>ПОВТОРЕНИЕ</strong>
-                        <p>Отмечайте сложные карточки для повторения</p>
-                    </div>
-                </div>
-                
-                <h3>Формат карточки</h3>
-                <div class="flashcard-demo">
-                    <div class="flashcard-front">
-                        <h4 style="color: #3b82f6; margin-bottom: 15px;">Лицевая сторона (Вопрос)</h4>
-                        <p><strong>ATC:</strong> "Cleared for takeoff runway 27"</p>
-                        <p><em>Произношение:</em> Kleerd for teyk-awf run-way twen-tee sev-en</p>
-                        <p style="margin-top: 15px; color: #6b7280; font-size: 0.95rem;"><strong>Перевод:</strong> Разрешение на взлёт, ВПП 27</p>
-                    </div>
-                    <div class="flashcard-back">
-                        <h4 style="color: #0f766e; margin-bottom: 15px;">Оборотная сторона (Ответ)</h4>
-                        <p><strong>PILOT:</strong> "Cleared for takeoff, KLM641"</p>
-                        <p><em>Произношение:</em> Kleerd for teyk-awf, Kay-El-Em Six-Four-One</p>
-                        <p style="margin-top: 15px; color: #6b7280; font-size: 0.95rem;"><strong>Ключевые термины:</strong> "cleared" = разрешение, "takeoff" = взлёт</p>
-                    </div>
-                </div>
-                
-                <h3>Методы изучения</h3>
-                <div class="tips-grid">
-                    <div class="tip-card">
-                        <h4>🗣️ Чтение вслух</h4>
-                        <p>Проговаривайте фразы вслух, обращая внимание на произношение цифр (niner, fife, tree)</p>
-                    </div>
-                    <div class="tip-card">
-                        <h4>🧠 По памяти</h4>
-                        <p>Закройте ответ, попробуйте вспомнить правильную фразу, затем проверьте себя</p>
-                    </div>
-                    <div class="tip-card">
-                        <h4>🎯 Фокус на фазах</h4>
-                        <p>Сгруппируйте карточки по фазам полета (взлет, набор, снижение и т.д.)</p>
-                    </div>
-                    <div class="tip-card">
-                        <h4>⏱️ Тайминг</h4>
-                        <p>Засекайте время ответа — в реальности Диспетчер ждать не будет</p>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- СЦЕНАРИИ -->
-            <section id="scenarios" class="section">
-                <h2>🔄 Типовые сценарии</h2>
-                
-                <div class="scenario">
-                    <h3>Сценарий 1: Правильный ответ с вводом</h3>
-                    <p><strong>Инструктор:</strong> "KLM641, contact Tower 118.70"</p>
-                    <p><strong>Ваши действия:</strong></p>
-                    <ol style="margin: 15px 0 15px 25px; font-size: 1.05rem;">
-                        <li>Нажать <strong>ПРОБЕЛ</strong></li>
-                        <li>Сказать: <em>"One one eight decimal seven zero, KLM641"</em></li>
-                        <li>Отпустить ПРОБЕЛ</li>
-                        <li>Ввести: <code>118.70</code> в поле (оно мигает синим)</li>
-                        <li>Нажать <strong>ENTER</strong> → зеленая вспышка</li>
-                        <li>Ждать инструктора: <em>"Сигнал"</em></li>
-                        <li>Нажать <strong>СТРЕЛКУ ВПРАВО</strong> → следующий шаг</li>
-                    </ol>
-                </div>
-                
-                <div class="scenario scenario-error">
-                    <h3>Сценарий 2: Исправление ошибки</h3>
-                    <p><strong>Инструктор:</strong> "KLM641, squawk 4721"</p>
-                    <p><strong>Ваши действия (с ошибкой):</strong></p>
-                    <ol style="margin: 15px 0 15px 25px; font-size: 1.05rem;">
-                        <li>Нажать ПРОБЕЛ, сказать ответ</li>
-                        <li>Ввести: <code>4720</code> (ошибка!)</li>
-                        <li>Нажать ENTER → <strong style="color: #dc2626;">красная вспышка</strong></li>
-                        <li>Инструктор повторяет: <em>"Correction, squawk 4721"</em></li>
-                        <li>Ввести: <code>4721</code> (правильно)</li>
-                        <li>Нажать ENTER → <strong style="color: #16a34a;">зеленая вспышка</strong></li>
-                        <li>Продолжить как обычно</li>
-                    </ol>
-                </div>
-                
-                <div class="scenario scenario-info">
-                    <h3>Сценарий 3: Без ввода данных</h3>
-                    <p><strong>Инструктор:</strong> "KLM641, cleared for takeoff"</p>
-                    <p><strong>Ваши действия:</strong></p>
-                    <ol style="margin: 15px 0 15px 25px; font-size: 1.05rem;">
-                        <li>Нажать <strong>ПРОБЕЛ</strong></li>
-                        <li>Сказать: <em>"Cleared for takeoff, KLM641"</em></li>
-                        <li>Отпустить ПРОБЕЛ</li>
-                        <li><strong>Ввод не требуется</strong> (поле не мигает)</li>
-                        <li>Ждать инструктора: <em>"Сигнал"</em></li>
-                        <li>Нажать <strong>СТРЕЛКУ ВПРАВО</strong></li>
-                    </ol>
-                    <p style="margin-top: 15px; color: #6b7280; font-size: 0.95rem;"><strong>Обратите внимание:</strong> поле ввода остается неактивным — это нормально для таких команд</p>
-                </div>
-            </section>
-            
-            <!-- СОВЕТЫ -->
-            <section id="tips" class="section">
-                <h2>💡 Советы по тренировке</h2>
-                
-                <h3>Для начинающих</h3>
-                <div class="tips-grid">
-                    <div class="tip-card">
-                        <h4>👂 Фокус на слушании</h4>
-                        <p>Не торопитесь отвечать. Сначала полностью поймите команду Диспетчера.</p>
-                    </div>
-                    <div class="tip-card">
-                        <h4>🔢 Четкие цифры</h4>
-                        <p>Тренируйте: "niner" (не "nine"), "fife" (не "five"), "tree" (не "three").</p>
-                    </div>
-                    <div class="tip-card">
-                        <h4>📝 Полные фразы</h4>
-                        <p>Говорите "One one eight decimal seven zero", а не "One one eight point seven zero".</p>
-                    </div>
-                    <div class="tip-card">
-                        <h4>⏳ Терпение</h4>
-                        <p>Ждите сигнала от инструктора перед продолжением. Как с реальным Диспетчером.</p>
-                    </div>
-                </div>
-                
-                <h3>Для подготовки к экзамену ICAO</h3>
-                <div class="tips-grid">
-                    <div class="tip-card">
-                        <h4>🎧 Тренировка с шумом</h4>
-                        <p>Увеличивайте громкость звука в наушниках для работы со статическим шумом.</p>
-                    </div>
-                    <div class="tip-card">
-                        <h4>⏱️ Контроль времени</h4>
-                        <p>Засекайте время ответа. Настоящий Диспетчер не будет ждать дольше 3-5 секунд.</p>
-                    </div>
-                    <div class="tip-card">
-                        <h4>🎤 Запись и анализ</h4>
-                        <p>Записывайте свои ответы, затем сравнивайте с эталонным произношением.</p>
-                    </div>
-                    <div class="tip-card">
-                        <h4>📈 Регулярность</h4>
-                        <p>Лучше 15 минут ежедневно, чем 2 часа раз в неделю.</p>
-                    </div>
-                </div>
-                
-                <h3>Типичные ошибки (избегайте!)</h3>
-                <div>
-                    <div class="mistake">
-                        <strong>Продолжение без подтверждения</strong> — всегда ждите сигнал от инструктора
-                    </div>
-                    <div class="mistake">
-                        <strong>Пропуск нулей</strong> — "118.7" вместо "118.70" или "118,700" считается ошибкой
-                    </div>
-                    <div class="mistake">
-                        <strong>Неправильное произношение</strong> — "nine" вместо "niner" покажет незнание фразеологии
-                    </div>
-                    <div class="mistake">
-                        <strong>Разговор во время ввода</strong> — ПРОБЕЛ отключает клавиатуру, нельзя печатать во время "передачи"
-                    </div>
-                    <div class="mistake">
-                        <strong>Слишком быстрый темп</strong> — Естественная пауза между командой и ответом важна
-                    </div>
-                </div>
-                
-                <div class="reminder">
-                    <h3>Философия обучения</h3>
-                    <p>SkyTalk намеренно ограничивает вас (одно поле ввода, отсутствие подсказок, необходимость подтверждения). Это не недостаток, а <strong>педагогический прием</strong>. В реальной кабине у вас тоже не будет подсказок, множества полей ввода или возможности "перемотать" команду Диспетчера. Эти ограничения развивают именно те навыки, которые нужны в реальном полете.</p>
-                </div>
-            </section>
-            
-            <!-- ПРОБЛЕМЫ -->
-            <section id="troubleshoot" class="section">
-                <h2>🔧 Устранение неисправностей</h2>
-                
-                <h3>Частые проблемы и решения</h3>
-                <table>
-                    <tr>
-                        <th>Проблема</th>
-                        <th>Решение</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Урок не загружается</strong></td>
-                        <td>
-                            1. Проверьте, что файл в папке <code>Downloads</code><br>
-                            2. Перезапустите приложение<br>
-                            3. Убедитесь, что файл не поврежден
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Поле ввода не реагирует</strong></td>
-                        <td>
-                            1. Вы, вероятно, в неправильном состоянии — дождитесь синего мигания<br>
-                            2. Проверьте, не зажат ли ПРОБЕЛ (он отключает ввод)<br>
-                            3. Переключитесь на другое окно и обратно
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Нет зеленой/красной вспышки</strong></td>
-                        <td>
-                            1. Убедитесь, что нажали ENTER после ввода<br>
-                            2. Проверьте правильность ввода (формат, пробелы)<br>
-                            3. Перезапустите приложение
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Стрелка вправо не работает</strong></td>
-                        <td>
-                        
-                            1. Возможно, предыдущий ввод был неправильным<br>
-                
-                        </td>
-                    </tr>
-            
-                </table>
-                
-                <h3>Быстрые исправления</h3>
-                <div class="quick-start">
-                    <ol>
-                        <li><strong>Всегда сохраняйте файлы уроков</strong> в одну папку: <code>Downloads/</code></li>
-                        <li><strong>Перезапускайте приложение</strong> при любых проблемах с вводом</li>
-                        <li><strong>Проверяйте аудио в Zoom/Телемост</strong> если инструктор вас не слышит</li>
-                        <li><strong>Включайте демонстрацию экрана</strong> чтобы инструктор видел ваши действия</li>
-                        <li><strong>Делайте скриншоты</strong> проблем для обращения в поддержку</li>
-                    </ol>
-                </div>
-                
-                <h3>Что видит ваш инструктор</h3>
-                <p>Во время сессии инструктор видит через демонстрацию экрана:</p>
-                <ul style="margin: 15px 0 15px 25px; font-size: 1.05rem;">
-                    <li>✅ Ваше поле ввода и его состояние</li>
-                    <li>✅ Зеленые/красные вспышки (правильно/неправильно)</li>
-                    <li>✅ Номер текущего шага и фазу полета</li>
-                    <li>✅ Время вашей реакции на команды</li>
-                </ul>
-                
-                <p><strong>Инструктор НЕ видит:</strong></p>
-                <ul style="margin: 15px 0 15px 25px; font-size: 1.05rem; color: #dc2626;">
-                    <li>❌ Что вы вводите до нажатия ENTER</li>
-                    <li>❌ Будущие шаги или команды</li>
-                    <li>❌ Ваши мысли или сомнения</li>
-                    <li>❌ Не может удаленно управлять вашим приложением</li>
-                </ul>
-                
-                <div class="reminder">
-                    <h3>Получение помощи</h3>
-                    <p>1. <strong>Во время сессии:</strong> Спросите инструктора устно — это самый быстрый способ<br>
-                    2. <strong>Технические проблемы:</strong> Перезапустите приложение, проверьте файлы<br>
-                    3. <strong>Вопросы по обучению:</strong> Используйте заметки в карточках<br>
-                    4. <strong>Отзывы и предложения:</strong> Сообщите вашему инструктору</p>
-                </div>
-            </section>
-        </main>
-        
-        <footer>
-            <h3>SkyTalk</h3>
-            <p>Тренажер Обучения Авиационному Английскому Пилотов Гражданской Авиации</p>
-            <div class="footer-slogan">Летайте безопасно, общайтесь чётко.</div>
-        </footer>
+              </div>
+
+              <!-- Debug Overlay -->
+              <div class="cp-debug">
+                STATE: INPUT_REQUIRED<br />
+                LOCKED: false
+              </div>
+
+              <!-- Exit Button Mockup -->
+              <div class="cp-exit">EXIT</div>
+            </div>
+          </div>
+
+          <h3>6-шаговый процесс радиообмена</h3>
+          <div class="process-steps">
+            <div class="step">
+              <span class="step-number">1</span><strong>СЛУШАТЬ</strong>
+              <p>Инструктор дает команду Диспетчера через Zoom</p>
+            </div>
+            <div class="step">
+              <span class="step-number">2</span><strong>НАЖАТЬ</strong>
+              <p>Нажать ПРОБЕЛ для имитации начала передачи</p>
+            </div>
+            <div class="step">
+              <span class="step-number">3</span><strong>ГОВОРИТЬ</strong>
+              <p>Произнести правильный ответ по фразеологии ICAO</p>
+            </div>
+            <div class="step">
+              <span class="step-number">4</span><strong>ВВОД</strong>
+              <p>Ввести требуемое значение в поле (если нужно)</p>
+            </div>
+            <div class="step">
+              <span class="step-number">5</span><strong>ПРОВЕРКА</strong>
+              <p>Нажать ENTER → ждать зеленую/красную вспышку</p>
+            </div>
+            <div class="step">
+              <span class="step-number">6</span><strong>ПРОДОЛЖИТЬ</strong>
+              <p>После сигнала инструктора нажать СТРЕЛКУ ВПРАВО</p>
+            </div>
+          </div>
+
+          <h3>Поле ввода: что означают цвета</h3>
+          <div class="input-guide">
+            <div class="input-card blue">
+              <h4>🔵 Мигает синим</h4>
+              <p><strong>Ожидается ввод</strong></p>
+              <p>Введите требуемое значение и нажмите ENTER</p>
+            </div>
+            <div class="input-card green">
+              <h4>🟢 Зеленое постоянно</h4>
+              <p><strong>Ввод правильный</strong></p>
+              <p>Ждите устного подтверждения инструктора</p>
+            </div>
+            <div class="input-card red">
+              <h4>🔴 Красная вспышка</h4>
+              <p><strong>Ввод неправильный</strong></p>
+              <p>Переслушайте команду, введите заново</p>
+            </div>
+          </div>
+
+          <h3>Формат ввода данных</h3>
+          <table>
+            <tr>
+              <th>Тип данных</th>
+              <th>Пример</th>
+              <th>Правила</th>
+            </tr>
+            <tr>
+              <td><strong>Частота</strong></td>
+              <td><code>121.50</code></td>
+              <td>Обязательно с конечными нулями, точка как разделитель</td>
+            </tr>
+            <tr>
+              <td><strong>Код ответчика</strong></td>
+              <td><code>4701</code></td>
+              <td>4 цифры (0-7), без пробелов и букв</td>
+            </tr>
+            <tr>
+              <td><strong>Курс</strong></td>
+              <td><code>270</code></td>
+              <td>Всегда 3 цифры, 001-360</td>
+            </tr>
+            <tr>
+              <td><strong>Высота</strong></td>
+              <td><code>5000</code></td>
+              <td>Футы, без единиц измерения и пробелов</td>
+            </tr>
+          </table>
+
+          <div class="key-controls">
+            <h3>Управление клавишами</h3>
+            <div class="key-row">
+              <div class="key">ПРОБЕЛ</div>
+              <div>Передача по радио (удерживать во время речи, отключает ввод)</div>
+            </div>
+            <div class="key-row">
+              <div class="key">ENTER</div>
+              <div>Отправить введенное значение</div>
+            </div>
+            <div class="key-row">
+              <div class="key">СТРЕЛКА →</div>
+              <div>Следующий шаг (только после подтверждения инструктора)</div>
+            </div>
+            <div class="key-row">
+              <div class="key">R</div>
+              <div>Перезагрузить урок</div>
+            </div>
+            <div class="key-row">
+              <div class="key">ESC</div>
+              <div>Завершить урок</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- КАРТОЧКИ -->
+        <section id="flashcards" class="section">
+          <h2>📚 Режим карточек</h2>
+
+          <h3>Для чего нужны карточки?</h3>
+          <p>
+            Карточки предназначены для <strong>самостоятельной тренировки</strong> словарного
+            запаса, фразеологии и произношения. Идеально для подготовки к экзамену ICAO или
+            повторения материала между сессиями с инструктором.
+          </p>
+
+          <h3>Как использовать</h3>
+          <div class="process-steps">
+            <div class="step">
+              <span class="step-number">1</span><strong>ДОСТУП</strong>
+              <p>Главное меню → "Карточки" → Выберите колоду</p>
+            </div>
+            <div class="step">
+              <span class="step-number">2</span><strong>ИЗУЧЕНИЕ</strong>
+              <p>Читайте команду Диспетчера, пытайтесь вспомнить ответ</p>
+            </div>
+            <div class="step">
+              <span class="step-number">3</span><strong>ПРОВЕРКА</strong>
+              <p>Нажмите на карточку, чтобы увидеть правильный ответ</p>
+            </div>
+            <div class="step">
+              <span class="step-number">4</span><strong>ПОВТОРЕНИЕ</strong>
+              <p>Отмечайте сложные карточки для повторения</p>
+            </div>
+          </div>
+
+          <h3>Формат карточки</h3>
+          <div class="flashcard-demo">
+            <div class="flashcard-front">
+              <h4 style="color: #3b82f6; margin-bottom: 15px">Лицевая сторона (Вопрос)</h4>
+              <p><strong>ATC:</strong> "Cleared for takeoff runway 27"</p>
+              <p><em>Произношение:</em> Kleerd for teyk-awf run-way twen-tee sev-en</p>
+              <p style="margin-top: 15px; color: #6b7280; font-size: 0.95rem">
+                <strong>Перевод:</strong> Разрешение на взлёт, ВПП 27
+              </p>
+            </div>
+            <div class="flashcard-back">
+              <h4 style="color: #0f766e; margin-bottom: 15px">Оборотная сторона (Ответ)</h4>
+              <p><strong>PILOT:</strong> "Cleared for takeoff, KLM641"</p>
+              <p><em>Произношение:</em> Kleerd for teyk-awf, Kay-El-Em Six-Four-One</p>
+              <p style="margin-top: 15px; color: #6b7280; font-size: 0.95rem">
+                <strong>Ключевые термины:</strong> "cleared" = разрешение, "takeoff" = взлёт
+              </p>
+            </div>
+          </div>
+
+          <h3>Методы изучения</h3>
+          <div class="tips-grid">
+            <div class="tip-card">
+              <h4>🗣️ Чтение вслух</h4>
+              <p>
+                Проговаривайте фразы вслух, обращая внимание на произношение цифр (niner, fife,
+                tree)
+              </p>
+            </div>
+            <div class="tip-card">
+              <h4>🧠 По памяти</h4>
+              <p>Закройте ответ, попробуйте вспомнить правильную фразу, затем проверьте себя</p>
+            </div>
+            <div class="tip-card">
+              <h4>🎯 Фокус на фазах</h4>
+              <p>Сгруппируйте карточки по фазам полета (взлет, набор, снижение и т.д.)</p>
+            </div>
+            <div class="tip-card">
+              <h4>⏱️ Тайминг</h4>
+              <p>Засекайте время ответа — в реальности Диспетчер ждать не будет</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- СЦЕНАРИИ -->
+        <section id="scenarios" class="section">
+          <h2>🔄 Типовые сценарии</h2>
+
+          <div class="scenario">
+            <h3>Сценарий 1: Правильный ответ с вводом</h3>
+            <p><strong>Инструктор:</strong> "KLM641, contact Tower 118.70"</p>
+            <p><strong>Ваши действия:</strong></p>
+            <ol style="margin: 15px 0 15px 25px; font-size: 1.05rem">
+              <li>Нажать <strong>ПРОБЕЛ</strong></li>
+              <li>Сказать: <em>"One one eight decimal seven zero, KLM641"</em></li>
+              <li>Отпустить ПРОБЕЛ</li>
+              <li>Ввести: <code>118.70</code> в поле (оно мигает синим)</li>
+              <li>Нажать <strong>ENTER</strong> → зеленая вспышка</li>
+              <li>Ждать инструктора: <em>"Сигнал"</em></li>
+              <li>Нажать <strong>СТРЕЛКУ ВПРАВО</strong> → следующий шаг</li>
+            </ol>
+          </div>
+
+          <div class="scenario scenario-error">
+            <h3>Сценарий 2: Исправление ошибки</h3>
+            <p><strong>Инструктор:</strong> "KLM641, squawk 4721"</p>
+            <p><strong>Ваши действия (с ошибкой):</strong></p>
+            <ol style="margin: 15px 0 15px 25px; font-size: 1.05rem">
+              <li>Нажать ПРОБЕЛ, сказать ответ</li>
+              <li>Ввести: <code>4720</code> (ошибка!)</li>
+              <li>Нажать ENTER → <strong style="color: #dc2626">красная вспышка</strong></li>
+              <li>Инструктор повторяет: <em>"Correction, squawk 4721"</em></li>
+              <li>Ввести: <code>4721</code> (правильно)</li>
+              <li>Нажать ENTER → <strong style="color: #16a34a">зеленая вспышка</strong></li>
+              <li>Продолжить как обычно</li>
+            </ol>
+          </div>
+
+          <div class="scenario scenario-info">
+            <h3>Сценарий 3: Без ввода данных</h3>
+            <p><strong>Инструктор:</strong> "KLM641, cleared for takeoff"</p>
+            <p><strong>Ваши действия:</strong></p>
+            <ol style="margin: 15px 0 15px 25px; font-size: 1.05rem">
+              <li>Нажать <strong>ПРОБЕЛ</strong></li>
+              <li>Сказать: <em>"Cleared for takeoff, KLM641"</em></li>
+              <li>Отпустить ПРОБЕЛ</li>
+              <li><strong>Ввод не требуется</strong> (поле не мигает)</li>
+              <li>Ждать инструктора: <em>"Сигнал"</em></li>
+              <li>Нажать <strong>СТРЕЛКУ ВПРАВО</strong></li>
+            </ol>
+            <p style="margin-top: 15px; color: #6b7280; font-size: 0.95rem">
+              <strong>Обратите внимание:</strong> поле ввода остается неактивным — это нормально для
+              таких команд
+            </p>
+          </div>
+        </section>
+
+        <!-- СОВЕТЫ -->
+        <section id="tips" class="section">
+          <h2>💡 Советы по тренировке</h2>
+
+          <h3>Для начинающих</h3>
+          <div class="tips-grid">
+            <div class="tip-card">
+              <h4>👂 Фокус на слушании</h4>
+              <p>Не торопитесь отвечать. Сначала полностью поймите команду Диспетчера.</p>
+            </div>
+            <div class="tip-card">
+              <h4>🔢 Четкие цифры</h4>
+              <p>Тренируйте: "niner" (не "nine"), "fife" (не "five"), "tree" (не "three").</p>
+            </div>
+            <div class="tip-card">
+              <h4>📝 Полные фразы</h4>
+              <p>
+                Говорите "One one eight decimal seven zero", а не "One one eight point seven zero".
+              </p>
+            </div>
+            <div class="tip-card">
+              <h4>⏳ Терпение</h4>
+              <p>Ждите сигнала от инструктора перед продолжением. Как с реальным Диспетчером.</p>
+            </div>
+          </div>
+
+          <h3>Для подготовки к экзамену ICAO</h3>
+          <div class="tips-grid">
+            <div class="tip-card">
+              <h4>🎧 Тренировка с шумом</h4>
+              <p>Увеличивайте громкость звука в наушниках для работы со статическим шумом.</p>
+            </div>
+            <div class="tip-card">
+              <h4>⏱️ Контроль времени</h4>
+              <p>Засекайте время ответа. Настоящий Диспетчер не будет ждать дольше 3-5 секунд.</p>
+            </div>
+            <div class="tip-card">
+              <h4>🎤 Запись и анализ</h4>
+              <p>Записывайте свои ответы, затем сравнивайте с эталонным произношением.</p>
+            </div>
+            <div class="tip-card">
+              <h4>📈 Регулярность</h4>
+              <p>Лучше 15 минут ежедневно, чем 2 часа раз в неделю.</p>
+            </div>
+          </div>
+
+          <h3>Типичные ошибки (избегайте!)</h3>
+          <div>
+            <div class="mistake">
+              <strong>Продолжение без подтверждения</strong> — всегда ждите сигнал от инструктора
+            </div>
+            <div class="mistake">
+              <strong>Пропуск нулей</strong> — "118.7" вместо "118.70" или "118,700" считается
+              ошибкой
+            </div>
+            <div class="mistake">
+              <strong>Неправильное произношение</strong> — "nine" вместо "niner" покажет незнание
+              фразеологии
+            </div>
+            <div class="mistake">
+              <strong>Разговор во время ввода</strong> — ПРОБЕЛ отключает клавиатуру, нельзя
+              печатать во время "передачи"
+            </div>
+            <div class="mistake">
+              <strong>Слишком быстрый темп</strong> — Естественная пауза между командой и ответом
+              важна
+            </div>
+          </div>
+
+          <div class="reminder">
+            <h3>Философия обучения</h3>
+            <p>
+              SkyTalk намеренно ограничивает вас (одно поле ввода, отсутствие подсказок,
+              необходимость подтверждения). Это не недостаток, а
+              <strong>педагогический прием</strong>. В реальной кабине у вас тоже не будет
+              подсказок, множества полей ввода или возможности "перемотать" команду Диспетчера. Эти
+              ограничения развивают именно те навыки, которые нужны в реальном полете.
+            </p>
+          </div>
+        </section>
+
+        <!-- ПРОБЛЕМЫ -->
+        <section id="troubleshoot" class="section">
+          <h2>🔧 Устранение неисправностей</h2>
+
+          <h3>Частые проблемы и решения</h3>
+          <table>
+            <tr>
+              <th>Проблема</th>
+              <th>Решение</th>
+            </tr>
+            <tr>
+              <td><strong>Урок не загружается</strong></td>
+              <td>
+                1. Проверьте, что файл в папке <code>Downloads</code><br />
+                2. Перезапустите приложение<br />
+                3. Убедитесь, что файл не поврежден
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Поле ввода не реагирует</strong></td>
+              <td>
+                1. Вы, вероятно, в неправильном состоянии — дождитесь синего мигания<br />
+                2. Проверьте, не зажат ли ПРОБЕЛ (он отключает ввод)<br />
+                3. Переключитесь на другое окно и обратно
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Нет зеленой/красной вспышки</strong></td>
+              <td>
+                1. Убедитесь, что нажали ENTER после ввода<br />
+                2. Проверьте правильность ввода (формат, пробелы)<br />
+                3. Перезапустите приложение
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Стрелка вправо не работает</strong></td>
+              <td>1. Возможно, предыдущий ввод был неправильным<br /></td>
+            </tr>
+          </table>
+
+          <h3>Быстрые исправления</h3>
+          <div class="quick-start">
+            <ol>
+              <li>
+                <strong>Всегда сохраняйте файлы уроков</strong> в одну папку:
+                <code>Downloads/</code>
+              </li>
+              <li><strong>Перезапускайте приложение</strong> при любых проблемах с вводом</li>
+              <li>
+                <strong>Проверяйте аудио в Zoom/Телемост</strong> если инструктор вас не слышит
+              </li>
+              <li>
+                <strong>Включайте демонстрацию экрана</strong> чтобы инструктор видел ваши действия
+              </li>
+              <li><strong>Делайте скриншоты</strong> проблем для обращения в поддержку</li>
+            </ol>
+          </div>
+
+          <h3>Что видит ваш инструктор</h3>
+          <p>Во время сессии инструктор видит через демонстрацию экрана:</p>
+          <ul style="margin: 15px 0 15px 25px; font-size: 1.05rem">
+            <li>✅ Ваше поле ввода и его состояние</li>
+            <li>✅ Зеленые/красные вспышки (правильно/неправильно)</li>
+            <li>✅ Номер текущего шага и фазу полета</li>
+            <li>✅ Время вашей реакции на команды</li>
+          </ul>
+
+          <p><strong>Инструктор НЕ видит:</strong></p>
+          <ul style="margin: 15px 0 15px 25px; font-size: 1.05rem; color: #dc2626">
+            <li>❌ Что вы вводите до нажатия ENTER</li>
+            <li>❌ Будущие шаги или команды</li>
+            <li>❌ Ваши мысли или сомнения</li>
+            <li>❌ Не может удаленно управлять вашим приложением</li>
+          </ul>
+
+          <div class="reminder">
+            <h3>Получение помощи</h3>
+            <p>
+              1. <strong>Во время сессии:</strong> Спросите инструктора устно — это самый быстрый
+              способ<br />
+              2. <strong>Технические проблемы:</strong> Перезапустите приложение, проверьте файлы<br />
+              3. <strong>Вопросы по обучению:</strong> Используйте заметки в карточках<br />
+              4. <strong>Отзывы и предложения:</strong> Сообщите вашему инструктору
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <h3>SkyTalk</h3>
+        <p>Тренажер Обучения Авиационному Английскому Пилотов Гражданской Авиации</p>
+        <div class="footer-slogan">Летайте безопасно, общайтесь чётко.</div>
+      </footer>
     </div>
-    
-    <button class="print-btn" onclick="window.print()">
-        🖨️ Печать руководства
-    </button>
-</body>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Печать руководства</button>
+  </body>
 </html>

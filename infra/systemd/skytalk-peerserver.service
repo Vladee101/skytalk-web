@@ -1,0 +1,25 @@
+[Unit]
+Description=SkyTalk PeerJS signaling server
+Documentation=https://github.com/Vladee101/skytalk-web
+After=network.target
+
+[Service]
+User=skytalk
+Group=skytalk
+WorkingDirectory=/opt/skytalk/peerserver
+
+# peerjs package installed in /opt/skytalk/peerserver via:
+#   npm install peerjs-server  (or: npm install -g peer)
+ExecStart=/opt/skytalk/peerserver/node_modules/.bin/peerjs --port 9000 --path /peerjs
+
+Restart=on-failure
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=skytalk-peerserver
+
+[Install]
+WantedBy=multi-user.target

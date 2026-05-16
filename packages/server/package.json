@@ -1,0 +1,26 @@
+{
+  "name": "@skytalk/server",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsup src/server.ts --format esm --target node22 --external node:sqlite --out-dir dist",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "test:coverage": "vitest run --coverage --passWithNoTests",
+    "lint": "eslint src --ext .ts",
+    "dev": "tsup src/server.ts --format esm --target node22 --external node:sqlite --out-dir dist --watch"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.0.0",
+    "@fastify/multipart": "^10.0.0",
+    "@fastify/rate-limit": "^10.0.0",
+    "@fastify/websocket": "^11.0.0",
+    "@skytalk/core": "workspace:*",
+    "bcryptjs": "^2.4.3",
+    "fastify": "^5.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "nanoid": "^5.0.0",
+    "zod": "^3.23.0"
+  }
+}

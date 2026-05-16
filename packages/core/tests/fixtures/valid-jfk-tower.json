@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "lesson": {
+    "name": "JFK Tower Departure",
+    "callsign": "KLM642",
+    "route": "KJFK-EHAM",
+    "aircraft_type": "B777",
+    "aircraft": "Boeing 777",
+    "difficulty": "beginner",
+    "level": "1"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "id": "step-001",
+      "phase": "TAXI",
+      "atc": "KLM642, ground, taxi to runway 31L via taxiway Bravo, squawk 4721",
+      "expected_readback": "Taxi runway 31L via Bravo, squawk 4721, KLM642",
+      "required_inputs": [{ "type": "squawk", "value": "4721", "input_id": "input-001" }]
+    },
+    {
+      "step": 2,
+      "id": "step-002",
+      "phase": "LINE-UP",
+      "atc": "KLM642, Tower, runway 31L, line up and wait",
+      "expected_readback": "Runway 31L, line up and wait, KLM642",
+      "required_inputs": []
+    },
+    {
+      "step": 3,
+      "id": "step-003",
+      "phase": "TAKEOFF",
+      "atc": "KLM642, runway 31L, cleared for takeoff, wind 290 at 12, contact Departure 118.70",
+      "expected_readback": "Cleared for takeoff runway 31L, KLM642",
+      "required_inputs": [{ "type": "com_frequency", "value": "118.70", "input_id": "input-003" }],
+      "required_inputs_local": [],
+      "atc_translation": "KLM642, полоса 31L, разрешен взлет",
+      "readback_translation": "Разрешен взлет полоса 31L, KLM642"
+    }
+  ]
+}

@@ -19,11 +19,13 @@ The simulation must feel like a real cockpit radio exchange. Authenticity over c
 ## Why a web app (not desktop port)
 
 The v1 desktop apps required Zoom for voice and shared `flight.json` files for state alignment. This was deliberate (human-in-the-loop, no networked simulator) but introduced friction:
+
 - Zoom dependency (audio quality, scheduling, account requirements)
 - Manual file distribution
 - No source of truth for lesson state — tutor and student could drift
 
 The web version keeps the **pedagogical principles** (tutor as judge, app as gatekeeper, exact-match validation, no AI scoring) but removes infrastructure friction by:
+
 - Hosting both UIs on the same backend (server is the source of truth for lesson state)
 - Embedding voice as P2P WebRTC audio
 - Streaming student input directly to tutor's UI in real time (no screen share needed)
@@ -83,6 +85,7 @@ If a v1 source contradicts a web-architecture decision in this document, **this 
 ## What "done" looks like for the MVP
 
 A live demo where:
+
 1. Tutor logs in, uploads a `flight.json` (schema 1.0, validated), gets a student URL.
 2. Student opens the URL in another browser, lands on the cockpit UI.
 3. Both establish a WebRTC audio connection. Voice sounds like radio (filtered, with static).

@@ -32,6 +32,7 @@
 **Steps:**
 
 **Root level (these are the files agents most often forget):**
+
 1. `pnpm init` at root, set `"name": "skytalk-web"`, `"private": true`
 2. Create `pnpm-workspace.yaml` listing `packages/*`
 3. Create root `package.json` with:
@@ -49,13 +50,10 @@
 11. Copy reference docs into root: `PROJECT_BRIEF.md`, `ARCHITECTURE.md`, `DOMAIN_MODEL.md`, `TASKS.md`, `CLAUDE.md`
 12. Create `README.md` that briefly describes the project and points readers to `CLAUDE.md` and `PROJECT_BRIEF.md`
 
-**Per-package level:**
-13. Create `packages/core/`, `packages/server/`, `packages/web/` directories
-14. Each gets its own `package.json` with package-specific runtime deps only (none yet, just the structure: name, version, type=module, main, types, scripts)
-15. Each gets its own `tsconfig.json` extending `../../tsconfig.base.json` with its own `outDir`, `rootDir`, and `references` to its workspace dependencies
-16. Each gets a tiny `README.md` (3-5 lines) describing its purpose and public API surface
+**Per-package level:** 13. Create `packages/core/`, `packages/server/`, `packages/web/` directories 14. Each gets its own `package.json` with package-specific runtime deps only (none yet, just the structure: name, version, type=module, main, types, scripts) 15. Each gets its own `tsconfig.json` extending `../../tsconfig.base.json` with its own `outDir`, `rootDir`, and `references` to its workspace dependencies 16. Each gets a tiny `README.md` (3-5 lines) describing its purpose and public API surface
 
 **Verification:** Before declaring done, run from repo root:
+
 ```bash
 pnpm install
 pnpm -r build       # may produce nothing if packages are empty, but must not error
@@ -65,6 +63,7 @@ pnpm format:check   # must pass
 ```
 
 **Acceptance:**
+
 - All commands above succeed without errors or warnings
 - Adding a dependency to one package and re-running `pnpm install` from root updates only the relevant `pnpm-lock.yaml` entries
 - The repo can be opened in VS Code without TypeScript complaining about missing references
@@ -82,6 +81,7 @@ pnpm format:check   # must pass
 **Context to load:** `DOMAIN_MODEL.md` §1 (Core types)
 
 **Steps:**
+
 1. Add `vitest` as dev dependency in `packages/core`
 2. Create `src/types.ts` with all the type/interface definitions from `DOMAIN_MODEL.md` §1 (verbatim — they are the spec)
 3. Create stub files: `src/validate-input.ts`, `src/validate-lesson.ts`, `src/state-machine.ts`, `src/index.ts` with `export *` re-exports
@@ -89,6 +89,7 @@ pnpm format:check   # must pass
 5. Configure `package.json` with `"main": "./dist/index.js"`, `"types": "./dist/index.d.ts"`
 
 **Acceptance:**
+
 - `pnpm --filter @skytalk/core build` produces `dist/`
 - `pnpm --filter @skytalk/core test` passes the smoke test
 - Importing `FlightLesson`, `Step`, `RequiredInput` types from `@skytalk/core` works in another package
@@ -108,12 +109,14 @@ pnpm format:check   # must pass
 **Critical clarification:** Format validation follows **Annex C only**. Operational Rules TA-01..TA-04 (trailing zeros, kHz spacing) are tutor authoring guidance, not runtime validation. Read `DOMAIN_MODEL.md §3.1` for the full reasoning. Do NOT enforce trailing-zero rules in `validateInputFormat`. Trailing-zero discipline is enforced via exact-match in `validateInput`.
 
 **Implementation:**
+
 1. Implement `validateInputFormat` exactly per `DOMAIN_MODEL §3.2` — regexes verbatim from Annex C
 2. Implement `validateInput` master function per `DOMAIN_MODEL §3.3`
 3. Write tests covering every example in `DOMAIN_MODEL §7.1`, `§7.2`, `§7.3`
 4. Add property-based tests using `@fast-check/vitest`: assert `validateInput(type, x, x)` returns `correct: true` for all `x` that pass `validateInputFormat`
 
 **Acceptance:**
+
 - All test cases from `DOMAIN_MODEL §7.1–7.3` pass
 - Coverage >95% on `validate-input.ts`
 - Public API matches `DOMAIN_MODEL §3.3` exactly
@@ -130,11 +133,13 @@ pnpm format:check   # must pass
 **Context to load:** `DOMAIN_MODEL.md` §1 (types) + §2 (validation rules), `docs/v1-source/ANNEX_A_flight_schema.txt` (the formal JSON schema), `docs/v1-source/ANNEX_D_tutor_UI.txt` (tighter authoring constraints to apply as warnings)
 
 **Critical points:**
+
 - `required_input` is **always present** on every step (Annex A `step.required` includes it). When no input is needed, the JSON contains `"required_input": { "type": "none" }` — not omission of the field.
 - Field names are Annex A's: `aircraft_type` (not `aircraft`), `difficulty` (not `level`), `step` integer (not `id` string).
 - Use `RequiredInput` as a discriminated union (per `DOMAIN_MODEL §1`) — TypeScript should refuse code that accesses `.value` without narrowing `.type`.
 
 **Implementation:**
+
 1. Implement function signature from `DOMAIN_MODEL §2`
 2. Validate top-level structure including `additionalProperties: false`
 3. Validate `schema_version === "1.0"` and halt on mismatch
@@ -144,6 +149,7 @@ pnpm format:check   # must pass
 7. Provide the sample fixture `packages/core/tests/fixtures/valid-jfk-tower.json` based on Operational Rules Scenarios 5.1, 5.2, 5.3 — but using **Annex A field names** (`aircraft_type`, `difficulty`, `step` integer, `required_input.type === "com_frequency"`, etc.)
 
 **Tests required:**
+
 - All cases in `DOMAIN_MODEL §7.8`
 - Valid file → `{ valid: true, lesson, warnings: [] }`
 - Wrong `schema_version` → single error, no further validation runs
@@ -154,6 +160,7 @@ pnpm format:check   # must pass
 - Each format-violating value (e.g. `value: "118"` for `com_frequency`) → error per Annex C regex
 
 **Acceptance:**
+
 - Valid v1.0 file → `{ valid: true, lesson }` with full type
 - Wrong `schema_version` → `valid: false` with single error, no further validation
 - Each broken case produces a useful error with `path` and `rule`
@@ -170,18 +177,21 @@ pnpm format:check   # must pass
 **Context to load:** `DOMAIN_MODEL.md` §4 (full), `docs/v1-source/ANNEX_B_state_machine.txt` (the authoritative source)
 
 **Critical points:**
+
 - Six states: `IDLE`, `LISTENING`, `INPUT_REQUIRED`, `INPUT_NOT_REQUIRED`, `READY_TO_ADVANCE`, `COMPLETED` — exact case from Annex B
 - **No 3-strike rule.** Annex B doesn't enforce attempt limits. Wrong input keeps state at `INPUT_REQUIRED` indefinitely. `attempt_count` is a diagnostic field only.
 - **Tutor's PTT release is the trigger** that moves `LISTENING → INPUT_REQUIRED` (or `INPUT_NOT_REQUIRED`). The condition checks the current step's `required_input.type`.
 - **Right Arrow authority matrix** (Annex B §B.5) is enforced by the machine: only allowed in `INPUT_NOT_REQUIRED` and `READY_TO_ADVANCE`. Other states return `error: "invalid_action"`.
 
 **Implementation:**
+
 1. Implement `LessonStateMachine` class with `initial()` and `transition()` methods per `DOMAIN_MODEL §4.5`
 2. State must be **immutable** — `transition` returns a new state object, never mutates input
 3. Implement every row of the transition table from `DOMAIN_MODEL §4.3`
 4. Tests: every test case in `DOMAIN_MODEL §7.4`, `§7.5`, `§7.6`, `§7.7`, plus exhaustive coverage of disallowed transitions
 
 **Acceptance:**
+
 - All §7.4–7.7 tests pass
 - Coverage >95%
 - Calling `transition` with same state and event produces same result (pure)
@@ -199,11 +209,13 @@ pnpm format:check   # must pass
 **Context to load:** `DOMAIN_MODEL.md` §5
 
 **Implementation:**
+
 1. Implement `viewStepForRole(step, role)` function
 2. Tests: feed a step with all fields, assert tutor view has all fields, student view has only `id`, `phase`, `required_input.type` (no value, no atc, no expected_readback, no notes)
 3. Property test: for any valid step, the student view must not contain the strings of `atc`, `expected_readback`, `required_input.value`, or `notes`
 
 **Acceptance:**
+
 - Function exists, exported from `@skytalk/core`
 - Tests pass
 - The "no leakage" property test passes
@@ -221,6 +233,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §3, §11
 
 **Implementation:**
+
 1. Set up `packages/server` with Fastify, pino logger
 2. Bootstrap function reads env vars: `PORT` (default 3001), `SKYTALK_TUTOR_PASSWORD` (required), `JWT_SECRET` (required)
 3. Implement `/api/health` returning `{ status: "ok", uptime_seconds }`
@@ -229,6 +242,7 @@ pnpm format:check   # must pass
 6. Provide `.env.example` with placeholder values
 
 **Acceptance:**
+
 - `pnpm --filter @skytalk/server dev` starts the server
 - `curl localhost:3001/api/health` returns 200 with expected body
 - Server exits cleanly on SIGTERM
@@ -245,6 +259,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §5
 
 **Implementation:**
+
 1. Add `better-sqlite3` dependency
 2. `src/db.ts`: opens DB at `process.env.SKYTALK_DB_PATH || './skytalk.db'`, applies WAL mode
 3. Migration system: simple — read `src/migrations/*.sql` in order, track applied in a `_migrations` table
@@ -253,6 +268,7 @@ pnpm format:check   # must pass
 6. Tests: in-memory SQLite (`:memory:`) for testing schema and cleanup logic
 
 **Acceptance:**
+
 - Server startup creates DB file and tables
 - Re-running doesn't duplicate or break
 - Cleanup function works on test data
@@ -269,6 +285,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §3, §13
 
 **Implementation:**
+
 1. At server startup, hash `SKYTALK_TUTOR_PASSWORD` with bcrypt (10 rounds), store in memory
 2. Endpoint compares submitted password with bcrypt hash (constant-time)
 3. On success: issue JWT with claim `{ role: "tutor", iat, exp: iat+3600 }`, return as both body and HTTP-only Secure cookie
@@ -276,6 +293,7 @@ pnpm format:check   # must pass
 5. Tests: correct password → 200 + token; wrong password → 401; rate limit kicks in after 10 attempts
 
 **Acceptance:**
+
 - All tests pass
 - Token verifies with `jsonwebtoken.verify` using `JWT_SECRET`
 - No timing leak on wrong-vs-right password (bcrypt handles this)
@@ -292,6 +310,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §3, `DOMAIN_MODEL.md` §1
 
 **Implementation:**
+
 1. Endpoint requires valid tutor JWT (middleware)
 2. Accepts multipart upload, max 256 KB
 3. Parses uploaded file as JSON, calls `validateFlightJson` from `@skytalk/core`
@@ -300,6 +319,7 @@ pnpm format:check   # must pass
 6. Tests: valid upload → 200; invalid JSON → 400; invalid lesson → 422; no auth → 401
 
 **Acceptance:**
+
 - All tests pass
 - Returned URLs work (will fail at WebSocket layer for now, but validate the URL parsing in T-030)
 - DB row created with correct fields
@@ -316,6 +336,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §3, `DOMAIN_MODEL.md` §5
 
 **Implementation:**
+
 1. Endpoint extracts `token` from query string, looks up room
 2. If `tutor_token` matches → role tutor; if `student_token` matches → role student; otherwise 401
 3. If room expired or ended → 410 Gone
@@ -323,6 +344,7 @@ pnpm format:check   # must pass
 5. Tests: tutor token returns full data; student token returns filtered; bad token 401; expired room 410
 
 **Acceptance:**
+
 - All tests pass
 - Student response NEVER contains `atc`, `expected_readback`, `required_input.value`, or `notes`
 
@@ -337,6 +359,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §4
 
 **Implementation:**
+
 1. Use `@fastify/websocket` plugin
 2. On connection: validate `room_id` + `token` (same logic as T-024); reject if invalid
 3. Maintain `RoomManager` class: `Map<room_id, { tutorWs, studentWs, runtime }>`
@@ -346,6 +369,7 @@ pnpm format:check   # must pass
 7. Tests: connect with valid token → receive snapshot; connect with bad token → close 1008; second connection on same role replaces first
 
 **Acceptance:**
+
 - Two clients can connect simultaneously to same room with different role tokens
 - `state_snapshot` arrives within 100ms of connection
 - Disconnects logged
@@ -361,6 +385,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §4 (updated for Annex B states), `DOMAIN_MODEL.md` §4
 
 **Implementation:**
+
 1. Schema validation for incoming messages using Zod (reject malformed with `error: "validation_failed"`)
 2. Per-message-type handler:
    - `ping` → reply `pong`
@@ -377,6 +402,7 @@ pnpm format:check   # must pass
 5. Tests: simulate full happy-path lesson via WebSocket (Annex B §B.7); simulate error recovery (Annex B §B.8); simulate Right Arrow rejection in non-allowed states; simulate tutor sending student-only message
 
 **Acceptance:**
+
 - All test scenarios pass
 - DB rows reflect every transition with the new state names
 - Both clients receive identical broadcasts (within milliseconds)
@@ -393,6 +419,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §6 (ICE configuration), coturn `lt-cred-mech` docs
 
 **Implementation:**
+
 1. Function `generateTurnCreds(secret, ttl)` — HMAC-SHA1 based per coturn standard
 2. Username = `${unix_timestamp_expiry}:skytalk`
 3. Password = `base64(hmac_sha1(secret, username))`
@@ -400,6 +427,7 @@ pnpm format:check   # must pass
 5. Tests: generated creds match coturn's expected format; expired creds detectable
 
 **Acceptance:**
+
 - coturn accepts the generated credentials when configured with the same `static-auth-secret`
 - Tests pass
 
@@ -416,6 +444,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §8
 
 **Implementation:**
+
 1. `pnpm create vite@latest` template react-ts inside `packages/web`
 2. Add Tailwind CSS, configure
 3. Add `react-router-dom`, set up routes per `ARCHITECTURE.md §8`
@@ -424,6 +453,7 @@ pnpm format:check   # must pass
 6. Add `@skytalk/core` as workspace dependency
 
 **Acceptance:**
+
 - `pnpm --filter @skytalk/web dev` runs on http://localhost:5173
 - Each route shows its placeholder
 - Importing types from `@skytalk/core` works
@@ -439,6 +469,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §3, §8
 
 **Implementation:**
+
 1. Single password field, submit button
 2. POST to `/api/auth/login`, on success store JWT in memory (Zustand store) AND rely on HTTP-only cookie for actual auth
 3. On error: display message
@@ -446,6 +477,7 @@ pnpm format:check   # must pass
 5. Already-logged-in users skip the form (redirect to `/tutor`)
 
 **Acceptance:**
+
 - Wrong password shows error inline
 - Correct password redirects to `/tutor`
 - Refresh after login keeps session (cookie)
@@ -461,6 +493,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §3, §8
 
 **Implementation:**
+
 1. Fetch active rooms (we'll need a `GET /api/rooms` endpoint — add it as a sub-task with the same auth as T-022; lists rooms not yet ended)
 2. Display each room: lesson name, student name, created timestamp, expires timestamp, status, link to tutor URL, "Copy student URL" button
 3. "Create new room" form: file picker (drag-drop OK) for flight.json, optional student name field
@@ -468,6 +501,7 @@ pnpm format:check   # must pass
 5. On validation error: show error list inline (use the structured errors from `@skytalk/core`)
 
 **Acceptance:**
+
 - Drag-drop works
 - Validation errors displayed clearly with rule references (e.g. "Step 3: missing trailing zero (TA-03)")
 - Successful creation navigates to session
@@ -484,6 +518,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §4
 
 **Implementation:**
+
 1. Custom React hook returning `{ state, send, connectionStatus }`
 2. Connects to `wss://.../ws/rooms/:roomId?token=:token`
 3. Reconnect with exponential backoff up to 30s
@@ -493,6 +528,7 @@ pnpm format:check   # must pass
 7. Sends `ping` every 25s
 
 **Acceptance:**
+
 - Hook handles reconnect on transient network failure
 - State updates are reactive (component re-renders on new snapshot)
 - No memory leaks (proper cleanup on unmount, tested with React StrictMode double-invoke)
@@ -508,6 +544,7 @@ pnpm format:check   # must pass
 **Context to load:** `ARCHITECTURE.md` §4 (PTT semantics), `OPERATIONAL_RULES_v1_0.txt` §3.1 (radio discipline rules)
 
 **Implementation:**
+
 1. Listen on `keydown`/`keyup` globally for Space key
 2. When pressed AND not already pressed (no auto-repeat): send `{ type: "ptt", pressed: true }` once
 3. When released: send `{ type: "ptt", pressed: false }` once
@@ -516,6 +553,7 @@ pnpm format:check   # must pass
 6. Tests with React Testing Library + jsdom keyboard events
 
 **Acceptance:**
+
 - Space in input field doesn't fire PTT
 - Holding Space sends only one `pressed: true`
 - Release sends `pressed: false`
@@ -532,11 +570,13 @@ pnpm format:check   # must pass
 **Context to load:** `Executive_Summary.txt` §6, `docs/v1-source/ANNEX_B_state_machine.txt` (especially §B.2 Input Field Locking, §B.5 Right Arrow Authority, §B.6 Input Field State Matrix), `Руководство_пользователя.txt` (UI feedback semantics)
 
 **Critical rules to implement:**
+
 - **Rule IF-01** (Annex B §B.2): when spacebar is held, input field is **immediately disabled**. When released, re-enabled if state allows. This applies in ALL states except `IDLE` and `COMPLETED`. Implementation: input element has `disabled={pttPressed || !inputAllowedInState(state)}`.
 - **Right Arrow authority matrix** (Annex B §B.5): Right Arrow handler checks state. Only `INPUT_NOT_REQUIRED` and `READY_TO_ADVANCE` send the message to server. In other states, locally flash the input field red without sending anything (cheaper UX feedback than waiting for server reject).
 - **Step counter** (Annex B §B.4): bottom status bar shows `Step: X/Y` where X = `current_step_index + 1`.
 
 **Implementation:**
+
 1. Layout: dark cockpit-themed background, callsign/aircraft_type/route bottom-left, required input field bottom-right styled per input type (4 visual variants: `com_frequency` → COM window, `squawk` → squawk box, `heading` → heading selector, `altitude` → altitude window). When `required_input.type === "none"` or state is `INPUT_NOT_REQUIRED`/`READY_TO_ADVANCE`/etc., render input as disabled/grayed-out
 2. Input field state machine (mirrors Annex B §B.6):
    - `IDLE`: disabled, no flashing
@@ -553,6 +593,7 @@ pnpm format:check   # must pass
 8. Display "Tutor is transmitting" indicator when `peer_ptt.by === "tutor" && pressed`
 
 **Acceptance:**
+
 - Input field locks immediately on spacebar press (Rule IF-01) in any state where it was enabled
 - Input field re-enables on spacebar release if state allows
 - Right Arrow in `INPUT_REQUIRED` triggers local red flash, no server message sent
@@ -573,6 +614,7 @@ pnpm format:check   # must pass
 **Layout (matches desktop tutor app):**
 
 Left panel (~60% width):
+
 - Top bar: lesson name, callsign · route · aircraft_type, progress bar, Step X/Y
 - Phase badge
 - ATC Instruction box (large — this is what tutor speaks aloud)
@@ -580,6 +622,7 @@ Left panel (~60% width):
 - Notes (if present, tutor-only)
 
 Right panel (~40% width):
+
 - Required Input Cards grid (see below)
 - Navigation: ← prev / Reset / → next (skip)
 - Student Status strip: connection indicators, PTT state, attempt count
@@ -615,17 +658,20 @@ NO_INPUT (step has required_inputs === []):
 Cards reset to PENDING when step changes.
 
 **Student Status strip:**
+
 - "Student: [STATE] (input N/M)" — e.g. "Student: INPUT_REQUIRED (input 2/4)"
 - "🔴 TX" indicator when student holds spacebar (peer_ptt)
 - "Attempts: N" on current input — shown prominently when ≥3
 
 **Bottom controls:**
+
 - "Start lesson" button (IDLE only, sends `start_lesson`)
 - "End lesson" (sends `end_lesson`)
 - "Skip step" button + Shift+S shortcut (sends `skip_step`)
 - "Reset lesson" (confirmation modal, sends `reset_lesson`, all states except IDLE/ENDED)
 
 **Keyboard:**
+
 - Spacebar → PTT (`usePTT`). Tutor PTT release in LISTENING triggers state transition
 - Enter in IDLE → `start_lesson`
 - Shift+S → `skip_step`
@@ -634,6 +680,7 @@ Cards reset to PENDING when step changes.
 **Note:** tutor does NOT press Right Arrow to advance. Only student can advance. Tutor controls: speak (PTT), skip (demonstrate), reset, end.
 
 **Acceptance:**
+
 - Left/right split layout matches desktop screenshot proportions
 - All required input cards visible simultaneously, in order
 - Active card (current input_index) has pulsing highlight
@@ -656,6 +703,7 @@ Cards reset to PENDING when step changes.
 **Context to load:** `ARCHITECTURE.md` §6
 
 **Implementation:**
+
 1. Init PeerJS with peer ID `${roomId}-${role}` and ICE config from `turnCreds`
 2. Tutor side: on `peer.open`, place call to `${roomId}-student` with local audio stream
 3. Student side: on `peer.on('call')`, answer with local audio stream
@@ -664,6 +712,7 @@ Cards reset to PENDING when step changes.
 6. Cleanup: destroy peer on unmount
 
 **Acceptance:**
+
 - Manual test: open both sessions in two browsers (or two tabs), verify audio flows both ways
 - Mute button mutes local audio (peer no longer hears)
 - Reconnect works after temporary network drop
@@ -679,12 +728,14 @@ Cards reset to PENDING when step changes.
 **Context to load:** `ARCHITECTURE.md` §7
 
 **Implementation:**
+
 1. Class `RadioAudioEngine` in `packages/web/src/audio/`
 2. `processOutbound(MediaStream): MediaStream` chain: source → highpass 300 → lowpass 3000 → compressor → waveshaper (mild saturation) → MediaStreamDestination
 3. Expose `intensity: number` (0–1) controlling compression and saturation depth
 4. Visual test page (`/dev/audio-test` route, dev-only): plays a sine sweep through the chain so you can hear the effect
 
 **Acceptance:**
+
 - The dev test page plays processed audio
 - At intensity=1.0, voice sounds bandwidth-limited and slightly distorted
 - At intensity=0, voice is unaffected (passthrough)
@@ -701,6 +752,7 @@ Cards reset to PENDING when step changes.
 **Context to load:** `ARCHITECTURE.md` §7
 
 **Implementation:**
+
 1. `processInbound(peerStream, options)` → AudioNode connected to destination
 2. Static: generate white noise via `AudioBufferSourceNode` (loop), bandpass 500–2500 Hz, gain controlled by intensity
 3. Sample assets in `src/audio/samples/`: `click.wav`, `squelch-tail.wav`, `channel-change.wav` (CC0 from freesound.org or generated)
@@ -708,6 +760,7 @@ Cards reset to PENDING when step changes.
 5. Wire up in session pages: subscribe to `peer_ptt` from WebSocket → call click/tail; subscribe to `step_changed` → call channel change
 
 **Acceptance:**
+
 - Dev test page lets you trigger each effect and hear the difference
 - During a real session, hearing the tutor speak is preceded by a click and followed by a squelch tail
 - Static is audible but doesn't drown out voice
@@ -724,12 +777,14 @@ Cards reset to PENDING when step changes.
 **Context to load:** `ARCHITECTURE.md` §7 (last paragraph)
 
 **Implementation:**
+
 1. Settings panel (gear icon top-right of student UI)
 2. Slider 0–100, default 60, persisted in localStorage
 3. Wires through to `RadioAudioEngine.setIntensity()`
 4. Optional: separate sliders for "voice processing" and "static volume"
 
 **Acceptance:**
+
 - Slider visibly affects audio in real time
 - Setting persists across page reloads
 - Tutor UI also has the slider (for tutor's own monitoring)
@@ -747,6 +802,7 @@ Cards reset to PENDING when step changes.
 **Context to load:** `ARCHITECTURE.md` §2, §10
 
 **Implementation:**
+
 1. `infra/nginx/skytalk.conf` — server block per `ARCHITECTURE §2`
 2. `infra/systemd/skytalk-server.service` — runs Node server as `skytalk` user, `Restart=always`, `WorkingDirectory=/opt/skytalk/server`, env file `/etc/skytalk/server.env`
 3. `infra/systemd/skytalk-peerserver.service` — runs PeerServer
@@ -755,6 +811,7 @@ Cards reset to PENDING when step changes.
 6. README in `infra/` explaining what each file does and how to install
 
 **Acceptance:**
+
 - All files present and pass syntax validation (`nginx -t`, `systemd-analyze verify`, etc.)
 - README is detailed enough that you could follow it on a fresh VPS
 
@@ -769,6 +826,7 @@ Cards reset to PENDING when step changes.
 **Context to load:** `ARCHITECTURE.md` §10
 
 **Implementation:**
+
 1. Script reads VPS host from `.deploy.env` (gitignored)
 2. `pnpm -r build` locally
 3. `rsync -av packages/server/dist/ packages/server/node_modules/ skytalk@host:/opt/skytalk/server/`
@@ -777,6 +835,7 @@ Cards reset to PENDING when step changes.
 6. Output: timing for each step
 
 **Acceptance:**
+
 - Idempotent (running twice with no changes does nothing destructive)
 - Failure at any step halts the script
 - Logs the deployed git commit hash
@@ -792,6 +851,7 @@ Cards reset to PENDING when step changes.
 **Context to load:** `ARCHITECTURE.md` §10 (First-time setup)
 
 **Steps:**
+
 1. Upgrade VPS to 2 vCPU / 2 GB (provider control panel)
 2. SSH in, follow the README from T-050
 3. Set up `skytalk` user, directories, env files
@@ -801,6 +861,7 @@ Cards reset to PENDING when step changes.
 7. Manual smoke test: log in as tutor, upload a test flight.json, open student URL in incognito browser, complete one step end-to-end with audio
 
 **Acceptance:**
+
 - All five components running: nginx, skytalk-server, peerserver, coturn, quiz-app (untouched)
 - TLS certificate valid
 - Health endpoint returns 200 from public internet
@@ -818,6 +879,7 @@ Cards reset to PENDING when step changes.
 **Context to load:** `ARCHITECTURE.md` §11, §12
 
 **Implementation:**
+
 1. Cron job (or systemd timer) `/usr/local/bin/skytalk-metrics.sh` writing system stats every minute to `/var/log/skytalk/metrics.log`
 2. `logrotate` config for `/var/log/skytalk/`
 3. UptimeRobot account configured to ping `/api/health` every 5 minutes
@@ -825,6 +887,7 @@ Cards reset to PENDING when step changes.
 5. Weekly rsync to external storage (Hetzner Storage Box or similar)
 
 **Acceptance:**
+
 - After 1 hour, metrics.log has 60 entries
 - Manually trigger backup, verify archive contents
 - UptimeRobot shows green
@@ -841,6 +904,7 @@ Cards reset to PENDING when step changes.
 **Depends on:** T-035, T-036
 
 **Implementation:**
+
 1. `/ended` page with friendly message + "back to home" link
 2. Connection lost banner: "Reconnecting..." with auto-retry
 3. Token expired: redirect to `/ended` with "session expired" message
@@ -848,6 +912,7 @@ Cards reset to PENDING when step changes.
 5. WebRTC failed: fallback message "Audio could not connect — check firewall or try a different network"
 
 **Acceptance:**
+
 - Each scenario tested manually
 - No console errors anywhere
 
@@ -858,12 +923,14 @@ Cards reset to PENDING when step changes.
 **Goal:** Keyboard navigation works everywhere; screen readers don't trip.
 
 **Implementation:**
+
 1. All interactive elements have proper roles, labels, focus styles
 2. Color contrast checked (cockpit dark UI is the risky one)
 3. Page structure has correct landmarks (`<main>`, `<nav>`, etc.)
 4. Test with VoiceOver/NVDA on the tutor login + dashboard at minimum
 
 **Acceptance:**
+
 - Lighthouse accessibility score >90
 - Keyboard-only operation possible for all flows except actually conducting a lesson (which is keyboard-native by design)
 
@@ -874,11 +941,13 @@ Cards reset to PENDING when step changes.
 **Goal:** README, runbook, and tutor user guide.
 
 **Implementation:**
+
 1. Top-level `README.md`: what it is, how to develop locally, link to architecture docs
 2. `RUNBOOK.md` for operations: common issues, log locations, how to restart, how to roll back
 3. Brief tutor guide (1 page) covering the new web flow vs. old desktop flow
 
 **Acceptance:**
+
 - A new developer can clone, install, and run locally following the README
 - Operations actions are documented
 - Tutor can follow the guide without questions for first session

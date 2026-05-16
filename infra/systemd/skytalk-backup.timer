@@ -1,0 +1,10 @@
+[Unit]
+Description=SkyTalk backup — run daily at 02:00
+Requires=skytalk-backup.service
+
+[Timer]
+OnCalendar=*-*-* 02:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

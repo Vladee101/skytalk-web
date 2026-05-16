@@ -5,6 +5,7 @@
 > **Authority:** The Annexes in `docs/v1-source/` are normative. This document translates them into TypeScript-flavored pseudocode for `@skytalk/core`. When this document and an Annex disagree, the Annex wins; please open an issue or notify the project owner so this document can be corrected.
 >
 > **Source mapping:**
+>
 > - Section 1 (types) — based on `ANNEX_A_flight_schema.txt`
 > - Section 2 (lesson validation) — based on `ANNEX_A` + `ANNEX_D`
 > - Section 3 (input validation) — based on `ANNEX_C` only (NOT Operational Rules — see explanation)
@@ -21,17 +22,17 @@ These types reflect the **actual `flight.json` format produced by the desktop tu
 
 **Key differences from Annex A (idealized spec) vs actual desktop format:**
 
-| Annex A says | Desktop tutor actually produces | Resolution |
-|---|---|---|
-| `required_input` (singular object) | `required_inputs` (array, max ~4 items) | Use array — multi-input is a real feature |
-| No `{ type: "none" }` needed when empty | Empty array `[]` for no-input steps | Accept empty array as "no input required" |
-| No `input_id` on inputs | Each input has `input_id` (UUID) | Accept and preserve, not required |
-| No `id` on steps | Each step has `id` (UUID) | Accept and preserve, not required |
-| No top-level `id` | Document has `id` (UUID) | Accept, ignore |
-| `aircraft_type` only | Both `aircraft_type` AND `aircraft` | Accept both, use `aircraft_type` |
-| `difficulty` only | Both `difficulty` AND `level` | Accept both, use `difficulty` |
+| Annex A says                            | Desktop tutor actually produces         | Resolution                                |
+| --------------------------------------- | --------------------------------------- | ----------------------------------------- |
+| `required_input` (singular object)      | `required_inputs` (array, max ~4 items) | Use array — multi-input is a real feature |
+| No `{ type: "none" }` needed when empty | Empty array `[]` for no-input steps     | Accept empty array as "no input required" |
+| No `input_id` on inputs                 | Each input has `input_id` (UUID)        | Accept and preserve, not required         |
+| No `id` on steps                        | Each step has `id` (UUID)               | Accept and preserve, not required         |
+| No top-level `id`                       | Document has `id` (UUID)                | Accept, ignore                            |
+| `aircraft_type` only                    | Both `aircraft_type` AND `aircraft`     | Accept both, use `aircraft_type`          |
+| `difficulty` only                       | Both `difficulty` AND `level`           | Accept both, use `difficulty`             |
 
-```ts
+````ts
 // ============================================================
 // FlightLesson — mirrors actual desktop tutor output
 // ============================================================
@@ -234,7 +235,7 @@ export interface LessonRuntime {
   attempt_count: number;
   last_input?: { value: string; correct: boolean; ts: number };
 }
-```
+````
 
 ### Why `RequiredInput` is a discriminated union
 
@@ -251,11 +252,11 @@ export type ValidationError = {
   path: string;
   rule: string;
   message: string;
-  severity: "error" | "warning";
+  severity: 'error' | 'warning';
 };
 
 export type ValidationResult =
-  | { valid: true;  lesson: FlightLesson; warnings: ValidationError[] }
+  | { valid: true; lesson: FlightLesson; warnings: ValidationError[] }
   | { valid: false; errors: ValidationError[]; warnings: ValidationError[] };
 
 export function validateFlightJson(raw: unknown): ValidationResult;
@@ -269,43 +270,43 @@ The validator does **not** enforce `additionalProperties: false` (unlike Annex A
 
 ### Top-level checks
 
-| Check | Severity |
-|---|---|
-| Input is a non-null object | error |
+| Check                      | Severity                        |
+| -------------------------- | ------------------------------- |
+| Input is a non-null object | error                           |
 | `schema_version === "1.0"` | error, halts further validation |
-| `lesson` object present | error |
-| `steps` is non-empty array | error |
+| `lesson` object present    | error                           |
+| `steps` is non-empty array | error                           |
 
 ### Lesson metadata checks
 
-| Field | Rule | Severity |
-|---|---|---|
-| `name` | non-empty string | error |
-| `callsign` | matches `^[A-Z0-9]+$` | error |
-| `route` | matches `^[A-Z]{4}-[A-Z]{4}$` | error |
-| `aircraft_type` | non-empty string | error |
-| `difficulty` | one of `beginner`/`intermediate`/`advanced` | error |
-| `aircraft`, `level`, `id` | if present, accepted silently | — |
+| Field                     | Rule                                        | Severity |
+| ------------------------- | ------------------------------------------- | -------- |
+| `name`                    | non-empty string                            | error    |
+| `callsign`                | matches `^[A-Z0-9]+$`                       | error    |
+| `route`                   | matches `^[A-Z]{4}-[A-Z]{4}$`               | error    |
+| `aircraft_type`           | non-empty string                            | error    |
+| `difficulty`              | one of `beginner`/`intermediate`/`advanced` | error    |
+| `aircraft`, `level`, `id` | if present, accepted silently               | —        |
 
 ### Per-step checks
 
-| Check | Severity |
-|---|---|
-| `step` is integer, sequential from 1 (`steps[i].step === i + 1`) | error |
-| `phase` is one of the 11 enum values | error |
-| `atc` non-empty string | error |
-| `expected_readback` non-empty string | error |
-| `required_inputs` is an array (may be empty) | error |
+| Check                                                                                                               | Severity       |
+| ------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `step` is integer, sequential from 1 (`steps[i].step === i + 1`)                                                    | error          |
+| `phase` is one of the 11 enum values                                                                                | error          |
+| `atc` non-empty string                                                                                              | error          |
+| `expected_readback` non-empty string                                                                                | error          |
+| `required_inputs` is an array (may be empty)                                                                        | error          |
 | Each item in `required_inputs`: `type` is valid enum (excluding `"none"`), `value` present and matches type's regex | error per item |
-| `required_inputs.length <= 4` (observed max, sanity cap) | warning |
-| `id`, `required_inputs_local`, translation fields: accepted silently | — |
+| `required_inputs.length <= 4` (observed max, sanity cap)                                                            | warning        |
+| `id`, `required_inputs_local`, translation fields: accepted silently                                                | —              |
 
 ### Empty array = no input required
 
 ```ts
 // Both of these mean "no typed input needed on this step":
-step.required_inputs === []          // desktop tutor produces this
-step.required_inputs === undefined   // older files might omit it
+step.required_inputs === []; // desktop tutor produces this
+step.required_inputs === undefined; // older files might omit it
 
 // NOT: { type: "none" } — desktop doesn't produce that form
 // The validator normalizes: if required_inputs is missing, treat as []
@@ -321,7 +322,7 @@ During `validateFlightJson`, before validation, apply these normalizations silen
 // Both are semantically identical; web version only knows "com_frequency".
 for (const step of raw.steps) {
   for (const input of step.required_inputs ?? []) {
-    if (input.type === "frequency") input.type = "com_frequency";
+    if (input.type === 'frequency') input.type = 'com_frequency';
   }
 }
 ```
@@ -354,16 +355,16 @@ The real enforcement of trailing-zero is **exact-match** between expected and su
 ```ts
 // Source: Annex C regex column, verbatim.
 // Note: "none" is not in this map — it never appears in required_inputs array items.
-const FORMAT_PATTERNS: Record<Exclude<RequiredInputType, "none">, RegExp> = {
+const FORMAT_PATTERNS: Record<Exclude<RequiredInputType, 'none'>, RegExp> = {
   com_frequency: /^[1-9][0-9]{2}\.[0-9]{1,3}$/,
-  squawk:        /^[0-7]{4}$/,
-  heading:       /^[0-9]{3}$/,
-  altitude:      /^[0-9]+$/,
+  squawk: /^[0-7]{4}$/,
+  heading: /^[0-9]{3}$/,
+  altitude: /^[0-9]+$/,
 };
 
 export function validateInputFormat(
-  type: Exclude<RequiredInputType, "none">,
-  value: string
+  type: Exclude<RequiredInputType, 'none'>,
+  value: string,
 ): boolean {
   return FORMAT_PATTERNS[type].test(value);
 }
@@ -371,12 +372,12 @@ export function validateInputFormat(
 
 Test cases (from Annex C tables):
 
-| Type | Valid examples | Invalid examples |
-|---|---|---|
+| Type            | Valid examples                                  | Invalid examples                                                  |
+| --------------- | ----------------------------------------------- | ----------------------------------------------------------------- |
 | `com_frequency` | `"118.7"`, `"121.900"`, `"118.70"`, `"118.725"` | `"011.7"` (leading zero), `"118"` (no decimal), `"118,7"` (comma) |
-| `squawk` | `"4721"`, `"1200"`, `"7500"` | `"8888"` (8 not octal), `"129"` (3 digits), `"47210"` (5 digits) |
-| `heading` | `"090"`, `"270"`, `"360"`, `"999"` | `"90"` (2 digits), `"27"`, `"270°"` (suffix) |
-| `altitude` | `"5000"`, `"35000"`, `"0"` | `"FL350"`, `"35,000"` (comma), `"5000ft"` (suffix) |
+| `squawk`        | `"4721"`, `"1200"`, `"7500"`                    | `"8888"` (8 not octal), `"129"` (3 digits), `"47210"` (5 digits)  |
+| `heading`       | `"090"`, `"270"`, `"360"`, `"999"`              | `"90"` (2 digits), `"27"`, `"270°"` (suffix)                      |
+| `altitude`      | `"5000"`, `"35000"`, `"0"`                      | `"FL350"`, `"35,000"` (comma), `"5000ft"` (suffix)                |
 
 Note: `heading: "999"` IS valid format-wise per Annex C "no range enforcement". Don't add range checks. v1 trusts the tutor.
 
@@ -385,19 +386,19 @@ Note: `heading: "999"` IS valid format-wise per Annex C "no range enforcement". 
 ```ts
 export type InputValidationResult =
   | { correct: true }
-  | { correct: false; reason: "format_invalid" | "value_mismatch" };
+  | { correct: false; reason: 'format_invalid' | 'value_mismatch' };
 
 export function validateInput(
-  type: Exclude<RequiredInputType, "none">,
+  type: Exclude<RequiredInputType, 'none'>,
   expectedValue: string,
-  submittedValue: string
+  submittedValue: string,
 ): InputValidationResult {
   if (!validateInputFormat(type, submittedValue)) {
-    return { correct: false, reason: "format_invalid" };
+    return { correct: false, reason: 'format_invalid' };
   }
   // Exact-match, case-sensitive, no trimming beyond UI sanitation (Annex C §C.2).
   if (submittedValue !== expectedValue) {
-    return { correct: false, reason: "value_mismatch" };
+    return { correct: false, reason: 'value_mismatch' };
   }
   return { correct: true };
 }
@@ -411,14 +412,14 @@ This function runs **server-side** on every `submit_input` WebSocket message and
 
 ### 4.1 The 6 states (from Annex B §B.1)
 
-| State | Meaning |
-|---|---|
-| `IDLE` | Room created, lesson not yet started. Pre-everything. |
-| `LISTENING` | Current step is active. Tutor is (or will be) speaking. Student is listening. Input field disabled. |
-| `INPUT_REQUIRED` | Tutor finished transmission. Step has `required_input.type !== "none"`. Student must type and submit. |
-| `INPUT_NOT_REQUIRED` | Tutor finished transmission. Step has `required_input.type === "none"`. No typed input expected. |
-| `READY_TO_ADVANCE` | Either input was correct OR student gave verbal readback for no-input step. Awaiting tutor approval (verbal) and student's right-arrow. |
-| `COMPLETED` | Last step finished. |
+| State                | Meaning                                                                                                                                 |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `IDLE`               | Room created, lesson not yet started. Pre-everything.                                                                                   |
+| `LISTENING`          | Current step is active. Tutor is (or will be) speaking. Student is listening. Input field disabled.                                     |
+| `INPUT_REQUIRED`     | Tutor finished transmission. Step has `required_input.type !== "none"`. Student must type and submit.                                   |
+| `INPUT_NOT_REQUIRED` | Tutor finished transmission. Step has `required_input.type === "none"`. No typed input expected.                                        |
+| `READY_TO_ADVANCE`   | Either input was correct OR student gave verbal readback for no-input step. Awaiting tutor approval (verbal) and student's right-arrow. |
+| `COMPLETED`          | Last step finished.                                                                                                                     |
 
 ### 4.2 Trigger sources
 
@@ -432,24 +433,24 @@ Web translation: where Annex B says "external", we use the tutor's PTT release a
 
 ### 4.3 Server-side transition table
 
-| Current State | Trigger | Condition | New State | Server emits |
-|---|---|---|---|---|
-| `IDLE` | tutor: `start_lesson` | — | `LISTENING` | `step_changed{step_index:0}` |
-| `LISTENING` | student: `ptt(true/false)` | — | `LISTENING` (stay) | `peer_ptt` |
-| `LISTENING` | tutor: `ptt(false)` | step has `required_inputs.length > 0` | `INPUT_REQUIRED` | `state_changed` |
-| `LISTENING` | tutor: `ptt(false)` | step has `required_inputs.length === 0` | `INPUT_NOT_REQUIRED` | `state_changed` |
-| `INPUT_REQUIRED` | student: `submit_input` | correct AND more inputs remain | `INPUT_REQUIRED` (stay) | `input_result{correct:true, input_index:N, more_inputs:true}` |
-| `INPUT_REQUIRED` | student: `submit_input` | correct AND last input | `READY_TO_ADVANCE` | `input_result{correct:true, more_inputs:false}`, `state_changed` |
-| `INPUT_REQUIRED` | student: `submit_input` | wrong | `INPUT_REQUIRED` (stay) | `input_result{correct:false, input_index:N}`, `attempt_count++` |
-| `INPUT_NOT_REQUIRED` | student: `right_arrow` | — | `READY_TO_ADVANCE` | `state_changed` |
-| `READY_TO_ADVANCE` | student: `right_arrow` | more steps remain | `LISTENING` (next step) | `step_changed{step_index:N+1}` |
-| `READY_TO_ADVANCE` | student: `right_arrow` | last step | `COMPLETED` | `lesson_completed` |
-| any (except IDLE/COMPLETED/ENDED) | tutor: `repeat_step` | — | unchanged | `repeat_signal` |
-| any (except IDLE/COMPLETED/ENDED) | tutor: `skip_step` | — | next step's initial state, or `COMPLETED` | `step_changed{reason:"skip"}` |
-| any (except IDLE/ENDED) | tutor or student: `reset_lesson` | — | `LISTENING` step 0, input_index 0 | `lesson_reset`, `step_changed{reason:"reset"}` |
-| any (except ENDED) | tutor or student: `end_lesson` | — | `ENDED` | `lesson_ended` |
-| any (except ENDED) | student: `exit` | — | `ENDED` | `lesson_ended{reason:"exit"}` |
-| `COMPLETED` | student: `right_arrow` | — | unchanged | (no-op) |
+| Current State                     | Trigger                          | Condition                               | New State                                 | Server emits                                                     |
+| --------------------------------- | -------------------------------- | --------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------- |
+| `IDLE`                            | tutor: `start_lesson`            | —                                       | `LISTENING`                               | `step_changed{step_index:0}`                                     |
+| `LISTENING`                       | student: `ptt(true/false)`       | —                                       | `LISTENING` (stay)                        | `peer_ptt`                                                       |
+| `LISTENING`                       | tutor: `ptt(false)`              | step has `required_inputs.length > 0`   | `INPUT_REQUIRED`                          | `state_changed`                                                  |
+| `LISTENING`                       | tutor: `ptt(false)`              | step has `required_inputs.length === 0` | `INPUT_NOT_REQUIRED`                      | `state_changed`                                                  |
+| `INPUT_REQUIRED`                  | student: `submit_input`          | correct AND more inputs remain          | `INPUT_REQUIRED` (stay)                   | `input_result{correct:true, input_index:N, more_inputs:true}`    |
+| `INPUT_REQUIRED`                  | student: `submit_input`          | correct AND last input                  | `READY_TO_ADVANCE`                        | `input_result{correct:true, more_inputs:false}`, `state_changed` |
+| `INPUT_REQUIRED`                  | student: `submit_input`          | wrong                                   | `INPUT_REQUIRED` (stay)                   | `input_result{correct:false, input_index:N}`, `attempt_count++`  |
+| `INPUT_NOT_REQUIRED`              | student: `right_arrow`           | —                                       | `READY_TO_ADVANCE`                        | `state_changed`                                                  |
+| `READY_TO_ADVANCE`                | student: `right_arrow`           | more steps remain                       | `LISTENING` (next step)                   | `step_changed{step_index:N+1}`                                   |
+| `READY_TO_ADVANCE`                | student: `right_arrow`           | last step                               | `COMPLETED`                               | `lesson_completed`                                               |
+| any (except IDLE/COMPLETED/ENDED) | tutor: `repeat_step`             | —                                       | unchanged                                 | `repeat_signal`                                                  |
+| any (except IDLE/COMPLETED/ENDED) | tutor: `skip_step`               | —                                       | next step's initial state, or `COMPLETED` | `step_changed{reason:"skip"}`                                    |
+| any (except IDLE/ENDED)           | tutor or student: `reset_lesson` | —                                       | `LISTENING` step 0, input_index 0         | `lesson_reset`, `step_changed{reason:"reset"}`                   |
+| any (except ENDED)                | tutor or student: `end_lesson`   | —                                       | `ENDED`                                   | `lesson_ended`                                                   |
+| any (except ENDED)                | student: `exit`                  | —                                       | `ENDED`                                   | `lesson_ended{reason:"exit"}`                                    |
+| `COMPLETED`                       | student: `right_arrow`           | —                                       | unchanged                                 | (no-op)                                                          |
 
 ### Multi-input step progression
 
@@ -480,14 +481,14 @@ Implementation: this is enforced in the React student page via the PTT hook — 
 
 #### Right Arrow authority matrix (Annex B §B.5)
 
-| State | Right Arrow allowed? | If not allowed |
-|---|---|---|
-| `IDLE` | No | (no feedback, key dead) |
-| `LISTENING` | No | red flash on input field |
-| `INPUT_REQUIRED` | No | red flash on input field |
-| `INPUT_NOT_REQUIRED` | **Yes** (transitions to `READY_TO_ADVANCE`) | — |
-| `READY_TO_ADVANCE` | **Yes** (advances or completes) | — |
-| `COMPLETED` | No | (no feedback) |
+| State                | Right Arrow allowed?                        | If not allowed           |
+| -------------------- | ------------------------------------------- | ------------------------ |
+| `IDLE`               | No                                          | (no feedback, key dead)  |
+| `LISTENING`          | No                                          | red flash on input field |
+| `INPUT_REQUIRED`     | No                                          | red flash on input field |
+| `INPUT_NOT_REQUIRED` | **Yes** (transitions to `READY_TO_ADVANCE`) | —                        |
+| `READY_TO_ADVANCE`   | **Yes** (advances or completes)             | —                        |
+| `COMPLETED`          | No                                          | (no feedback)            |
 
 This is enforced server-side: a `right_arrow` message in a state where it's blocked → server responds with `error{code:"invalid_action"}` and the client UI flashes red.
 
@@ -503,29 +504,35 @@ The state machine class lives in `@skytalk/core`:
 
 ```ts
 export type StateMachineEvent =
-  | { type: "start_lesson"; by: "tutor" }
-  | { type: "ptt"; by: "tutor" | "student"; pressed: boolean }
-  | { type: "submit_input"; value: string }   // server uses current_input_index to know which input
-  | { type: "right_arrow"; by: "student" }
-  | { type: "repeat_step"; by: "tutor" }
-  | { type: "skip_step"; by: "tutor" }
-  | { type: "end_lesson"; by: "tutor" | "student" }
-  | { type: "reset_lesson"; by: "tutor" | "student" }
-  | { type: "exit"; by: "student" };
+  | { type: 'start_lesson'; by: 'tutor' }
+  | { type: 'ptt'; by: 'tutor' | 'student'; pressed: boolean }
+  | { type: 'submit_input'; value: string } // server uses current_input_index to know which input
+  | { type: 'right_arrow'; by: 'student' }
+  | { type: 'repeat_step'; by: 'tutor' }
+  | { type: 'skip_step'; by: 'tutor' }
+  | { type: 'end_lesson'; by: 'tutor' | 'student' }
+  | { type: 'reset_lesson'; by: 'tutor' | 'student' }
+  | { type: 'exit'; by: 'student' };
 
 export type EmittedEvent =
-  | { type: "state_changed"; state: LessonState }
-  | { type: "step_changed"; step_index: number; reason: "advance" | "skip" | "start" | "reset" }
-  | { type: "input_result"; correct: boolean; input_index: number; more_inputs: boolean; attempt_count: number }
-  | { type: "peer_ptt"; by: "tutor" | "student"; pressed: boolean }
-  | { type: "repeat_signal" }
-  | { type: "lesson_completed" }
-  | { type: "lesson_reset" }
-  | { type: "lesson_ended"; reason: "by_tutor" | "by_student" | "exit" | "expired" };
+  | { type: 'state_changed'; state: LessonState }
+  | { type: 'step_changed'; step_index: number; reason: 'advance' | 'skip' | 'start' | 'reset' }
+  | {
+      type: 'input_result';
+      correct: boolean;
+      input_index: number;
+      more_inputs: boolean;
+      attempt_count: number;
+    }
+  | { type: 'peer_ptt'; by: 'tutor' | 'student'; pressed: boolean }
+  | { type: 'repeat_signal' }
+  | { type: 'lesson_completed' }
+  | { type: 'lesson_reset' }
+  | { type: 'lesson_ended'; reason: 'by_tutor' | 'by_student' | 'exit' | 'expired' };
 
 export type TransitionResult =
-  | { ok: true;  state: LessonRuntime; emit: EmittedEvent[] }
-  | { ok: false; error: "invalid_action" | "wrong_role" | "wrong_state"; message: string };
+  | { ok: true; state: LessonRuntime; emit: EmittedEvent[] }
+  | { ok: false; error: 'invalid_action' | 'wrong_role' | 'wrong_state'; message: string };
 
 export class LessonStateMachine {
   constructor(private readonly lesson: FlightLesson) {}
@@ -539,6 +546,7 @@ export class LessonStateMachine {
 ### 4.6 State persistence
 
 After every successful transition, the server:
+
 1. Writes the new `LessonRuntime` to the `rooms` row
 2. Appends an entry to `session_events` (audit log)
 3. Broadcasts the emitted events to both clients via WebSocket
@@ -553,16 +561,16 @@ Server-only. Lives in `@skytalk/core` so the same logic governs both REST GET an
 export type StepView = {
   step: number;
   phase: FlightPhase;
-  required_input: { type: RequiredInputType };  // type only, no value
+  required_input: { type: RequiredInputType }; // type only, no value
 };
 
-export type StepViewTutor = Step;                // full data including answers
+export type StepViewTutor = Step; // full data including answers
 
-export function viewStepForRole<R extends "tutor" | "student">(
+export function viewStepForRole<R extends 'tutor' | 'student'>(
   step: Step,
-  role: R
-): R extends "tutor" ? Step : StepView {
-  if (role === "tutor") return step as any;
+  role: R,
+): R extends 'tutor' ? Step : StepView {
+  if (role === 'tutor') return step as any;
   return {
     step: step.step,
     phase: step.phase,
@@ -581,22 +589,22 @@ Every meaningful runtime event is appended to `session_events`. Source: web-vers
 
 ```ts
 export type SessionEventType =
-  | "room_created"
-  | "client_connected"
-  | "client_disconnected"
-  | "lesson_started"
-  | "state_changed"
-  | "step_changed"
-  | "input_submitted"
-  | "ptt_changed"
-  | "lesson_completed"
-  | "lesson_ended";
+  | 'room_created'
+  | 'client_connected'
+  | 'client_disconnected'
+  | 'lesson_started'
+  | 'state_changed'
+  | 'step_changed'
+  | 'input_submitted'
+  | 'ptt_changed'
+  | 'lesson_completed'
+  | 'lesson_ended';
 
 export interface SessionEvent {
-  id: number;                                 // auto-increment
+  id: number; // auto-increment
   room_id: string;
-  ts: number;                                 // unix ms
-  actor: "tutor" | "student" | "server";
+  ts: number; // unix ms
+  actor: 'tutor' | 'student' | 'server';
   event_type: SessionEventType;
   payload: Record<string, unknown>;
 }
@@ -629,30 +637,30 @@ These are mandatory test cases for `@skytalk/core`. They're transcribed from Ann
 
 ```ts
 // com_frequency
-expect(validateInputFormat("com_frequency", "118.7")).toBe(true);
-expect(validateInputFormat("com_frequency", "121.900")).toBe(true);
-expect(validateInputFormat("com_frequency", "118.725")).toBe(true);
-expect(validateInputFormat("com_frequency", "011.7")).toBe(false);
-expect(validateInputFormat("com_frequency", "118")).toBe(false);
-expect(validateInputFormat("com_frequency", "118,7")).toBe(false);
+expect(validateInputFormat('com_frequency', '118.7')).toBe(true);
+expect(validateInputFormat('com_frequency', '121.900')).toBe(true);
+expect(validateInputFormat('com_frequency', '118.725')).toBe(true);
+expect(validateInputFormat('com_frequency', '011.7')).toBe(false);
+expect(validateInputFormat('com_frequency', '118')).toBe(false);
+expect(validateInputFormat('com_frequency', '118,7')).toBe(false);
 
 // squawk
-expect(validateInputFormat("squawk", "4721")).toBe(true);
-expect(validateInputFormat("squawk", "8888")).toBe(false);   // 8 not octal
-expect(validateInputFormat("squawk", "129")).toBe(false);    // 3 digits
-expect(validateInputFormat("squawk", "47210")).toBe(false);  // 5 digits
+expect(validateInputFormat('squawk', '4721')).toBe(true);
+expect(validateInputFormat('squawk', '8888')).toBe(false); // 8 not octal
+expect(validateInputFormat('squawk', '129')).toBe(false); // 3 digits
+expect(validateInputFormat('squawk', '47210')).toBe(false); // 5 digits
 
 // heading
-expect(validateInputFormat("heading", "090")).toBe(true);
-expect(validateInputFormat("heading", "999")).toBe(true);    // no range check (Annex C explicit)
-expect(validateInputFormat("heading", "90")).toBe(false);
-expect(validateInputFormat("heading", "270°")).toBe(false);
+expect(validateInputFormat('heading', '090')).toBe(true);
+expect(validateInputFormat('heading', '999')).toBe(true); // no range check (Annex C explicit)
+expect(validateInputFormat('heading', '90')).toBe(false);
+expect(validateInputFormat('heading', '270°')).toBe(false);
 
 // altitude
-expect(validateInputFormat("altitude", "5000")).toBe(true);
-expect(validateInputFormat("altitude", "0")).toBe(true);
-expect(validateInputFormat("altitude", "FL350")).toBe(false);
-expect(validateInputFormat("altitude", "35,000")).toBe(false);
+expect(validateInputFormat('altitude', '5000')).toBe(true);
+expect(validateInputFormat('altitude', '0')).toBe(true);
+expect(validateInputFormat('altitude', 'FL350')).toBe(false);
+expect(validateInputFormat('altitude', '35,000')).toBe(false);
 ```
 
 ### 7.2 Exact-match enforcement of trailing zero
@@ -660,28 +668,28 @@ expect(validateInputFormat("altitude", "35,000")).toBe(false);
 ```ts
 // Lesson author wrote "118.70". Student types "118.7". Both are valid format,
 // but exact-match fails — this is how trailing-zero discipline is enforced.
-expect(validateInput("com_frequency", "118.70", "118.7")).toEqual({
+expect(validateInput('com_frequency', '118.70', '118.7')).toEqual({
   correct: false,
-  reason: "value_mismatch"
+  reason: 'value_mismatch',
 });
 
 // Same value → correct
-expect(validateInput("com_frequency", "118.70", "118.70")).toEqual({ correct: true });
+expect(validateInput('com_frequency', '118.70', '118.70')).toEqual({ correct: true });
 ```
 
 ### 7.3 Format-vs-mismatch ordering
 
 ```ts
 // Format failure is reported before value mismatch (cheaper check first, clearer error)
-expect(validateInput("squawk", "4721", "129")).toEqual({
+expect(validateInput('squawk', '4721', '129')).toEqual({
   correct: false,
-  reason: "format_invalid"
+  reason: 'format_invalid',
 });
 
 // Format passes but value differs
-expect(validateInput("squawk", "4721", "4720")).toEqual({
+expect(validateInput('squawk', '4721', '4720')).toEqual({
   correct: false,
-  reason: "value_mismatch"
+  reason: 'value_mismatch',
 });
 ```
 
@@ -690,107 +698,141 @@ expect(validateInput("squawk", "4721", "4720")).toEqual({
 ```ts
 // Lesson fixture: use actual JSON format (required_inputs array, not required_input object)
 const lesson: FlightLesson = {
-  schema_version: "1.0",
-  lesson: { name: "test", callsign: "KLM641", route: "KJFK-EHAM", aircraft_type: "B747", difficulty: "beginner" },
+  schema_version: '1.0',
+  lesson: {
+    name: 'test',
+    callsign: 'KLM641',
+    route: 'KJFK-EHAM',
+    aircraft_type: 'B747',
+    difficulty: 'beginner',
+  },
   steps: [
-    { step: 1, phase: "TAXI", atc: "contact Tower 118.70", expected_readback: "...",
-      required_inputs: [{ type: "com_frequency", value: "118.70" }] },
-    { step: 2, phase: "TAKEOFF", atc: "cleared for takeoff", expected_readback: "...",
-      required_inputs: [] }
-  ]
+    {
+      step: 1,
+      phase: 'TAXI',
+      atc: 'contact Tower 118.70',
+      expected_readback: '...',
+      required_inputs: [{ type: 'com_frequency', value: '118.70' }],
+    },
+    {
+      step: 2,
+      phase: 'TAKEOFF',
+      atc: 'cleared for takeoff',
+      expected_readback: '...',
+      required_inputs: [],
+    },
+  ],
 };
 const sm = new LessonStateMachine(lesson);
 let state = sm.initial();
-expect(state.state).toBe("IDLE");
+expect(state.state).toBe('IDLE');
 expect(state.current_input_index).toBe(0);
 
 // Tutor starts
-state = sm.transition(state, { type: "start_lesson", by: "tutor" }).state;
-expect(state.state).toBe("LISTENING");
+state = sm.transition(state, { type: 'start_lesson', by: 'tutor' }).state;
+expect(state.state).toBe('LISTENING');
 
 // Tutor speaks (PTT press then release)
-state = sm.transition(state, { type: "ptt", by: "tutor", pressed: true }).state;
-state = sm.transition(state, { type: "ptt", by: "tutor", pressed: false }).state;
-expect(state.state).toBe("INPUT_REQUIRED");
+state = sm.transition(state, { type: 'ptt', by: 'tutor', pressed: true }).state;
+state = sm.transition(state, { type: 'ptt', by: 'tutor', pressed: false }).state;
+expect(state.state).toBe('INPUT_REQUIRED');
 
 // Student submits correct value
-const r = sm.transition(state, { type: "submit_input", value: "118.70" });
+const r = sm.transition(state, { type: 'submit_input', value: '118.70' });
 expect(r.ok).toBe(true);
-expect(r.state.state).toBe("READY_TO_ADVANCE");
-expect(r.emit).toContainEqual(expect.objectContaining({
-  type: "input_result", correct: true, input_index: 0, more_inputs: false
-}));
+expect(r.state.state).toBe('READY_TO_ADVANCE');
+expect(r.emit).toContainEqual(
+  expect.objectContaining({
+    type: 'input_result',
+    correct: true,
+    input_index: 0,
+    more_inputs: false,
+  }),
+);
 
 // Student presses Right Arrow → step 2 (no input)
-state = sm.transition(r.state, { type: "right_arrow", by: "student" }).state;
+state = sm.transition(r.state, { type: 'right_arrow', by: 'student' }).state;
 expect(state.current_step_index).toBe(1);
-expect(state.state).toBe("LISTENING");
+expect(state.state).toBe('LISTENING');
 
 // Tutor releases PTT on no-input step
-state = sm.transition(state, { type: "ptt", by: "tutor", pressed: false }).state;
-expect(state.state).toBe("INPUT_NOT_REQUIRED");
+state = sm.transition(state, { type: 'ptt', by: 'tutor', pressed: false }).state;
+expect(state.state).toBe('INPUT_NOT_REQUIRED');
 
 // Student Right Arrow → COMPLETED (last step)
-state = sm.transition(state, { type: "right_arrow", by: "student" }).state;
-expect(state.state).toBe("COMPLETED");
+state = sm.transition(state, { type: 'right_arrow', by: 'student' }).state;
+expect(state.state).toBe('COMPLETED');
 ```
 
 ### 7.10 Multi-input step (from real flight.json — step 1 has 4 inputs)
 
 ```ts
 const step1: Step = {
-  step: 1, phase: "PREFLIGHT", atc: "...", expected_readback: "...",
+  step: 1,
+  phase: 'PREFLIGHT',
+  atc: '...',
+  expected_readback: '...',
   required_inputs: [
-    { type: "com_frequency", value: "118.00" },
-    { type: "heading",       value: "090" },
-    { type: "altitude",      value: "30000" },
-    { type: "squawk",        value: "4721" },
-  ]
+    { type: 'com_frequency', value: '118.00' },
+    { type: 'heading', value: '090' },
+    { type: 'altitude', value: '30000' },
+    { type: 'squawk', value: '4721' },
+  ],
 };
 const lesson = { /* schema_version etc */ steps: [step1] };
 const sm = new LessonStateMachine(lesson);
 let state = sm.initial();
 
-state = sm.transition(state, { type: "start_lesson", by: "tutor" }).state;
-state = sm.transition(state, { type: "ptt", by: "tutor", pressed: false }).state;
-expect(state.state).toBe("INPUT_REQUIRED");
+state = sm.transition(state, { type: 'start_lesson', by: 'tutor' }).state;
+state = sm.transition(state, { type: 'ptt', by: 'tutor', pressed: false }).state;
+expect(state.state).toBe('INPUT_REQUIRED');
 expect(state.current_input_index).toBe(0);
 
 // Input 0: correct
-let r = sm.transition(state, { type: "submit_input", value: "118.00" });
-expect(r.state.state).toBe("INPUT_REQUIRED");      // still INPUT_REQUIRED
-expect(r.state.current_input_index).toBe(1);        // moved to next
-expect(r.emit).toContainEqual(expect.objectContaining({
-  type: "input_result", correct: true, input_index: 0, more_inputs: true
-}));
+let r = sm.transition(state, { type: 'submit_input', value: '118.00' });
+expect(r.state.state).toBe('INPUT_REQUIRED'); // still INPUT_REQUIRED
+expect(r.state.current_input_index).toBe(1); // moved to next
+expect(r.emit).toContainEqual(
+  expect.objectContaining({
+    type: 'input_result',
+    correct: true,
+    input_index: 0,
+    more_inputs: true,
+  }),
+);
 state = r.state;
 
 // Input 1: wrong first, then correct
-r = sm.transition(state, { type: "submit_input", value: "999" });
-expect(r.state.current_input_index).toBe(1);        // stays at index 1
+r = sm.transition(state, { type: 'submit_input', value: '999' });
+expect(r.state.current_input_index).toBe(1); // stays at index 1
 expect(r.state.attempt_count).toBe(1);
 state = r.state;
 
-r = sm.transition(state, { type: "submit_input", value: "090" });
+r = sm.transition(state, { type: 'submit_input', value: '090' });
 expect(r.state.current_input_index).toBe(2);
-expect(r.state.attempt_count).toBe(0);              // resets on correct
+expect(r.state.attempt_count).toBe(0); // resets on correct
 state = r.state;
 
 // Input 2: correct
-r = sm.transition(state, { type: "submit_input", value: "30000" });
+r = sm.transition(state, { type: 'submit_input', value: '30000' });
 expect(r.state.current_input_index).toBe(3);
 state = r.state;
 
 // Input 3 (last): correct → READY_TO_ADVANCE
-r = sm.transition(state, { type: "submit_input", value: "4721" });
-expect(r.state.state).toBe("READY_TO_ADVANCE");
-expect(r.emit).toContainEqual(expect.objectContaining({
-  type: "input_result", correct: true, input_index: 3, more_inputs: false
-}));
+r = sm.transition(state, { type: 'submit_input', value: '4721' });
+expect(r.state.state).toBe('READY_TO_ADVANCE');
+expect(r.emit).toContainEqual(
+  expect.objectContaining({
+    type: 'input_result',
+    correct: true,
+    input_index: 3,
+    more_inputs: false,
+  }),
+);
 
 // Right Arrow → COMPLETED (single-step lesson)
-state = sm.transition(r.state, { type: "right_arrow", by: "student" }).state;
-expect(state.state).toBe("COMPLETED");
+state = sm.transition(r.state, { type: 'right_arrow', by: 'student' }).state;
+expect(state.state).toBe('COMPLETED');
 ```
 
 ### 7.5 State machine: error recovery (from Annex B §B.8)
@@ -882,25 +924,37 @@ expect(r.state.state).toBe("INPUT_REQUIRED");  // stays
 
 ```ts
 // Wrong schema_version → halt, no further errors
-const r = validateFlightJson({ schema_version: "0.9", lesson: {}, steps: [] });
+const r = validateFlightJson({ schema_version: '0.9', lesson: {}, steps: [] });
 expect(r.valid).toBe(false);
 expect(r.errors).toHaveLength(1);
-expect(r.errors[0].rule).toBe("schema_version");
+expect(r.errors[0].rule).toBe('schema_version');
 
 // required_input is REQUIRED on every step (Annex A)
 const r2 = validateFlightJson({
-  schema_version: "1.0",
-  lesson: { name: "x", callsign: "ABC", route: "AAAA-BBBB", aircraft_type: "B747", difficulty: "beginner" },
-  steps: [{ step: 1, phase: "TAXI", atc: "x", expected_readback: "y" /* missing required_input */ }]
+  schema_version: '1.0',
+  lesson: {
+    name: 'x',
+    callsign: 'ABC',
+    route: 'AAAA-BBBB',
+    aircraft_type: 'B747',
+    difficulty: 'beginner',
+  },
+  steps: [
+    { step: 1, phase: 'TAXI', atc: 'x', expected_readback: 'y' /* missing required_input */ },
+  ],
 });
 expect(r2.valid).toBe(false);
-expect(r2.errors).toContainEqual(expect.objectContaining({
-  path: "steps[0].required_input",
-  rule: "required-field"
-}));
+expect(r2.errors).toContainEqual(
+  expect.objectContaining({
+    path: 'steps[0].required_input',
+    rule: 'required-field',
+  }),
+);
 
 // type === "none" should NOT have a value field (Annex A allOf)
-const r3 = validateFlightJson({ /* ... step with required_input: { type: "none", value: "x" } */ });
+const r3 = validateFlightJson({
+  /* ... step with required_input: { type: "none", value: "x" } */
+});
 expect(r3.valid).toBe(false);
 ```
 

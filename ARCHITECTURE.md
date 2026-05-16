@@ -39,10 +39,10 @@
 
 Two independent channels per session, with strict responsibilities:
 
-| Channel | Transport | Purpose | Server role |
-|---|---|---|---|
-| **Lesson state** | WebSocket (`wss://`) | Step progression, input validation, PTT events, approvals | Source of truth, validates everything |
-| **Voice** | WebRTC (P2P or via TURN) | Tutor↔student audio | Signaling only (PeerServer); media never touches our backend |
+| Channel          | Transport                | Purpose                                                   | Server role                                                  |
+| ---------------- | ------------------------ | --------------------------------------------------------- | ------------------------------------------------------------ |
+| **Lesson state** | WebSocket (`wss://`)     | Step progression, input validation, PTT events, approvals | Source of truth, validates everything                        |
+| **Voice**        | WebRTC (P2P or via TURN) | Tutor↔student audio                                       | Signaling only (PeerServer); media never touches our backend |
 
 This separation is the architecture's most important property. Lesson state cannot get out of sync between clients (server is authoritative). Voice cannot lag behind state (it's P2P, low latency). Failure of one doesn't crash the other.
 
@@ -103,19 +103,22 @@ Tutor logs in. Body: `{ "password": "<TUTOR_PASSWORD>" }`. Compares against env 
 ### `POST /api/rooms`
 
 Tutor creates a new lesson room. Authenticated (tutor session token). Multipart body:
+
 - `flight_json`: file upload (the lesson file)
 - `student_name`: string, optional, for display
 
 Server:
+
 1. Reads file content as JSON
 2. Calls `validateFlightJson()` from `@skytalk/core` — rejects with 422 + error array if invalid
 3. Generates `room_id` (16-char nanoid), `tutor_token` (32-char), `student_token` (32-char)
 4. Stores: `{ room_id, flight_json (raw), tutor_token, student_token, current_step: 0, state: 'idle', created_at, expires_at: created_at + 24h }`
 5. Returns:
+
 ```json
 {
   "room_id": "abc123...",
-  "tutor_url":   "https://skytalk.<domain>/tutor/abc123...?token=<tutor_token>",
+  "tutor_url": "https://skytalk.<domain>/tutor/abc123...?token=<tutor_token>",
   "student_url": "https://skytalk.<domain>/student/abc123...?token=<student_token>",
   "expires_at": "2026-04-28T12:00:00Z"
 }
@@ -126,11 +129,18 @@ Server:
 Either tutor or student fetches current room state. Token determines role (tutor token → returns `expected_readback`, `required_input.value`; student token → omits answers). Used by the SPA on page load to bootstrap the UI before the WebSocket connects.
 
 Response (student view):
+
 ```json
 {
   "room_id": "abc123",
   "role": "student",
-  "lesson": { "name": "JFK Tower Basics", "callsign": "KLM641", "route": "KJFK-EHAM", "aircraft_type": "B747-400", "difficulty": "beginner" },
+  "lesson": {
+    "name": "JFK Tower Basics",
+    "callsign": "KLM641",
+    "route": "KJFK-EHAM",
+    "aircraft_type": "B747-400",
+    "difficulty": "beginner"
+  },
   "total_steps": 12,
   "current_step_index": 3,
   "state": "INPUT_REQUIRED",
@@ -160,6 +170,7 @@ Returns `{ "status": "ok", "uptime_seconds": N }`. Used by UptimeRobot.
 Connection URL: `wss://skytalk.<domain>/ws/rooms/:room_id?token=<token>`.
 
 On connect:
+
 - Server validates token, attaches role (`tutor` | `student`)
 - Server sends `state_snapshot` with full current state
 - Server registers connection in the room's broadcast list
@@ -272,6 +283,16 @@ Broadcast to **both** clients in a room unless noted.
   type: "peer_ptt",
   pressed: boolean,
   by: "tutor" | "student"
+}
+
+// PeerJS peer registration handshake (see Section 6).
+// Student sends once when their PeerJS peer fires 'open' (registered on PeerServer).
+// Server forwards to tutor. Tutor initiates peer.call() only after receiving this.
+// This eliminates the race condition where tutor calls before student is registered.
+// Client → Server (student only): { type: "peer_ready", seq: number }
+// Server → Client (tutor only):   { type: "peer_ready" }
+{
+  type: "peer_ready"
 }
 
 // Tutor signaled "I'll repeat". Visual cue for student, no state change.
@@ -421,10 +442,12 @@ CREATE INDEX idx_events_room ON session_events(room_id, ts);
 ### Cleanup
 
 Cron job (or systemd timer) every hour:
+
 ```sql
 DELETE FROM session_events WHERE room_id IN (SELECT room_id FROM rooms WHERE expires_at < ?);
 DELETE FROM rooms WHERE expires_at < ?;
 ```
+
 Where `?` is `now() - 7 days`. So expired rooms hang around for a week (in case student rejoins late or for debugging) before purging.
 
 ## 6. WebRTC media layer
@@ -454,16 +477,16 @@ const peer = new Peer(peerId, {
       {
         urls: 'turn:skytalk.<domain>:3478',
         username: '<TURN_USER>',
-        credential: '<TURN_PASS>'
+        credential: '<TURN_PASS>',
       },
       {
         urls: 'turns:skytalk.<domain>:5349',
         username: '<TURN_USER>',
-        credential: '<TURN_PASS>'
-      }
+        credential: '<TURN_PASS>',
+      },
     ],
-    iceTransportPolicy: 'all'  // try direct first, fall back to relay
-  }
+    iceTransportPolicy: 'all', // try direct first, fall back to relay
+  },
 });
 ```
 
@@ -474,13 +497,13 @@ TURN credentials are time-limited (HMAC-based, computed server-side per session)
 ```js
 navigator.mediaDevices.getUserMedia({
   audio: {
-    echoCancellation: true,        // keep — tutor and student in same room headphones avoid feedback
-    noiseSuppression: false,       // OFF — we want to allow our radio static through
-    autoGainControl: true,         // ok
-    sampleRate: 16000,             // narrowband, classic VHF feel
-    channelCount: 1                // mono
+    echoCancellation: true, // keep — tutor and student in same room headphones avoid feedback
+    noiseSuppression: false, // OFF — we want to allow our radio static through
+    autoGainControl: true, // ok
+    sampleRate: 16000, // narrowband, classic VHF feel
+    channelCount: 1, // mono
   },
-  video: false
+  video: false,
 });
 ```
 

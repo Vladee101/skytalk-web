@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <title>SkyTalk — Тренажер авиационного английского</title>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --green: #22c55e;
+            --green-dim: #166534;
+            --sky: #38bdf8;
+            --dark: #050505;
+            --panel: #0a0a0a;
+            --border: #1f2937;
+            --text: #d1d5db;
+            --text-dim: #6b7280;
+            --blue-accent: #1e3a8a;
+            --teal-accent: #0f766e;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--dark);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(5,5,5,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; height: 56px;
+        }
+        .nav-logo {
+            color: var(--green); font-family: 'Courier New', monospace;
+            font-weight: bold; font-size: 1.1rem; letter-spacing: 2px;
+            text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 0; list-style: none; overflow-x: auto; }
+        .nav-links a {
+            display: block; padding: 0 18px; height: 56px; line-height: 56px;
+            color: var(--text-dim); text-decoration: none; font-size: 0.85rem;
+            letter-spacing: 1px; white-space: nowrap; transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--green); }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 80px 24px 80px;
+            position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: "✈";
+            position: absolute; font-size: 40vw;
+            opacity: 0.02; color: var(--green);
+            pointer-events: none; user-select: none;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+        .hero-tag {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem; letter-spacing: 3px; color: var(--green);
+            border: 1px solid var(--green-dim); padding: 4px 14px;
+            border-radius: 2px; margin-bottom: 28px; display: inline-block;
+        }
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 900; letter-spacing: -2px;
+            color: #fff; line-height: 1; margin-bottom: 20px;
+        }
+        .hero h1 span { color: var(--green); }
+        .hero-sub {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-dim); max-width: 520px;
+            margin: 0 auto 40px; line-height: 1.7;
+        }
+        .hero-cta {
+            display: inline-block;
+            background: var(--green); color: #000;
+            font-weight: 700; font-size: 0.9rem; letter-spacing: 2px;
+            padding: 14px 36px; border-radius: 3px;
+            text-decoration: none; transition: opacity 0.2s;
+            margin-bottom: 40px;
+        }
+        .hero-cta:hover { opacity: 0.85; }
+        .hero-scroll {
+            position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+            color: var(--text-dim); font-size: 0.75rem; letter-spacing: 2px;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+        /* ── SECTIONS ── */
+        section { padding: 100px 24px; }
+        .container { max-width: 960px; margin: 0 auto; }
+        .section-tag {
+            font-family: 'Courier New', monospace; font-size: 0.7rem;
+            letter-spacing: 3px; color: var(--green); margin-bottom: 12px;
+            display: block;
+        }
+        h2 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800; color: #fff; margin-bottom: 16px; line-height: 1.1;
+        }
+        .lead {
+            font-size: 1.05rem; color: var(--text-dim);
+            max-width: 600px; margin-bottom: 56px; line-height: 1.8;
+        }
+
+        /* ── COCKPIT PREVIEW ── */
+        .cockpit {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 12px; overflow: hidden;
+            font-family: 'Courier New', monospace;
+            margin: 48px 0;
+            box-shadow: 0 0 60px rgba(34,197,94,0.06);
+        }
+        .ck-top {
+            padding: 14px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .ck-callsign {
+            color: var(--green); font-weight: bold; font-size: 0.95rem;
+            letter-spacing: 1px; text-shadow: 0 0 8px rgba(34,197,94,0.3);
+        }
+        .ck-radios { display: flex; gap: 20px; align-items: center; }
+        .ck-radio { text-align: right; }
+        .ck-rlabel { font-size: 0.6rem; color: var(--green); letter-spacing: 2px; line-height: 1; }
+        .ck-rval { color: var(--green); font-size: 1rem; font-weight: bold; }
+        .ck-sep { color: var(--border); font-size: 1.4rem; }
+        .ck-dots { display: flex; gap: 6px; align-items: center; }
+
+        /* PFD */
+        .ck-pfd-wrap {
+            height: 390px; background: #111;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        .pfd-box {
+            width: min(400px, 90%); height: 330px;
+            background: #222; border: 1px solid #333; border-radius: 10px;
+            position: relative; overflow: hidden;
+        }
+        .pfd-sky { position: absolute; top:0; left:0; right:0; height:50%; background:#0078d7; }
+        .pfd-ground { position: absolute; bottom:0; left:0; right:0; height:50%; background:#5d4037; border-top:2px solid #fff; }
+        .pfd-modes {
+            position: absolute; top:0; left:0; right:0;
+            display:flex; justify-content:space-between; padding:4px 10px;
+            color:#00ffff; font-size:0.75rem; font-weight:bold;
+            background:rgba(0,0,0,0.25); z-index:5;
+        }
+        .pfd-arc {
+            position:absolute; top:24px; left:50%; transform:translateX(-50%);
+            width:130px; height:65px;
+            border-top:2px solid #fff; border-radius:130px 130px 0 0; z-index:4;
+        }
+        .pfd-tri {
+            position:absolute; top:20px; left:50%; transform:translateX(-50%);
+            width:0; height:0;
+            border-left:7px solid transparent; border-right:7px solid transparent;
+            border-bottom:9px solid #ffeb3b; z-index:5;
+        }
+        .pfd-tape {
+            position:absolute; top:12%; bottom:12%; width:48px;
+            background:rgba(0,0,0,0.45);
+            display:flex; flex-direction:column; justify-content:space-around; align-items:center;
+            color:#fff; font-size:0.75rem; font-weight:bold; z-index:10;
+        }
+        .pfd-tape.left { left:0; border-right:1px solid #555; }
+        .pfd-tape.right { right:0; border-left:1px solid #555; }
+        .pfd-tbox { background:#000; border:2px solid #ffeb3b; color:#ffeb3b; padding:1px 4px; font-size:0.8rem; }
+        .pfd-hdg {
+            position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+            background:#000; border:1px solid #fff; color:var(--green);
+            padding:1px 6px; font-weight:bold; z-index:10; font-size:0.8rem;
+        }
+        .pfd-qnh { position:absolute; bottom:8px; right:8px; color:#00ffff; font-size:0.65rem; font-weight:bold; z-index:10; }
+        .pfd-cross {
+            position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+            width:110px; display:flex; justify-content:center; align-items:center; z-index:8;
+        }
+        .ch-b { width:10px; height:10px; border:2px solid #000; background:#ffeb3b; }
+        .ch-w { height:3px; width:40px; background:#ffeb3b; border:1px solid #000; position:absolute; }
+        .ch-l { left:0; } .ch-r { right:0; }
+
+        /* Bottom bar */
+        .ck-bar {
+            background: var(--panel); border-top:1px solid var(--border);
+            padding: 10px 20px;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .ck-ptt {
+            flex-shrink: 0; padding: 6px 14px;
+            border: 1px solid var(--border); border-radius: 3px;
+            font-size: 0.65rem; letter-spacing: 2px; color: var(--text-dim);
+            white-space: nowrap;
+        }
+        .ck-ptt.tx { background:#075985; border-color:#0369a1; color:#fff; }
+        .ck-field {
+            flex: 1; position: relative;
+            border: 2px solid #3b82f6; border-radius: 3px;
+            padding: 6px 12px; background: rgba(59,130,246,0.04);
+            animation: blink 1.2s infinite;
+        }
+        @keyframes blink { 0%,100%{border-color:#3b82f6} 50%{border-color:rgba(59,130,246,0.2)} }
+        .ck-field-label {
+            position: absolute; top: -9px; left: 10px;
+            background: var(--panel); color: var(--green);
+            font-size: 0.6rem; padding: 0 4px; letter-spacing: 2px;
+        }
+        .ck-field-val { color: var(--text-dim); font-size: 1.1rem; font-weight: bold; letter-spacing: 2px; }
+        .ck-intensity { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        .ck-int-label { font-size: 0.6rem; color: var(--text-dim); letter-spacing: 1px; white-space: nowrap; }
+        .ck-slider { width: 70px; accent-color: var(--sky); }
+        .ck-step { flex-shrink: 0; text-align: right; }
+        .ck-step-num { font-size: 1.2rem; font-weight: bold; color: #fff; line-height: 1; }
+        .ck-step-ph { font-size: 0.6rem; color: var(--green); letter-spacing: 2px; }
+
+        /* ── STEPS ROW ── */
+        .steps-row {
+            display: flex; gap: 1px; background: var(--border);
+            border: 1px solid var(--border); border-radius: 8px;
+            overflow-x: auto; margin-top: 48px;
+            scrollbar-width: none;
+        }
+        .steps-row::-webkit-scrollbar { display: none; }
+        .step-card { flex: 1; min-width: 160px; background: var(--panel); padding: 28px 20px; }
+        .step-num {
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem; color: var(--green); letter-spacing: 2px;
+            margin-bottom: 16px; display: block;
+        }
+        .step-card h3 { color: #fff; font-size: 1rem; margin-bottom: 8px; }
+        .step-card p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; }
+
+        /* ── INPUT STATES ── */
+        .states-grid {
+            display: grid; grid-template-columns: repeat(3,1fr); gap: 16px;
+            margin-top: 48px;
+        }
+        .state-card {
+            background: var(--panel); border-radius: 8px;
+            padding: 28px 20px; border: 1px solid var(--border);
+            position: relative; overflow: hidden;
+        }
+        .state-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+        }
+        .state-card.blue::before { background: #3b82f6; }
+        .state-card.green::before { background: var(--green); }
+        .state-card.red::before { background: #ef4444; }
+        .state-icon { font-size: 1.6rem; margin-bottom: 12px; }
+        .state-card h3 { color: #fff; font-size: 0.9rem; margin-bottom: 8px; }
+        .state-card p { color: var(--text-dim); font-size: 0.85rem; line-height: 1.6; }
+
+        /* ── INPUT TABLE ── */
+        .input-table { width: 100%; border-collapse: collapse; margin-top: 48px; }
+        .input-table th {
+            background: var(--panel); color: var(--green);
+            font-family: 'Courier New', monospace; font-size: 0.75rem;
+            letter-spacing: 2px; padding: 14px 20px; text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .input-table td {
+            padding: 16px 20px; border-bottom: 1px solid var(--border);
+            font-size: 0.9rem; color: var(--text-dim);
+        }
+        .input-table tr:last-child td { border-bottom: none; }
+        .input-table code {
+            background: #111; color: var(--green); padding: 2px 8px;
+            border-radius: 3px; font-family: 'Courier New', monospace;
+            font-size: 0.9rem; border: 1px solid var(--border);
+        }
+        .input-table td:first-child { color: #fff; font-weight: 600; }
+
+        /* ── STATIC CONTROL ── */
+        .static-demo {
+            background: var(--panel); border: 1px solid var(--border);
+            border-radius: 8px; padding: 32px; margin-top: 48px;
+            display: flex; align-items: center; gap: 40px;
+        }
+        .static-desc { flex: 1; }
+        .static-desc h3 { color: #fff; margin-bottom: 12px; font-size: 1.1rem; }
+        .static-desc p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.7; }
+        .static-visual {
+            flex-shrink: 0; text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+        .static-bar {
+            display: flex; align-items: center; gap: 12px;
+            background: var(--dark); border: 1px solid var(--border);
+            padding: 10px 16px; border-radius: 4px;
+        }
+        .static-label { font-size: 0.65rem; color: var(--text-dim); letter-spacing: 1px; white-space: nowrap; }
+        .static-range { width: 120px; accent-color: var(--sky); }
+        .static-levels {
+            display: flex; justify-content: space-between;
+            font-size: 0.6rem; color: var(--text-dim); margin-top: 6px;
+            padding: 0 2px;
+        }
+
+        /* ── CONTROLS ── */
+        .key-list { display: flex; flex-direction: column; gap: 1px; margin-top: 48px; }
+        .key-row {
+            display: flex; align-items: center; gap: 24px;
+            background: var(--panel); padding: 18px 24px;
+            border: 1px solid var(--border); border-bottom: none;
+        }
+        .key-row:first-child { border-radius: 8px 8px 0 0; }
+        .key-row:last-child { border-bottom: 1px solid var(--border); border-radius: 0 0 8px 8px; }
+        .key-badge {
+            flex-shrink: 0; background: #111; color: #fff;
+            border: 1px solid #374151; border-radius: 4px;
+            padding: 8px 16px; font-family: 'Courier New', monospace;
+            font-size: 0.85rem; font-weight: bold; min-width: 120px; text-align: center;
+        }
+        .key-desc { color: var(--text-dim); font-size: 0.9rem; }
+
+        /* ── TIPS ── */
+        .tips-grid {
+            display: grid; grid-template-columns: repeat(2,1fr); gap: 16px;
+            margin-top: 48px;
+        }
+        .tip-card {
+            background: var(--panel); border: 1px solid var(--border);
+            border-radius: 8px; padding: 24px;
+        }
+        .tip-card h4 { color: #fff; margin-bottom: 8px; font-size: 0.95rem; }
+        .tip-card p { color: var(--text-dim); font-size: 0.875rem; line-height: 1.7; }
+
+        .mistakes { margin-top: 32px; display: flex; flex-direction: column; gap: 10px; }
+        .mistake {
+            background: rgba(239,68,68,0.05); border-left: 3px solid #ef4444;
+            padding: 14px 18px; border-radius: 0 6px 6px 0;
+            font-size: 0.9rem; color: var(--text-dim);
+        }
+        .mistake strong { color: #f87171; }
+
+        /* ── PHILOSOPHY ── */
+        .philosophy {
+            background: var(--panel); border: 1px solid var(--border);
+            border-radius: 8px; padding: 40px; margin-top: 48px;
+            position: relative; overflow: hidden;
+        }
+        .philosophy::after {
+            content: '"'; position: absolute; bottom: -20px; right: 20px;
+            font-size: 10rem; color: var(--green); opacity: 0.04;
+            font-family: Georgia, serif; line-height: 1;
+        }
+        .philosophy p {
+            color: var(--text); font-size: 1.05rem; line-height: 1.8;
+            max-width: 680px;
+        }
+        .philosophy p + p { margin-top: 16px; }
+
+        /* ── TROUBLESHOOT ── */
+        .trouble-list { display: flex; flex-direction: column; gap: 1px; margin-top: 48px; }
+        .trouble-row {
+            display: grid; grid-template-columns: 1fr 2fr; gap: 0;
+            border: 1px solid var(--border); border-bottom: none;
+            background: var(--panel);
+        }
+        .trouble-row:first-child { border-radius: 8px 8px 0 0; }
+        .trouble-row:last-child { border-bottom: 1px solid var(--border); border-radius: 0 0 8px 8px; }
+        .trouble-q { padding: 20px 24px; border-right: 1px solid var(--border); color: #fff; font-size: 0.9rem; font-weight: 600; }
+        .trouble-a { padding: 20px 24px; color: var(--text-dim); font-size: 0.875rem; line-height: 1.7; }
+
+        /* ── PRE-FOOTER CTA ── */
+        .cta-section { padding: 80px 24px; text-align: center; }
+        .cta-section h2 { margin-bottom: 12px; }
+        .cta-sub { color: var(--text-dim); font-size: 1.05rem; margin-bottom: 36px; }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 48px 24px; text-align: center;
+        }
+        .footer-logo {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4rem; font-weight: bold; color: var(--green);
+            letter-spacing: 3px; margin-bottom: 12px; display: block;
+        }
+        footer p { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 8px; }
+        .footer-slogan { color: var(--text-dim); font-style: italic; margin-top: 20px; }
+
+        /* ── DIVIDER ── */
+        .section-divider {
+            border: none; border-top: 1px solid var(--border);
+            margin: 0;
+        }
+
+        /* ── RESPONSIVE ── */
+        .footer-contacts {
+            margin: 16px 0 8px;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+        }
+        .footer-contacts a {
+            color: var(--green); text-decoration: none; font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+        .footer-contacts a:hover { opacity: 0.7; }
+        .footer-dot { color: var(--text-dim); }
+
+        @media (max-width: 768px) {
+            nav { padding: 0 16px; }
+            .nav-links { display: none; }
+            section { padding: 64px 16px; }
+            .states-grid { grid-template-columns: 1fr; }
+            .tips-grid { grid-template-columns: 1fr; }
+            .trouble-row { grid-template-columns: 1fr; }
+            .trouble-q { border-right: none; border-bottom: 1px solid var(--border); }
+            .static-demo { flex-direction: column; gap: 24px; }
+            .ck-bar { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <a href="#" class="nav-logo">SKYTALK</a>
+    <ul class="nav-links">
+        <li><a href="#how">КАК ЭТО РАБОТАЕТ</a></li>
+        <li><a href="#interface">ИНТЕРФЕЙС</a></li>
+        <li><a href="#controls">УПРАВЛЕНИЕ</a></li>
+        <li><a href="#tips">СОВЕТЫ</a></li>
+        <li><a href="#troubleshoot">ПРОБЛЕМЫ</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-tag">АВИАЦИОННЫЙ ТРЕНАЖЕР</div>
+    <h1>Sky<span>Talk</span></h1>
+    <p class="hero-sub">Тренажер авиационного английского. Реальные условия связи с Диспетчером — прямо в браузере.</p>
+    <a href="mailto:skytalk101@proton.me" class="hero-cta">ЗАКАЗАТЬ УРОК</a>
+    <div class="hero-scroll">↓ &nbsp; УЗНАТЬ БОЛЬШЕ</div>
+</div>
+
+<hr class="section-divider">
+
+<!-- HOW IT WORKS -->
+<section id="how">
+    <div class="container">
+        <span class="section-tag">// КАК ЭТО РАБОТАЕТ</span>
+        <h2>Процесс радиообмена</h2>
+        <p class="lead">Каждый шаг урока имитирует реальный обмен с Диспетчером. Инструктор — за пультом ATC, студент — в кабине пилота.</p>
+
+        <div class="steps-row">
+            <div class="step-card">
+                <span class="step-num">01 // СЛУШАТЬ</span>
+                <h3>Команда Диспетчера</h3>
+                <p>Инструктор дает команду голосом. Студент слышит её через наушники с эффектом радиостатики — как в реальном эфире.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-num">02 // НАЖАТЬ</span>
+                <h3>Зажать пробел</h3>
+                <p>Удерживать <strong>ПРОБЕЛ</strong> — имитация нажатия кнопки PTT на штурвале. Это активирует микрофон и блокирует ввод.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-num">03 // ГОВОРИТЬ</span>
+                <h3>Ответный вызов</h3>
+                <p>Произнести правильный ответ по фразеологии ICAO. Инструктор слышит голос студента чисто, без статики.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-num">04 // ВВОД</span>
+                <h3>Данные в поле</h3>
+                <p>Если поле мигает синим — ввести требуемое значение (частоту, код, курс или высоту) и нажать <strong>ENTER</strong>.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-num">05 // ЖДАТЬ</span>
+                <h3>Подтверждение</h3>
+                <p>После зеленой вспышки студент ждет. Инструктор решает когда переходить к следующему шагу.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- INTERFACE -->
+<section id="interface">
+    <div class="container">
+        <span class="section-tag">// ИНТЕРФЕЙС</span>
+        <h2>Кабина пилота</h2>
+        <p class="lead">Живой PFD (Primary Flight Display) с анимированными приборами. Показатели меняются вместе с фазой полета.</p>
+
+        <!-- Cockpit mockup -->
+        <div class="cockpit">
+            <div class="ck-top">
+                <div class="ck-callsign">KLM641 &nbsp;|&nbsp; B747-400 &nbsp;|&nbsp; KJFK-EHAM</div>
+                <div class="ck-radios">
+                    <div class="ck-radio">
+                        <div class="ck-rlabel">COM 1</div>
+                        <div class="ck-rval">118.700</div>
+                    </div>
+                    <div class="ck-sep">|</div>
+                    <div class="ck-radio">
+                        <div class="ck-rlabel">XPDR</div>
+                        <div class="ck-rval">4721</div>
+                    </div>
+                    <div class="ck-sep">|</div>
+                    <div class="ck-dots">
+                        <span style="color:var(--green);font-size:.75rem;">●</span>
+                        <span style="color:var(--sky);font-size:.75rem;">◆</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ck-pfd-wrap">
+                <div class="pfd-box">
+                    <div class="pfd-sky"></div>
+                    <div class="pfd-ground"></div>
+                    <div class="pfd-modes">
+                        <span>SPD</span><span>NAV</span><span>AP1</span><span>ALT</span>
+                    </div>
+                    <div class="pfd-arc"></div>
+                    <div class="pfd-tri"></div>
+                    <div class="pfd-tape left">
+                        <span>180</span><span>170</span>
+                        <span class="pfd-tbox">160</span>
+                        <span>150</span>
+                    </div>
+                    <div class="pfd-tape right">
+                        <span>3200</span><span>3100</span>
+                        <span class="pfd-tbox">3000</span>
+                        <span>2900</span>
+                    </div>
+                    <div class="pfd-hdg">270</div>
+                    <div style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid #ffeb3b;z-index:11;"></div>
+                    <div class="pfd-qnh">QNH <span style="color:#fff">1013</span></div>
+                    <div class="pfd-cross">
+                        <div class="ch-w ch-l"></div>
+                        <div class="ch-b"></div>
+                        <div class="ch-w ch-r"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ck-bar">
+                <div class="ck-ptt">HOLD SPACE</div>
+                <div class="ck-field">
+                    <div class="ck-field-label">SQUAWK</div>
+                    <div class="ck-field-val">ENTER VALUE</div>
+                </div>
+                <div class="ck-intensity">
+                    <span class="ck-int-label">RADIO 60%</span>
+                    <input type="range" class="ck-slider" value="60" disabled>
+                </div>
+                <div class="ck-step">
+                    <div class="ck-step-num">3 / 11</div>
+                    <div class="ck-step-ph">APPROACH</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input states -->
+        <div class="states-grid">
+            <div class="state-card blue">
+                <div class="state-icon">🔵</div>
+                <h3>Мигает синим</h3>
+                <p>Ожидается ввод. Введите значение и нажмите ENTER.</p>
+            </div>
+            <div class="state-card green">
+                <div class="state-icon">🟢</div>
+                <h3>Зеленое постоянно</h3>
+                <p>Ввод принят. Ждите — инструктор перейдет к следующему шагу.</p>
+            </div>
+            <div class="state-card red">
+                <div class="state-icon">🔴</div>
+                <h3>Красная вспышка</h3>
+                <p>Ошибка. Переслушайте команду и введите заново.</p>
+            </div>
+        </div>
+
+        <!-- Input formats -->
+        <table class="input-table">
+            <thead>
+                <tr>
+                    <th>ТИП ДАННЫХ</th>
+                    <th>ПРИМЕР</th>
+                    <th>ПРАВИЛА</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Частота</td>
+                    <td><code>121.50</code></td>
+                    <td>Обязательно с конечными нулями. Точка как разделитель.</td>
+                </tr>
+                <tr>
+                    <td>Код ответчика</td>
+                    <td><code>4701</code></td>
+                    <td>4 цифры (0–7), без пробелов.</td>
+                </tr>
+                <tr>
+                    <td>Курс</td>
+                    <td><code>270</code></td>
+                    <td>Всегда 3 цифры, диапазон 001–360.</td>
+                </tr>
+                <tr>
+                    <td>Высота</td>
+                    <td><code>5000</code></td>
+                    <td>Футы, без единиц измерения и пробелов.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Static control -->
+        <div class="static-demo">
+            <div class="static-desc">
+                <h3>Регулятор статики</h3>
+                <p>Ползунок <strong>Radio %</strong> в нижней части экрана управляет громкостью радиошума — того, что слышите вы когда говорит инструктор.</p>
+                <p style="margin-top:12px;">0% — чистый голос. 60–70% — реалистичный эфир. 100% — тяжелые условия для продвинутой тренировки. Инструктор всегда слышит вас чисто — ползунок влияет только на вас.</p>
+            </div>
+            <div class="static-visual">
+                <div class="static-bar">
+                    <span class="static-label">RADIO 65%</span>
+                    <input type="range" class="static-range" value="65" disabled>
+                </div>
+                <div class="static-levels">
+                    <span>ЧИСТО</span>
+                    <span>ПОЛНАЯ СТАТИКА</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- CONTROLS -->
+<section id="controls">
+    <div class="container">
+        <span class="section-tag">// УПРАВЛЕНИЕ</span>
+        <h2>Клавиши</h2>
+        <p class="lead">Два действия студента. Всё остальное — голос и ожидание.</p>
+
+        <div class="key-list">
+            <div class="key-row">
+                <div class="key-badge">ПРОБЕЛ</div>
+                <div class="key-desc">Удерживать во время передачи — имитация PTT. Отключает ввод пока зажат.</div>
+            </div>
+            <div class="key-row">
+                <div class="key-badge">ENTER</div>
+                <div class="key-desc">Отправить введенное значение.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- TIPS -->
+<section id="tips">
+    <div class="container">
+        <span class="section-tag">// СОВЕТЫ</span>
+        <h2>Как тренироваться эффективно</h2>
+        <p class="lead">Несколько принципов которые ускорят прогресс.</p>
+
+        <div class="tips-grid">
+            <div class="tip-card">
+                <h4>👂 Сначала слушать</h4>
+                <p>Не торопитесь нажимать ПРОБЕЛ. Сначала полностью поймите команду, затем отвечайте.</p>
+            </div>
+            <div class="tip-card">
+                <h4>🔢 Фонетика цифр</h4>
+                <p>"niner" а не "nine". "fife" а не "five". "tree" а не "three". Это не опечатки — это стандарт ICAO.</p>
+            </div>
+            <div class="tip-card">
+                <h4>📡 Увеличивайте статику</h4>
+                <p>Начните с 0%, постепенно поднимайте. К экзамену умейте работать на 70–80%.</p>
+            </div>
+            <div class="tip-card">
+                <h4>📝 Полные фразы</h4>
+                <p>"One one eight decimal seven zero" — не "One one eight point seven". Каждый слог важен.</p>
+            </div>
+            <div class="tip-card">
+                <h4>⏳ Терпение</h4>
+                <p>После зеленой вспышки — просто ждите. Темп сессии полностью у инструктора. Это намеренно.</p>
+            </div>
+            <div class="tip-card">
+                <h4>📈 Регулярность</h4>
+                <p>15 минут каждый день работают лучше, чем два часа раз в неделю.</p>
+            </div>
+        </div>
+
+        <div class="mistakes">
+            <div class="mistake"><strong>Пропуск нулей</strong> — "118.7" вместо "118.70" не пройдет валидацию.</div>
+            <div class="mistake"><strong>Ввод во время передачи</strong> — пока ПРОБЕЛ зажат, клавиатура заблокирована.</div>
+    
+            <div class="mistake"><strong>Слишком быстрый ответ</strong> — пауза после команды естественна и правильна. Диспетчер ждет.</div>
+        </div>
+
+        <div class="philosophy">
+            <p>SkyTalk намеренно ограничивает студента — одно поле ввода, отсутствие подсказок, инструктор управляет темпом. Это не недостаток.</p>
+            <p>В реальной кабине нет кнопки «следующий шаг», нет подсказок, нет возможности перемотать команду Диспетчера. Эти ограничения развивают именно те навыки, которые нужны в реальном полете.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- TROUBLESHOOT -->
+<section id="troubleshoot">
+    <div class="container">
+        <span class="section-tag">// ПРОБЛЕМЫ</span>
+        <h2>Устранение неисправностей</h2>
+        <p class="lead">Если что-то пошло не так.</p>
+
+        <div class="trouble-list">
+            <div class="trouble-row">
+                <div class="trouble-q">Нет звука от инструктора</div>
+                <div class="trouble-a">Нажмите ПРОБЕЛ хотя бы один раз — это активирует аудиосистему браузера. Проверьте что браузер разрешил доступ к микрофону. Если не помогло — перезагрузите страницу (Ctrl+Shift+R).</div>
+            </div>
+            <div class="trouble-row">
+                <div class="trouble-q">Инструктор не слышит вас</div>
+                <div class="trouble-a">Убедитесь что удерживаете ПРОБЕЛ во время речи. Проверьте индикатор TRANSMITTING в нижней полосе экрана. Проверьте разрешение микрофона в настройках браузера.</div>
+            </div>
+            <div class="trouble-row">
+                <div class="trouble-q">Поле ввода не реагирует</div>
+                <div class="trouble-a">Дождитесь синего мигания — без него поле неактивно. Убедитесь что не зажат ПРОБЕЛ. Кликните в поле мышью.</div>
+            </div>
+            <div class="trouble-row">
+                <div class="trouble-q">Нет зеленой / красной вспышки</div>
+                <div class="trouble-a">Убедитесь что нажали ENTER после ввода. Проверьте формат: точка вместо запятой, ведущие нули для частот, 4 цифры для squawk.</div>
+            </div>
+            <div class="trouble-row">
+                <div class="trouble-q">Страница не подключается</div>
+                <div class="trouble-a">Ссылка действительна 24 часа. Попросите инструктора создать новую комнату. Используйте Chrome или Edge для лучшей совместимости.</div>
+            </div>
+            <div class="trouble-row">
+                <div class="trouble-q">Статика слишком громкая</div>
+                <div class="trouble-a">Передвиньте ползунок Radio % влево в нижней части экрана.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRE-FOOTER CTA -->
+<section class="cta-section">
+    <div class="container">
+        <h2>Готовы начать?</h2>
+        <p class="cta-sub">Напишите нам — подберем время для первого урока.</p>
+        <a href="mailto:skytalk101@proton.me" class="hero-cta">ЗАКАЗАТЬ УРОК</a>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <span class="footer-logo">SKYTALK</span>
+    <p>Тренажер обучения авиационному английскому пилотов гражданской авиации</p>
+    <div class="footer-contacts">
+        <a href="mailto:skytalk101@proton.me">skytalk101@proton.me</a>
+        <span class="footer-dot">·</span>
+        <a href="https://t.me/SkyTalk_Radio">t.me/SkyTalk_Radio</a>
+    </div>
+    <p class="footer-slogan">Летайте безопасно, общайтесь чётко.</p>
+</footer>
+
+
+<script>
+(function () {
+    var heroCta = document.querySelector('.hero .hero-cta');
+    if (heroCta && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        heroCta.addEventListener('click', function (e) {
+            e.preventDefault();
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        });
+    }
+})();
+</script>
+</body>
+</html>

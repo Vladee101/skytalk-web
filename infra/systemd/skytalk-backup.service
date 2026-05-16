@@ -1,0 +1,11 @@
+[Unit]
+Description=SkyTalk daily backup
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/opt/skytalk/skytalk-backup.sh
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=skytalk-backup

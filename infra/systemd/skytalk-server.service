@@ -1,0 +1,29 @@
+[Unit]
+Description=SkyTalk Fastify server
+Documentation=https://github.com/Vladee101/skytalk-web
+After=network.target
+
+[Service]
+User=skytalk
+Group=skytalk
+WorkingDirectory=/opt/skytalk/server
+
+# Verify with: which node (must be Node 22+)
+# Common paths: /usr/bin/node, /usr/local/bin/node
+ExecStart=/usr/bin/node dist/server.js
+
+Restart=on-failure
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+# Environment — secrets and config live in this file, not here
+EnvironmentFile=/etc/skytalk/skytalk.env
+
+# Logging — captured by journald; view with: journalctl -u skytalk-server -f
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=skytalk-server
+
+[Install]
+WantedBy=multi-user.target

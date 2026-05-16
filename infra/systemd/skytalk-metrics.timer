@@ -1,0 +1,10 @@
+[Unit]
+Description=SkyTalk metrics — run every minute
+Requires=skytalk-metrics.service
+
+[Timer]
+OnCalendar=minutely
+Persistent=true
+
+[Install]
+WantedBy=timers.target
