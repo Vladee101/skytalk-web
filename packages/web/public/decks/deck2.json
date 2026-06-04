@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "lesson": {
+    "name": "Москва — Стамбул: Полный цикл",
+    "callsign": "AFL023",
+    "aircraft_type": "B737",
+    "route": "UUEE-LTFM",
+    "difficulty": "intermediate"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "phase": "PUSHBACK",
+      "atc": "AFL023, pushback and startup approved, face south",
+      "atc_translation_ru": "AFL023, отбуксировка и запуск двигателей разрешены, ориентация на юг",
+      "expected_readback": "Pushback and startup approved, face south, AFL023",
+      "readback_translation_ru": "Отбуксировка и запуск разрешены, ориентация на юг, AFL023"
+    },
+    {
+      "step": 2,
+      "phase": "TAXI",
+      "atc": "AFL023, taxi to holding point runway two four left, via taxiway Bravo, Delta, hold short of taxiway Echo",
+      "atc_translation_ru": "AFL023, рулите на исполнительный старт ВПП 24L по рулёжным дорожкам Браво, Дельта, остановитесь перед Эхо",
+      "expected_readback": "Taxi to holding point runway two four left, via Bravo, Delta, hold short of Echo, AFL023",
+      "readback_translation_ru": "Рулим на ВПП 24L по Браво, Дельта, останавливаемся перед Эхо, AFL023"
+    },
+    {
+      "step": 3,
+      "phase": "TAXI",
+      "atc": "AFL023, squawk two three four one, frequency change approved, contact Tower on one one eight decimal one zero",
+      "atc_translation_ru": "AFL023, сквок 2341, смена частоты разрешена, свяжитесь с Вышкой на 118.10",
+      "expected_readback": "Squawk two three four one, Tower on one one eight decimal one zero, AFL023",
+      "readback_translation_ru": "Сквок 2341, Вышка на 118.10, AFL023"
+    },
+    {
+      "step": 4,
+      "phase": "LINE-UP",
+      "atc": "AFL023, behind the departing Boeing seven three seven, line up and wait runway two four left",
+      "atc_translation_ru": "AFL023, за уходящим Боингом 737, выруливайте на ВПП 24L и ждите",
+      "expected_readback": "Behind the departing Boeing seven three seven, line up and wait runway two four left, AFL023",
+      "readback_translation_ru": "За уходящим Боингом 737, выруливаем на ВПП 24L и ждём, AFL023"
+    },
+    {
+      "step": 5,
+      "phase": "TAKEOFF",
+      "atc": "AFL023, wind two two zero degrees, one zero knots, runway two four left, cleared for takeoff",
+      "atc_translation_ru": "AFL023, ветер двести двадцать градусов, десять узлов, ВПП 24L, взлёт разрешён",
+      "expected_readback": "Runway two four left, cleared for takeoff, AFL023",
+      "readback_translation_ru": "ВПП 24L, взлёт разрешён, AFL023"
+    },
+    {
+      "step": 6,
+      "phase": "CLIMB",
+      "atc": "AFL023, contact Moscow Radar on one three five decimal five five, good day",
+      "atc_translation_ru": "AFL023, свяжитесь с Московским Радаром на 135.55, всего доброго",
+      "expected_readback": "One three five decimal five five, AFL023",
+      "readback_translation_ru": "135.55, AFL023"
+    },
+    {
+      "step": 7,
+      "phase": "CLIMB",
+      "atc": "AFL023, climb and maintain flight level three seven zero, direct PEPOX",
+      "atc_translation_ru": "AFL023, набирайте и выдерживайте эшелон 370, прямо на PEPOX",
+      "expected_readback": "Climb and maintain flight level three seven zero, direct PEPOX, AFL023",
+      "readback_translation_ru": "Набираем и выдерживаем эшелон 370, прямо на PEPOX, AFL023"
+    },
+    {
+      "step": 8,
+      "phase": "ENROUTE",
+      "atc": "AFL023, due to traffic, turn right heading one nine zero, expect direct PEPOX in five miles",
+      "atc_translation_ru": "AFL023, из-за воздушного судна разворот вправо курс 190, ожидайте прямо на PEPOX через пять миль",
+      "expected_readback": "Right heading one nine zero, AFL023",
+      "readback_translation_ru": "Разворот вправо курс 190, AFL023"
+    },
+    {
+      "step": 9,
+      "phase": "DESCENT",
+      "atc": "AFL023, descend and maintain flight level one one zero, reduce speed to two eight zero knots",
+      "atc_translation_ru": "AFL023, снижайтесь и выдерживайте эшелон 110, уменьшите скорость до 280 узлов",
+      "expected_readback": "Descend and maintain flight level one one zero, speed two eight zero knots, AFL023",
+      "readback_translation_ru": "Снижаемся и выдерживаем эшелон 110, скорость 280 узлов, AFL023"
+    },
+    {
+      "step": 10,
+      "phase": "DESCENT",
+      "atc": "AFL023, contact Istanbul Approach on one two three decimal nine zero",
+      "atc_translation_ru": "AFL023, свяжитесь со Стамбульским Подходом на 123.90",
+      "expected_readback": "One two three decimal nine zero, AFL023",
+      "readback_translation_ru": "123.90, AFL023"
+    },
+    {
+      "step": 11,
+      "phase": "APPROACH",
+      "atc": "AFL023, turn left heading zero nine zero, descend to three thousand feet, cleared ILS approach runway three six right",
+      "atc_translation_ru": "AFL023, разворот влево курс 090, снижение до трёх тысяч футов, заход по ILS на ВПП 36R разрешён",
+      "expected_readback": "Left heading zero nine zero, descend to three thousand feet, cleared ILS approach runway three six right, AFL023",
+      "readback_translation_ru": "Разворот влево курс 090, снижение до трёх тысяч футов, заход по ILS ВПП 36R разрешён, AFL023"
+    },
+    {
+      "step": 12,
+      "phase": "LANDING",
+      "atc": "AFL023, wind three five zero degrees, one four knots, runway three six right, cleared to land",
+      "atc_translation_ru": "AFL023, ветер триста пятьдесят градусов, четырнадцать узлов, ВПП 36R, посадка разрешена",
+      "expected_readback": "Runway three six right, cleared to land, AFL023",
+      "readback_translation_ru": "ВПП 36R, посадка разрешена, AFL023"
+    },
+    {
+      "step": 13,
+      "phase": "TAXI-IN",
+      "atc": "AFL023, vacate right, taxi to apron via taxiway Foxtrot, Golf, contact Ground on one two one decimal six zero",
+      "atc_translation_ru": "AFL023, освободите вправо, рулите на перрон по рулёжным дорожкам Фокстрот, Гольф, свяжитесь с Руением на 121.60",
+      "expected_readback": "Vacate right, taxi via Foxtrot, Golf, Ground on one two one decimal six zero, AFL023",
+      "readback_translation_ru": "Освобождаем вправо, рулим по Фокстрот, Гольф, Руение на 121.60, AFL023"
+    }
+  ]
+}

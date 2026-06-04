@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "lesson": {
+    "name": "Москва — Сочи: Вылет",
+    "callsign": "SBI1142",
+    "aircraft_type": "B737",
+    "route": "UUEE-URSS",
+    "difficulty": "beginner"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "phase": "TAXI",
+      "atc": "SBI1142, taxi to holding point runway two four left, via taxiway Alpha, Bravo",
+      "atc_translation_ru": "SBI1142, рулите на исполнительный старт ВПП 24L по рулёжным дорожкам Альфа, Браво",
+      "expected_readback": "Taxi to holding point runway two four left, via Alpha, Bravo, SBI1142",
+      "readback_translation_ru": "Рулим на исполнительный старт ВПП 24L по Альфа, Браво, SBI1142"
+    },
+    {
+      "step": 2,
+      "phase": "LINE-UP",
+      "atc": "SBI1142, line up and wait runway two four left",
+      "atc_translation_ru": "SBI1142, выруливайте на ВПП 24L и ждите",
+      "expected_readback": "Line up and wait runway two four left, SBI1142",
+      "readback_translation_ru": "Выруливаем на ВПП 24L, ждём, SBI1142"
+    },
+    {
+      "step": 3,
+      "phase": "TAKEOFF",
+      "atc": "SBI1142, wind two three zero degrees, six knots, runway two four left, cleared for takeoff",
+      "atc_translation_ru": "SBI1142, ветер двести тридцать градусов, шесть узлов, ВПП 24L, взлёт разрешён",
+      "expected_readback": "Runway two four left, cleared for takeoff, SBI1142",
+      "readback_translation_ru": "ВПП 24L, взлёт разрешён, SBI1142"
+    },
+    {
+      "step": 4,
+      "phase": "CLIMB",
+      "atc": "SBI1142, contact Moscow Radar on one three two decimal seven zero",
+      "atc_translation_ru": "SBI1142, свяжитесь с Московским Радаром на 132.70",
+      "expected_readback": "One three two decimal seven zero, SBI1142",
+      "readback_translation_ru": "132.70, SBI1142"
+    },
+    {
+      "step": 5,
+      "phase": "CLIMB",
+      "atc": "SBI1142, climb and maintain flight level three three zero",
+      "atc_translation_ru": "SBI1142, набирайте и выдерживайте эшелон 330",
+      "expected_readback": "Climb and maintain flight level three three zero, SBI1142",
+      "readback_translation_ru": "Набираем и выдерживаем эшелон 330, SBI1142"
+    },
+    {
+      "step": 6,
+      "phase": "DESCENT",
+      "atc": "SBI1142, descend and maintain flight level nine zero, expect ILS approach runway two two",
+      "atc_translation_ru": "SBI1142, снижайтесь и выдерживайте эшелон 90, ожидайте заход по ILS на ВПП 22",
+      "expected_readback": "Descend and maintain flight level nine zero, SBI1142",
+      "readback_translation_ru": "Снижаемся и выдерживаем эшелон 90, SBI1142"
+    },
+    {
+      "step": 7,
+      "phase": "APPROACH",
+      "atc": "SBI1142, turn left heading one eight zero, intercept localizer runway two two, cleared ILS approach, QNH one zero one eight",
+      "atc_translation_ru": "SBI1142, разворот влево курс 180, перехватите курсовой маяк ВПП 22, заход по ILS разрешён, давление 1018",
+      "expected_readback": "Left heading one eight zero, cleared ILS approach runway two two, QNH one zero one eight, SBI1142",
+      "readback_translation_ru": "Разворот влево курс 180, заход по ILS ВПП 22 разрешён, давление 1018, SBI1142"
+    },
+    {
+      "step": 8,
+      "phase": "LANDING",
+      "atc": "SBI1142, wind two zero zero degrees, nine knots, runway two two, cleared to land",
+      "atc_translation_ru": "SBI1142, ветер двести градусов, девять узлов, ВПП 22, посадка разрешена",
+      "expected_readback": "Runway two two, cleared to land, SBI1142",
+      "readback_translation_ru": "ВПП 22, посадка разрешена, SBI1142"
+    }
+  ]
+}

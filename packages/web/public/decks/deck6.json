@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "lesson": {
+    "name": "Пекин — Москва: Полный цикл, нештатные ситуации",
+    "callsign": "CCA931",
+    "aircraft_type": "A330",
+    "route": "ZBAA-UUEE",
+    "difficulty": "advanced"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "phase": "PREFLIGHT",
+      "atc": "CCA931, clearance delivery, cleared to Moscow Sheremetyevo via ELKUR departure, flight level three five zero, squawk three four one seven, departure frequency one nine decimal zero zero",
+      "atc_translation_ru": "CCA931, служба клиренса, клиренс до Москвы Шереметьево по процедуре вылета ELKUR, эшелон 350, сквок 3417, частота вылета 129.00",
+      "expected_readback": "Cleared to Moscow Sheremetyevo via ELKUR departure, flight level three five zero, squawk three four one seven, departure frequency one two nine decimal zero zero, CCA931",
+      "readback_translation_ru": "Клиренс до Москвы Шереметьево по ELKUR, эшелон 350, сквок 3417, частота вылета 129.00, CCA931"
+    },
+    {
+      "step": 2,
+      "phase": "PUSHBACK",
+      "atc": "CCA931, pushback and startup approved, face south, be advised remote stand, expect delay",
+      "atc_translation_ru": "CCA931, отбуксировка и запуск разрешены, ориентация на юг, внимание — удалённая стоянка, ожидайте задержку",
+      "expected_readback": "Pushback and startup approved, face south, CCA931",
+      "readback_translation_ru": "Отбуксировка и запуск разрешены, ориентация на юг, CCA931"
+    },
+    {
+      "step": 3,
+      "phase": "TAXI",
+      "atc": "CCA931, taxi to holding point runway three six left, via taxiway Bravo, Echo, hold short of runway one eight right",
+      "atc_translation_ru": "CCA931, рулите на исполнительный старт ВПП 36L по Браво, Эхо, остановитесь перед ВПП 18R",
+      "expected_readback": "Taxi to holding point runway three six left, via Bravo, Echo, hold short of runway one eight right, CCA931",
+      "readback_translation_ru": "Рулим на ВПП 36L по Браво, Эхо, останавливаемся перед ВПП 18R, CCA931"
+    },
+    {
+      "step": 4,
+      "phase": "TAXI",
+      "atc": "CCA931, hold position, runway one eight right in use, wait for landing traffic",
+      "atc_translation_ru": "CCA931, остановитесь, ВПП 18R используется, ожидайте приземляющийся самолёт",
+      "expected_readback": "Holding position, CCA931",
+      "readback_translation_ru": "Останавливаемся, CCA931"
+    },
+    {
+      "step": 5,
+      "phase": "TAXI",
+      "atc": "CCA931, runway one eight right clear, continue taxi via Echo to holding point runway three six left",
+      "atc_translation_ru": "CCA931, ВПП 18R свободна, продолжайте руление по Эхо на исполнительный старт ВПП 36L",
+      "expected_readback": "Continue taxi via Echo to holding point runway three six left, CCA931",
+      "readback_translation_ru": "Продолжаем руление по Эхо на ВПП 36L, CCA931"
+    },
+    {
+      "step": 6,
+      "phase": "LINE-UP",
+      "atc": "CCA931, line up and wait runway three six left, be ready for immediate departure",
+      "atc_translation_ru": "CCA931, выруливайте на ВПП 36L и ждите, будьте готовы к немедленному взлёту",
+      "expected_readback": "Line up and wait runway three six left, CCA931",
+      "readback_translation_ru": "Выруливаем на ВПП 36L, ждём, CCA931"
+    },
+    {
+      "step": 7,
+      "phase": "TAKEOFF",
+      "atc": "CCA931, wind three five zero degrees, one zero knots, runway three six left, cleared for takeoff",
+      "atc_translation_ru": "CCA931, ветер триста пятьдесят градусов, десять узлов, ВПП 36L, взлёт разрешён",
+      "expected_readback": "Runway three six left, cleared for takeoff, CCA931",
+      "readback_translation_ru": "ВПП 36L, взлёт разрешён, CCA931"
+    },
+    {
+      "step": 8,
+      "phase": "CLIMB",
+      "atc": "CCA931, contact Beijing Departure on one two nine decimal zero zero",
+      "atc_translation_ru": "CCA931, свяжитесь с Пекинским Вылетом на 129.00",
+      "expected_readback": "One two nine decimal zero zero, CCA931",
+      "readback_translation_ru": "129.00, CCA931"
+    },
+    {
+      "step": 9,
+      "phase": "CLIMB",
+      "atc": "CCA931, climb and maintain flight level three five zero, traffic information, crossing traffic at flight level three three zero, two o'clock, eight miles",
+      "atc_translation_ru": "CCA931, набирайте и выдерживайте эшелон 350, информация о трафике — пересекающий самолёт на эшелоне 330, два часа, восемь миль",
+      "expected_readback": "Climb and maintain flight level three five zero, traffic in sight, CCA931",
+      "readback_translation_ru": "Набираем и выдерживаем эшелон 350, трафик наблюдаем, CCA931"
+    },
+    {
+      "step": 10,
+      "phase": "ENROUTE",
+      "atc": "CCA931, contact Ulaanbaatar Control on one three four decimal eight zero",
+      "atc_translation_ru": "CCA931, свяжитесь с Улан-Баторским Контролем на 134.80",
+      "expected_readback": "One three four decimal eight zero, CCA931",
+      "readback_translation_ru": "134.80, CCA931"
+    },
+    {
+      "step": 11,
+      "phase": "ENROUTE",
+      "atc": "CCA931, due to military airspace active ahead, turn left heading two seven zero, expect direct OVNIK in two zero miles",
+      "atc_translation_ru": "CCA931, впереди активное военное воздушное пространство, разворот влево курс 270, ожидайте прямо на OVNIK через двадцать миль",
+      "expected_readback": "Left heading two seven zero, CCA931",
+      "readback_translation_ru": "Разворот влево курс 270, CCA931"
+    },
+    {
+      "step": 12,
+      "phase": "ENROUTE",
+      "atc": "CCA931, direct OVNIK approved, contact Novosibirsk Control on one three one decimal zero",
+      "atc_translation_ru": "CCA931, прямо на OVNIK разрешено, свяжитесь с Новосибирским Контролем на 131.60",
+      "expected_readback": "Direct OVNIK, one three one decimal six zero, CCA931",
+      "readback_translation_ru": "Прямо на OVNIK, 131.60, CCA931"
+    },
+    {
+      "step": 13,
+      "phase": "DESCENT",
+      "atc": "CCA931, descend and maintain flight level one three zero, reduce speed to two six zero knots",
+      "atc_translation_ru": "CCA931, снижайтесь и выдерживайте эшелон 130, уменьшите скорость до 260 узлов",
+      "expected_readback": "Descend and maintain flight level one three zero, speed two six zero knots, CCA931",
+      "readback_translation_ru": "Снижаемся и выдерживаем эшелон 130, скорость 260 узлов, CCA931"
+    },
+    {
+      "step": 14,
+      "phase": "DESCENT",
+      "atc": "CCA931, contact Moscow Approach on one one nine decimal one zero",
+      "atc_translation_ru": "CCA931, свяжитесь с Московским Подходом на 119.10",
+      "expected_readback": "One one nine decimal one zero, CCA931",
+      "readback_translation_ru": "119.10, CCA931"
+    },
+    {
+      "step": 15,
+      "phase": "APPROACH",
+      "atc": "CCA931, turn right heading zero six zero, descend to four thousand feet, expect ILS approach runway zero seven right, QNH one zero zero nine",
+      "atc_translation_ru": "CCA931, разворот вправо курс 060, снижение до четырёх тысяч футов, ожидайте заход по ILS на ВПП 07R, давление 1009",
+      "expected_readback": "Right heading zero six zero, descend to four thousand feet, QNH one zero zero nine, CCA931",
+      "readback_translation_ru": "Разворот вправо курс 060, снижение до четырёх тысяч футов, давление 1009, CCA931"
+    },
+    {
+      "step": 16,
+      "phase": "APPROACH",
+      "atc": "CCA931, go around, I say again, go around, wind shear reported on final, climb straight ahead to three thousand feet, contact Approach on one one nine decimal one zero",
+      "atc_translation_ru": "CCA931, уход на второй круг, повторяю — уход на второй круг, сообщается о сдвиге ветра на глиссаде, набор прямо по курсу до трёх тысяч футов, свяжитесь с Подходом на 119.10",
+      "expected_readback": "Going around, climbing straight ahead to three thousand feet, CCA931",
+      "readback_translation_ru": "Уходим на второй круг, набор прямо по курсу до трёх тысяч футов, CCA931"
+    },
+    {
+      "step": 17,
+      "phase": "LANDING",
+      "atc": "CCA931, wind zero eight zero degrees, one four knots, runway zero seven right, cleared to land, caution wind shear reported three miles final",
+      "atc_translation_ru": "CCA931, ветер восемьдесят градусов, четырнадцать узлов, ВПП 07R, посадка разрешена, осторожно — сдвиг ветра зафиксирован на удалении трёх миль",
+      "expected_readback": "Runway zero seven right, cleared to land, CCA931",
+      "readback_translation_ru": "ВПП 07R, посадка разрешена, CCA931"
+    },
+    {
+      "step": 18,
+      "phase": "TAXI-IN",
+      "atc": "CCA931, vacate right at Delta, taxi to stand four one via taxiway Delta, Golf, contact Apron on one two one decimal zero",
+      "atc_translation_ru": "CCA931, освободите вправо на Дельта, рулите на стоянку 41 по Дельта, Гольф, свяжитесь с Перроном на 121.90",
+      "expected_readback": "Vacate right at Delta, taxi to stand four one via Delta, Golf, Apron on one two one decimal nine zero, CCA931",
+      "readback_translation_ru": "Освобождаем вправо на Дельта, рулим на стоянку 41 по Дельта, Гольф, Перрон на 121.90, CCA931"
+    }
+  ]
+}

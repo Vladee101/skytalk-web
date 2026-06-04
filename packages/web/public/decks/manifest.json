@@ -1,0 +1,39 @@
+[
+    {
+        "deckId": "deck1",
+        "name": "Москва — Дубай: Вылет",
+        "difficulty": "beginner",
+        "steps": 8
+    },
+    {
+        "deckId": "deck2",
+        "name": "Москва — Стамбул: Полный цикл",
+        "difficulty": "intermediate",
+        "steps": 13
+    },
+    {
+        "deckId": "deck3",
+        "name": "Москва — Лондон: Полный цикл, нештатные ситуации",
+        "difficulty": "advanced",
+        "steps": 15
+    },
+    {
+        "deckId": "deck4",
+        "name": "Москва — Сочи: Вылет",
+        "difficulty": "beginner",
+        "steps": 8
+    },
+    {
+        "deckId": "deck5",
+        "name": "Казань — Нячанг: Полный цикл",
+        "difficulty": "intermediate",
+        "steps": 13
+    },
+    {
+        "deckId": "deck6",
+        "name": "Пекин — Москва: Полный цикл, нештатные ситуации",
+        "difficulty": "advanced",
+        "steps": 18
+    }
+    
+]

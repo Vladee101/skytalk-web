@@ -51,6 +51,16 @@
             letter-spacing: 1px; white-space: nowrap; transition: color 0.2s;
         }
         .nav-links a:hover { color: var(--green); }
+        .nav-link-highlight { color: var(--sky) !important; }
+        .nav-mobile-flashcards {
+            display: none;
+            color: var(--sky); font-size: 0.8rem; font-weight: bold;
+            letter-spacing: 1px; text-decoration: none;
+            padding: 6px 12px; border: 1px solid rgba(56,189,248,0.4);
+            border-radius: 3px; white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+        .nav-mobile-flashcards:hover { opacity: 0.75; }
 
         /* ── HERO ── */
         .hero {
@@ -417,6 +427,7 @@
         @media (max-width: 768px) {
             nav { padding: 0 16px; }
             .nav-links { display: none; }
+            .nav-mobile-flashcards { display: block; }
             section { padding: 64px 16px; }
             .states-grid { grid-template-columns: 1fr; }
             .tips-grid { grid-template-columns: 1fr; }
@@ -432,12 +443,14 @@
 <!-- NAV -->
 <nav>
     <a href="#" class="nav-logo">SKYTALK</a>
+    <a href="/flashcards" class="nav-mobile-flashcards">ШПАРГАЛКИ</a>
     <ul class="nav-links">
         <li><a href="#how">КАК ЭТО РАБОТАЕТ</a></li>
         <li><a href="#interface">ИНТЕРФЕЙС</a></li>
         <li><a href="#controls">УПРАВЛЕНИЕ</a></li>
         <li><a href="#tips">СОВЕТЫ</a></li>
         <li><a href="#troubleshoot">ПРОБЛЕМЫ</a></li>
+        <li><a href="/flashcards" class="nav-link-highlight">ШПАРГАЛКИ</a></li>
     </ul>
 </nav>
 

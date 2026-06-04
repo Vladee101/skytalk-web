@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "lesson": {
+    "name": "Москва — Дубай: Вылет",
+    "callsign": "AFL211",
+    "aircraft_type": "A320",
+    "route": "UUEE-OMDB",
+    "difficulty": "beginner"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "phase": "TAXI",
+      "atc": "AFL211, taxi to holding point runway two four left, via taxiway Alpha, Charlie",
+      "atc_translation_ru": "AFL211, рулите на исполнительный старт ВПП 24L по рулёжным дорожкам Альфа, Чарли",
+      "expected_readback": "Taxi to holding point runway two four left, via Alpha, Charlie, AFL211",
+      "readback_translation_ru": "Рулим на исполнительный старт ВПП 24L по Альфа, Чарли, AFL211"
+    },
+    {
+      "step": 2,
+      "phase": "LINE-UP",
+      "atc": "AFL211, line up and wait runway two four left",
+      "atc_translation_ru": "AFL211, выруливайте на ВПП 24L и ждите",
+      "expected_readback": "Line up and wait runway two four left, AFL211",
+      "readback_translation_ru": "Выруливаем на ВПП 24L, ждём, AFL211"
+    },
+    {
+      "step": 3,
+      "phase": "TAKEOFF",
+      "atc": "AFL211, wind two three zero degrees, eight knots, runway two four left, cleared for takeoff",
+      "atc_translation_ru": "AFL211, ветер двести тридцать градусов, восемь узлов, ВПП 24L, взлёт разрешён",
+      "expected_readback": "Runway two four left, cleared for takeoff, AFL211",
+      "readback_translation_ru": "ВПП 24L, взлёт разрешён, AFL211"
+    },
+    {
+      "step": 4,
+      "phase": "CLIMB",
+      "atc": "AFL211, contact Moscow Radar on one two seven decimal seven zero, good day",
+      "atc_translation_ru": "AFL211, свяжитесь с Московским Радаром на частоте 127.70, всего доброго",
+      "expected_readback": "One two seven decimal seven zero, AFL211",
+      "readback_translation_ru": "127.70, AFL211"
+    },
+    {
+      "step": 5,
+      "phase": "CLIMB",
+      "atc": "AFL211, climb and maintain flight level three five zero",
+      "atc_translation_ru": "AFL211, набирайте и выдерживайте эшелон 350",
+      "expected_readback": "Climb and maintain flight level three five zero, AFL211",
+      "readback_translation_ru": "Набираем и выдерживаем эшелон 350, AFL211"
+    },
+    {
+      "step": 6,
+      "phase": "DESCENT",
+      "atc": "AFL211, descend and maintain flight level one zero zero, expect ILS approach runway three zero left",
+      "atc_translation_ru": "AFL211, снижайтесь и выдерживайте эшелон 100, ожидайте заход по ILS на ВПП 30L",
+      "expected_readback": "Descend and maintain flight level one zero zero, AFL211",
+      "readback_translation_ru": "Снижаемся и выдерживаем эшелон 100, AFL211"
+    },
+    {
+      "step": 7,
+      "phase": "APPROACH",
+      "atc": "AFL211, turn left heading two seven zero, intercept ILS runway three zero left, cleared ILS approach",
+      "atc_translation_ru": "AFL211, разворот влево курс 270, перехватите курсовой маяк ВПП 30L, заход по ILS разрешён",
+      "expected_readback": "Left heading two seven zero, cleared ILS approach runway three zero left, AFL211",
+      "readback_translation_ru": "Разворот влево курс 270, заход по ILS ВПП 30L разрешён, AFL211"
+    },
+    {
+      "step": 8,
+      "phase": "LANDING",
+      "atc": "AFL211, wind three zero zero degrees, one two knots, runway three zero left, cleared to land",
+      "atc_translation_ru": "AFL211, ветер триста градусов, двенадцать узлов, ВПП 30L, посадка разрешена",
+      "expected_readback": "Runway three zero left, cleared to land, AFL211",
+      "readback_translation_ru": "ВПП 30L, посадка разрешена, AFL211"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "lesson": {
+    "name": "Казань — Нячанг: Полный цикл",
+    "callsign": "POT251",
+    "aircraft_type": "B767",
+    "route": "UWKD-VVCR",
+    "difficulty": "intermediate"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "phase": "PUSHBACK",
+      "atc": "POT251, pushback and startup approved, face east",
+      "atc_translation_ru": "POT251, отбуксировка и запуск двигателей разрешены, ориентация на восток",
+      "expected_readback": "Pushback and startup approved, face east, POT251",
+      "readback_translation_ru": "Отбуксировка и запуск разрешены, ориентация на восток, POT251"
+    },
+    {
+      "step": 2,
+      "phase": "TAXI",
+      "atc": "POT251, squawk three six two one, taxi to holding point runway two nine, via taxiway Alpha, Charlie",
+      "atc_translation_ru": "POT251, сквок 3621, рулите на исполнительный старт ВПП 29 по рулёжным дорожкам Альфа, Чарли",
+      "expected_readback": "Squawk three six two one, taxi to holding point runway two nine, via Alpha, Charlie, POT251",
+      "readback_translation_ru": "Сквок 3621, рулим на ВПП 29 по Альфа, Чарли, POT251"
+    },
+    {
+      "step": 3,
+      "phase": "LINE-UP",
+      "atc": "POT251, line up and wait runway two nine",
+      "atc_translation_ru": "POT251, выруливайте на ВПП 29 и ждите",
+      "expected_readback": "Line up and wait runway two nine, POT251",
+      "readback_translation_ru": "Выруливаем на ВПП 29, ждём, POT251"
+    },
+    {
+      "step": 4,
+      "phase": "TAKEOFF",
+      "atc": "POT251, wind two eight zero degrees, one two knots, runway two nine, cleared for takeoff",
+      "atc_translation_ru": "POT251, ветер двести восемьдесят градусов, двенадцать узлов, ВПП 29, взлёт разрешён",
+      "expected_readback": "Runway two nine, cleared for takeoff, POT251",
+      "readback_translation_ru": "ВПП 29, взлёт разрешён, POT251"
+    },
+    {
+      "step": 5,
+      "phase": "CLIMB",
+      "atc": "POT251, contact Kazan Radar on one two five decimal three five, good day",
+      "atc_translation_ru": "POT251, свяжитесь с Казанским Радаром на 125.35, всего доброго",
+      "expected_readback": "One two five decimal three five, POT251",
+      "readback_translation_ru": "125.35, POT251"
+    },
+    {
+      "step": 6,
+      "phase": "CLIMB",
+      "atc": "POT251, climb and maintain flight level three seven zero, direct ROTOK",
+      "atc_translation_ru": "POT251, набирайте и выдерживайте эшелон 370, прямо на ROTOK",
+      "expected_readback": "Climb and maintain flight level three seven zero, direct ROTOK, POT251",
+      "readback_translation_ru": "Набираем и выдерживаем эшелон 370, прямо на ROTOK, POT251"
+    },
+    {
+      "step": 7,
+      "phase": "ENROUTE",
+      "atc": "POT251, contact Almaty Control on one three three decimal nine zero",
+      "atc_translation_ru": "POT251, свяжитесь с Алматинским Контролем на 133.90",
+      "expected_readback": "One three three decimal nine zero, POT251",
+      "readback_translation_ru": "133.90, POT251"
+    },
+    {
+      "step": 8,
+      "phase": "ENROUTE",
+      "atc": "POT251, due to traffic, turn right heading one two zero, resume own navigation in one zero miles",
+      "atc_translation_ru": "POT251, из-за воздушного судна разворот вправо курс 120, возобновите самостоятельную навигацию через десять миль",
+      "expected_readback": "Right heading one two zero, POT251",
+      "readback_translation_ru": "Разворот вправо курс 120, POT251"
+    },
+    {
+      "step": 9,
+      "phase": "ENROUTE",
+      "atc": "POT251, contact Ho Chi Minh Control on one two eight decimal five zero",
+      "atc_translation_ru": "POT251, свяжитесь с Контролем Хошимина на 128.50",
+      "expected_readback": "One two eight decimal five zero, POT251",
+      "readback_translation_ru": "128.50, POT251"
+    },
+    {
+      "step": 10,
+      "phase": "DESCENT",
+      "atc": "POT251, descend and maintain flight level one one zero, reduce speed to two eight zero knots",
+      "atc_translation_ru": "POT251, снижайтесь и выдерживайте эшелон 110, уменьшите скорость до 280 узлов",
+      "expected_readback": "Descend and maintain flight level one one zero, speed two eight zero knots, POT251",
+      "readback_translation_ru": "Снижаемся и выдерживаем эшелон 110, скорость 280 узлов, POT251"
+    },
+    {
+      "step": 11,
+      "phase": "APPROACH",
+      "atc": "POT251, contact Cam Ranh Approach on one two one decimal one zero",
+      "atc_translation_ru": "POT251, свяжитесь с Подходом Камрани на 121.10",
+      "expected_readback": "One two one decimal one zero, POT251",
+      "readback_translation_ru": "121.10, POT251"
+    },
+    {
+      "step": 12,
+      "phase": "APPROACH",
+      "atc": "POT251, turn left heading three five zero, descend to two thousand five hundred feet, cleared ILS approach runway zero two, QNH one zero one two",
+      "atc_translation_ru": "POT251, разворот влево курс 350, снижение до двух тысяч пятисот футов, заход по ILS на ВПП 02 разрешён, давление 1012",
+      "expected_readback": "Left heading three five zero, descend to two thousand five hundred feet, cleared ILS approach runway zero two, QNH one zero one two, POT251",
+      "readback_translation_ru": "Разворот влево курс 350, снижение до 2500 футов, заход по ILS ВПП 02 разрешён, давление 1012, POT251"
+    },
+    {
+      "step": 13,
+      "phase": "LANDING",
+      "atc": "POT251, wind three six zero degrees, eight knots, runway zero two, cleared to land",
+      "atc_translation_ru": "POT251, ветер триста шестьдесят градусов, восемь узлов, ВПП 02, посадка разрешена",
+      "expected_readback": "Runway zero two, cleared to land, POT251",
+      "readback_translation_ru": "ВПП 02, посадка разрешена, POT251"
+    }
+  ]
+}

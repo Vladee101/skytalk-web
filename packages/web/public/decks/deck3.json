@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "lesson": {
+    "name": "Москва — Лондон: Полный цикл, нештатные ситуации",
+    "callsign": "AFL231",
+    "aircraft_type": "A330",
+    "route": "UUEE-EGLL",
+    "difficulty": "advanced"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "phase": "PREFLIGHT",
+      "atc": "AFL231, clearance delivery, cleared to London Heathrow via DOMOD departure, flight level three five zero, squawk four five one two, departure frequency one three five decimal five five",
+      "atc_translation_ru": "AFL231, служба клиренса, клиренс до Лондона Хитроу по процедуре вылета DOMOD, эшелон 350, сквок 4512, частота вылета 135.55",
+      "expected_readback": "Cleared to London Heathrow via DOMOD departure, flight level three five zero, squawk four five one two, departure frequency one three five decimal five five, AFL231",
+      "readback_translation_ru": "Клиренс до Лондона Хитроу по DOMOD, эшелон 350, сквок 4512, частота вылета 135.55, AFL231"
+    },
+    {
+      "step": 2,
+      "phase": "PUSHBACK",
+      "atc": "AFL231, pushback and startup approved, face west, caution vehicle on your right",
+      "atc_translation_ru": "AFL231, отбуксировка и запуск разрешены, ориентация на запад, осторожно — техника справа",
+      "expected_readback": "Pushback and startup approved, face west, AFL231",
+      "readback_translation_ru": "Отбуксировка и запуск разрешены, ориентация на запад, AFL231"
+    },
+    {
+      "step": 3,
+      "phase": "TAXI",
+      "atc": "AFL231, taxi to holding point runway two four left, via taxiway Alpha, Echo, hold short of taxiway Golf",
+      "atc_translation_ru": "AFL231, рулите на исполнительный старт ВПП 24L по Альфа, Эхо, остановитесь перед Гольф",
+      "expected_readback": "Taxi to holding point runway two four left, via Alpha, Echo, hold short of Golf, AFL231",
+      "readback_translation_ru": "Рулим на ВПП 24L по Альфа, Эхо, останавливаемся перед Гольф, AFL231"
+    },
+    {
+      "step": 4,
+      "phase": "TAXI",
+      "atc": "AFL231, hold position, traffic crossing ahead",
+      "atc_translation_ru": "AFL231, остановитесь, воздушное судно пересекает полосу впереди",
+      "expected_readback": "Holding position, AFL231",
+      "readback_translation_ru": "Останавливаемся, AFL231"
+    },
+    {
+      "step": 5,
+      "phase": "LINE-UP",
+      "atc": "AFL231, line up and wait runway two four left, be ready for immediate departure",
+      "atc_translation_ru": "AFL231, выруливайте на ВПП 24L и ждите, будьте готовы к немедленному взлёту",
+      "expected_readback": "Line up and wait runway two four left, AFL231",
+      "readback_translation_ru": "Выруливаем на ВПП 24L, ждём, AFL231"
+    },
+    {
+      "step": 6,
+      "phase": "TAKEOFF",
+      "atc": "AFL231, wind two one zero degrees, one five knots, runway two four left, cleared for takeoff",
+      "atc_translation_ru": "AFL231, ветер двести десять градусов, пятнадцать узлов, ВПП 24L, взлёт разрешён",
+      "expected_readback": "Runway two four left, cleared for takeoff, AFL231",
+      "readback_translation_ru": "ВПП 24L, взлёт разрешён, AFL231"
+    },
+    {
+      "step": 7,
+      "phase": "CLIMB",
+      "atc": "AFL231, contact Moscow Radar on one three five decimal five five",
+      "atc_translation_ru": "AFL231, свяжитесь с Московским Радаром на 135.55",
+      "expected_readback": "One three five decimal five five, AFL231",
+      "readback_translation_ru": "135.55, AFL231"
+    },
+    {
+      "step": 8,
+      "phase": "CLIMB",
+      "atc": "AFL231, traffic information, opposite direction traffic at flight level three five zero, twelve o'clock, five miles, an Airbus three two zero",
+      "atc_translation_ru": "AFL231, информация о трафике — встречный самолёт на эшелоне 350, прямо по курсу, пять миль, Airbus 320",
+      "expected_readback": "Looking out, AFL231",
+      "readback_translation_ru": "Наблюдаем, AFL231"
+    },
+    {
+      "step": 9,
+      "phase": "CLIMB",
+      "atc": "AFL231, climb and maintain flight level three nine zero, due to traffic",
+      "atc_translation_ru": "AFL231, набирайте и выдерживайте эшелон 390, из-за воздушного судна",
+      "expected_readback": "Climb and maintain flight level three nine zero, AFL231",
+      "readback_translation_ru": "Набираем и выдерживаем эшелон 390, AFL231"
+    },
+    {
+      "step": 10,
+      "phase": "ENROUTE",
+      "atc": "AFL231, due to weather ahead, advise able to deviate left of track by two zero miles",
+      "atc_translation_ru": "AFL231, впереди погодные условия, сообщите, можете ли отклониться влево от трассы на 20 миль",
+      "expected_readback": "Affirm, able to deviate left by two zero miles, AFL231",
+      "readback_translation_ru": "Подтверждаем, можем отклониться влево на 20 миль, AFL231"
+    },
+    {
+      "step": 11,
+      "phase": "ENROUTE",
+      "atc": "AFL231, deviation approved, report back on track",
+      "atc_translation_ru": "AFL231, отклонение разрешено, доложите о возврате на трассу",
+      "expected_readback": "Deviation approved, wilco, AFL231",
+      "readback_translation_ru": "Отклонение разрешено, выполним, AFL231"
+    },
+    {
+      "step": 12,
+      "phase": "DESCENT",
+      "atc": "AFL231, descend and maintain flight level one two zero, speed two five zero knots or less below one zero thousand feet",
+      "atc_translation_ru": "AFL231, снижайтесь и выдерживайте эшелон 120, скорость не более 250 узлов ниже десяти тысяч футов",
+      "expected_readback": "Descend and maintain flight level one two zero, speed two five zero knots or less below one zero thousand, AFL231",
+      "readback_translation_ru": "Снижаемся и выдерживаем эшелон 120, скорость не более 250 узлов ниже 10000, AFL231"
+    },
+    {
+      "step": 13,
+      "phase": "DESCENT",
+      "atc": "AFL231, contact London Control on one two six decimal zero five",
+      "atc_translation_ru": "AFL231, свяжитесь с Лондонским Контролем на 126.05",
+      "expected_readback": "One two six decimal zero five, AFL231",
+      "readback_translation_ru": "126.05, AFL231"
+    },
+    {
+      "step": 14,
+      "phase": "APPROACH",
+      "atc": "AFL231, turn left heading two seven zero, descend to four thousand feet, expect ILS approach runway two seven left, QNH one zero one three",
+      "atc_translation_ru": "AFL231, разворот влево курс 270, снижение до четырёх тысяч футов, ожидайте заход по ILS на ВПП 27L, давление 1013",
+      "expected_readback": "Left heading two seven zero, descend to four thousand feet, QNH one zero one three, AFL231",
+      "readback_translation_ru": "Разворот влево курс 270, снижение до четырёх тысяч футов, давление 1013, AFL231"
+    },
+    {
+      "step": 15,
+      "phase": "APPROACH",
+      "atc": "AFL231, go around, I say again, go around, traffic on runway, climb straight ahead to three thousand feet",
+      "atc_translation_ru": "AFL231, уход на второй круг, повторяю — уход на второй круг, воздушное судно на полосе, набор прямо по курсу до трёх тысяч футов",
+      "expected_readback": "Going around, climbing straight ahead to three thousand feet, AFL231",
+      "readback_translation_ru": "Уходим на второй круг, набор прямо по курсу до трёх тысяч футов, AFL231"
+    },
+    {
+      "step": 16,
+      "phase": "APPROACH",
+      "atc": "AFL231, turn right heading zero nine zero, climb to four thousand feet, expect new ILS approach in five minutes",
+      "atc_translation_ru": "AFL231, разворот вправо курс 090, набор до четырёх тысяч футов, ожидайте повторный заход по ILS через пять минут",
+      "expected_readback": "Right heading zero nine zero, climb to four thousand feet, AFL231",
+      "readback_translation_ru": "Разворот вправо курс 090, набор до четырёх тысяч футов, AFL231"
+    },
+    {
+      "step": 17,
+      "phase": "LANDING",
+      "atc": "AFL231, wind two six zero degrees, one eight knots, gusting two six knots, runway two seven left, cleared to land",
+      "atc_translation_ru": "AFL231, ветер двести шестьдесят градусов, восемнадцать узлов, порывы до двадцати шести узлов, ВПП 27L, посадка разрешена",
+      "expected_readback": "Runway two seven left, cleared to land, AFL231",
+      "readback_translation_ru": "ВПП 27L, посадка разрешена, AFL231"
+    },
+    {
+      "step": 18,
+      "phase": "TAXI-IN",
+      "atc": "AFL231, vacate left at Echo, taxi to stand four six via taxiway Echo, Foxtrot, contact Apron on one two one decimal nine zero",
+      "atc_translation_ru": "AFL231, освободите влево на Эхо, рулите на стоянку 46 по Эхо, Фокстрот, свяжитесь с Перроном на 121.90",
+      "expected_readback": "Vacate left at Echo, taxi to stand four six via Echo, Foxtrot, Apron on one two one decimal nine zero, AFL231",
+      "readback_translation_ru": "Освобождаем влево на Эхо, рулим на стоянку 46 по Эхо, Фокстрот, Перрон на 121.90, AFL231"
+    }
+  ]
+}
