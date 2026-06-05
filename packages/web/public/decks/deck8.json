@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "lesson": {
+    "name": "Куала-Лумпур — Сингапур: Полный цикл, нештатные ситуации",
+    "callsign": "MAS617",
+    "aircraft_type": "A320",
+    "route": "WMKK-WSSS",
+    "difficulty": "advanced"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "phase": "PREFLIGHT",
+      "atc": "MAS617, clearance delivery, cleared to Singapore Changi via IGARI departure, flight level two eight zero, squawk four four three one , departure frequency one two four decimal seven zero",
+      "atc_translation_ru": "MAS617, служба клиренса, клиренс до Сингапура Чанги по процедуре вылета IGARI, эшелон 280, сквок 4431, частота вылета 124.70",
+      "expected_readback": "Cleared to Singapore Changi via IGARI departure, flight level two eight zero, squawk four four three one, departure frequency one two four decimal seven zero, MAS617",
+      "readback_translation_ru": "Клиренс до Сингапура Чанги по IGARI, эшелон 280, сквок 4431, частота вылета 124.70, MAS617"
+    },
+    {
+      "step": 2,
+      "phase": "PUSHBACK",
+      "atc": "MAS617, pushback and startup approved, face west, expect long taxi due to construction near apron Charlie",
+      "atc_translation_ru": "MAS617, отбуксировка и запуск разрешены, ориентация на запад, ожидайте длинное руление из-за строительных работ у перрона Чарли",
+      "expected_readback": "Pushback and startup approved, face west, MAS617",
+      "readback_translation_ru": "Отбуксировка и запуск разрешены, ориентация на запад, MAS617"
+    },
+    {
+      "step": 3,
+      "phase": "TAXI",
+      "atc": "MAS617, taxi to holding point runway three two right, via taxiway Mike, November, hold short of taxiway Papa",
+      "atc_translation_ru": "MAS617, рулите на исполнительный старт ВПП 32R по Майк, Ноябрь, остановитесь перед Папа",
+      "expected_readback": "Taxi to holding point runway three two right, via Mike, November, hold short of Papa, MAS617",
+      "readback_translation_ru": "Рулим на ВПП 32R по Майк, Ноябрь, останавливаемся перед Папа, MAS617"
+    },
+    {
+      "step": 4,
+      "phase": "TAXI",
+      "atc": "MAS617, hold position, emergency vehicle crossing ahead",
+      "atc_translation_ru": "MAS617, остановитесь, впереди проезжает машина экстренных служб",
+      "expected_readback": "Holding position, MAS617",
+      "readback_translation_ru": "Останавливаемся, MAS617"
+    },
+    {
+      "step": 5,
+      "phase": "TAXI",
+      "atc": "MAS617, clear to continue, taxi via Papa to holding point runway three two right",
+      "atc_translation_ru": "MAS617, можете продолжать, рулите по Папа на исполнительный старт ВПП 32R",
+      "expected_readback": "Continue taxi via Papa to holding point runway three two right, MAS617",
+      "readback_translation_ru": "Продолжаем руление по Папа на ВПП 32R, MAS617"
+    },
+    {
+      "step": 6,
+      "phase": "LINE-UP",
+      "atc": "MAS617, line up and wait runway three two right, be ready for immediate departure",
+      "atc_translation_ru": "MAS617, выруливайте на ВПП 32R и ждите, будьте готовы к немедленному взлёту",
+      "expected_readback": "Line up and wait runway three two right, MAS617",
+      "readback_translation_ru": "Выруливаем на ВПП 32R, ждём, MAS617"
+    },
+    {
+      "step": 7,
+      "phase": "TAKEOFF",
+      "atc": "MAS617, wind three one zero degrees, one one knots, runway three two right, cleared for takeoff",
+      "atc_translation_ru": "MAS617, ветер триста десять градусов, одиннадцать узлов, ВПП 32R, взлёт разрешён",
+      "expected_readback": "Runway three two right, cleared for takeoff, MAS617",
+      "readback_translation_ru": "ВПП 32R, взлёт разрешён, MAS617"
+    },
+    {
+      "step": 8,
+      "phase": "CLIMB",
+      "atc": "MAS617, contact Kuala Lumpur Radar on one two four decimal seven zero",
+      "atc_translation_ru": "MAS617, свяжитесь с Радаром Куала-Лумпура на 124.70",
+      "expected_readback": "One two four decimal seven zero, MAS617",
+      "readback_translation_ru": "124.70, MAS617"
+    },
+    {
+      "step": 9,
+      "phase": "CLIMB",
+      "atc": "MAS617, climb and maintain flight level two eight zero, traffic information, opposite direction traffic at flight level two six zero, twelve o'clock, four miles",
+      "atc_translation_ru": "MAS617, набирайте и выдерживайте эшелон 280, информация о трафике — встречный самолёт на эшелоне 260, прямо по курсу, четыре мили",
+      "expected_readback": "Climb and maintain flight level two eight zero, traffic in sight, MAS617",
+      "readback_translation_ru": "Набираем и выдерживаем эшелон 280, трафик наблюдаем, MAS617"
+    },
+    {
+      "step": 10,
+      "phase": "ENROUTE",
+      "atc": "MAS617, due to convective weather ahead, advise able to deviate right of track by one five miles",
+      "atc_translation_ru": "MAS617, впереди грозовая активность, сообщите, можете ли отклониться вправо от трассы на 15 миль",
+      "expected_readback": "Affirm, able to deviate right by one five miles, MAS617",
+      "readback_translation_ru": "Подтверждаем, можем отклониться вправо на 15 миль, MAS617"
+    },
+    {
+      "step": 11,
+      "phase": "ENROUTE",
+      "atc": "MAS617, deviation approved, report back on track, contact Singapore Control on one two five decimal five zero",
+      "atc_translation_ru": "MAS617, отклонение разрешено, доложите о возврате на трассу, свяжитесь с Сингапурским Контролем на 125.50",
+      "expected_readback": "Deviation approved, wilco, Singapore Control on one two five decimal five zero, MAS617",
+      "readback_translation_ru": "Отклонение разрешено, выполним, Сингапурский Контроль на 125.50, MAS617"
+    },
+    {
+      "step": 12,
+      "phase": "DESCENT",
+      "atc": "MAS617, descend and maintain eight thousand feet, reduce speed to two two zero knots, QNH one zero one six",
+      "atc_translation_ru": "MAS617, снижайтесь и выдерживайте восемь тысяч футов, уменьшите скорость до 220 узлов, давление 1016",
+      "expected_readback": "Descend and maintain eight thousand feet, speed two two zero knots, QNH one zero one six, MAS617",
+      "readback_translation_ru": "Снижаемся и выдерживаем 8000 футов, скорость 220 узлов, давление 1016, MAS617"
+    },
+    {
+      "step": 13,
+      "phase": "DESCENT",
+      "atc": "MAS617, contact Singapore Approach on one one nine decimal one zero",
+      "atc_translation_ru": "MAS617, свяжитесь с Сингапурским Подходом на 119.10",
+      "expected_readback": "One one nine decimal one zero, MAS617",
+      "readback_translation_ru": "119.10, MAS617"
+    },
+    {
+      "step": 14,
+      "phase": "APPROACH",
+      "atc": "MAS617, turn left heading one eight zero, descend to three thousand feet, expect ILS approach runway zero two left",
+      "atc_translation_ru": "MAS617, разворот влево курс 180, снижение до трёх тысяч футов, ожидайте заход по ILS на ВПП 02L",
+      "expected_readback": "Left heading one eight zero, descend to three thousand feet, MAS617",
+      "readback_translation_ru": "Разворот влево курс 180, снижение до трёх тысяч футов, MAS617"
+    },
+    {
+      "step": 15,
+      "phase": "APPROACH",
+      "atc": "MAS617, go around, I say again, go around, aircraft on runway, climb straight ahead to three thousand feet",
+      "atc_translation_ru": "MAS617, уход на второй круг, повторяю — уход на второй круг, воздушное судно на полосе, набор прямо по курсу до трёх тысяч футов",
+      "expected_readback": "Going around, climbing straight ahead to three thousand feet, MAS617",
+      "readback_translation_ru": "Уходим на второй круг, набор прямо по курсу до трёх тысяч футов, MAS617"
+    },
+    {
+      "step": 16,
+      "phase": "APPROACH",
+      "atc": "MAS617, turn right heading zero nine zero, climb to four thousand feet, expect ILS approach runway zero two left, expect vectors in five minutes",
+      "atc_translation_ru": "MAS617, разворот вправо курс 090, набор до четырёх тысяч футов, ожидайте повторный заход по ILS на ВПП 02L, векторение через пять минут",
+      "expected_readback": "Right heading zero nine zero, climb to four thousand feet, MAS617",
+      "readback_translation_ru": "Разворот вправо курс 090, набор до четырёх тысяч футов, MAS617"
+    },
+    {
+      "step": 17,
+      "phase": "LANDING",
+      "atc": "MAS617, wind one nine zero degrees, one four knots, runway zero two left, cleared to land",
+      "atc_translation_ru": "MAS617, ветер сто девяносто градусов, четырнадцать узлов, ВПП 02L, посадка разрешена",
+      "expected_readback": "Runway zero two left, cleared to land, MAS617",
+      "readback_translation_ru": "ВПП 02L, посадка разрешена, MAS617"
+    },
+    {
+      "step": 18,
+      "phase": "TAXI-IN",
+      "atc": "MAS617, vacate right at Echo, taxi to stand Delta three four via taxiway Echo, Foxtrot, contact Apron on one two one decimal six zero",
+      "atc_translation_ru": "MAS617, освободите вправо на Эхо, рулите на стоянку D34 по Эхо, Фокстрот, свяжитесь с Перроном на 121.60",
+      "expected_readback": "Vacate right at Echo, taxi to stand Delta three four via Echo, Foxtrot, Apron on one two one decimal six zero, MAS617",
+      "readback_translation_ru": "Освобождаем вправо на Эхо, рулим на стоянку D34 по Эхо, Фокстрот, Перрон на 121.60, MAS617"
+    }
+  ]
+}

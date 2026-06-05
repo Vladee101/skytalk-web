@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "lesson": {
+    "name": "Гонконг — Тайпей: Полный цикл, нештатные ситуации",
+    "callsign": "CPA451",
+    "aircraft_type": "A320",
+    "route": "VHHH-RCTP",
+    "difficulty": "advanced"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "phase": "PREFLIGHT",
+      "atc": "CPA451, clearance delivery, cleared to Taipei Taoyuan via BEKOL departure, flight level three three zero, squawk two one three four, departure frequency one two zero decimal five zero",
+      "atc_translation_ru": "CPA451, служба клиренса, клиренс до Тайбэя Таоюань по процедуре вылета BEKOL, эшелон 330, сквок 2134, частота вылета 120.50",
+      "expected_readback": "Cleared to Taipei Taoyuan via BEKOL departure, flight level three three zero, squawk two one three four, departure frequency one two zero decimal five zero, CPA451",
+      "readback_translation_ru": "Клиренс до Тайбэя Таоюань по BEKOL, эшелон 330, сквок 2134, частота вылета 120.50, CPA451"
+    },
+    {
+      "step": 2,
+      "phase": "PUSHBACK",
+      "atc": "CPA451, pushback and startup approved, face north, caution works on taxiway Alpha",
+      "atc_translation_ru": "CPA451, отбуксировка и запуск разрешены, ориентация на север, осторожно — ремонтные работы на рулёжной дорожке Альфа",
+      "expected_readback": "Pushback and startup approved, face north, CPA451",
+      "readback_translation_ru": "Отбуксировка и запуск разрешены, ориентация на север, CPA451"
+    },
+    {
+      "step": 3,
+      "phase": "TAXI",
+      "atc": "CPA451, taxi to holding point runway zero seven right, via taxiway Bravo, Charlie, avoid Alpha due to works",
+      "atc_translation_ru": "CPA451, рулите на исполнительный старт ВПП 07R по Браво, Чарли, избегайте Альфа из-за работ",
+      "expected_readback": "Taxi to holding point runway zero seven right, via Bravo, Charlie, avoid Alpha, CPA451",
+      "readback_translation_ru": "Рулим на ВПП 07R по Браво, Чарли, избегаем Альфа, CPA451"
+    },
+    {
+      "step": 4,
+      "phase": "TAXI",
+      "atc": "CPA451, hold position, runway zero seven right, departing traffic",
+      "atc_translation_ru": "CPA451, остановитесь, ВПП 07R, вылетающий самолёт",
+      "expected_readback": "Holding position, CPA451",
+      "readback_translation_ru": "Останавливаемся, CPA451"
+    },
+    {
+      "step": 5,
+      "phase": "LINE-UP",
+      "atc": "CPA451, line up and wait runway zero seven right",
+      "atc_translation_ru": "CPA451, выруливайте на ВПП 07R и ждите",
+      "expected_readback": "Line up and wait runway zero seven right, CPA451",
+      "readback_translation_ru": "Выруливаем на ВПП 07R, ждём, CPA451"
+    },
+    {
+      "step": 6,
+      "phase": "TAKEOFF",
+      "atc": "CPA451, wind zero six zero degrees, one three knots, runway zero seven right, cleared for takeoff",
+      "atc_translation_ru": "CPA451, ветер шестьдесят градусов, тринадцать узлов, ВПП 07R, взлёт разрешён",
+      "expected_readback": "Runway zero seven right, cleared for takeoff, CPA451",
+      "readback_translation_ru": "ВПП 07R, взлёт разрешён, CPA451"
+    },
+    {
+      "step": 7,
+      "phase": "CLIMB",
+      "atc": "CPA451, contact Hong Kong Radar on one two zero decimal five zero",
+      "atc_translation_ru": "CPA451, свяжитесь с Радаром Гонконга на 120.50",
+      "expected_readback": "One two zero decimal five zero, CPA451",
+      "readback_translation_ru": "120.50, CPA451"
+    },
+    {
+      "step": 8,
+      "phase": "CLIMB",
+      "atc": "CPA451, climb and maintain flight level three three zero, traffic information, same direction traffic at flight level three one zero, eleven o'clock, six miles, a Boeing seven three seven",
+      "atc_translation_ru": "CPA451, набирайте и выдерживайте эшелон 330, информация о трафике — попутный самолёт на эшелоне 310, одиннадцать часов, шесть миль, Боинг 737",
+      "expected_readback": "Climb and maintain flight level three three zero, traffic in sight, CPA451",
+      "readback_translation_ru": "Набираем и выдерживаем эшелон 330, трафик наблюдаем, CPA451"
+    },
+    {
+      "step": 9,
+      "phase": "ENROUTE",
+      "atc": "CPA451, due to restricted airspace, turn right heading zero five zero, expect direct ENVAR in one five miles",
+      "atc_translation_ru": "CPA451, из-за ограниченного воздушного пространства разворот вправо курс 050, ожидайте прямо на ENVAR через пятнадцать миль",
+      "expected_readback": "Right heading zero five zero, CPA451",
+      "readback_translation_ru": "Разворот вправо курс 050, CPA451"
+    },
+    {
+      "step": 10,
+      "phase": "ENROUTE",
+      "atc": "CPA451, direct ENVAR approved, contact Taipei Control on one two four decimal three zero",
+      "atc_translation_ru": "CPA451, прямо на ENVAR разрешено, свяжитесь с Тайбэйским Контролем на 124.30",
+      "expected_readback": "Direct ENVAR, one two four decimal three zero, CPA451",
+      "readback_translation_ru": "Прямо на ENVAR, 124.30, CPA451"
+    },
+    {
+      "step": 11,
+      "phase": "DESCENT",
+      "atc": "CPA451, descend and maintain flight level one zero zero, reduce speed to two five zero knots",
+      "atc_translation_ru": "CPA451, снижайтесь и выдерживайте эшелон 100, уменьшите скорость до 250 узлов",
+      "expected_readback": "Descend and maintain flight level one zero zero, speed two five zero knots, CPA451",
+      "readback_translation_ru": "Снижаемся и выдерживаем эшелон 100, скорость 250 узлов, CPA451"
+    },
+    {
+      "step": 12,
+      "phase": "DESCENT",
+      "atc": "CPA451, contact Taipei Approach on one one nine decimal one zero",
+      "atc_translation_ru": "CPA451, свяжитесь с Тайбэйским Подходом на 119.10",
+      "expected_readback": "One one nine decimal one zero, CPA451",
+      "readback_translation_ru": "119.10, CPA451"
+    },
+    {
+      "step": 13,
+      "phase": "APPROACH",
+      "atc": "CPA451, turn left heading three four zero, descend to three thousand feet, expect ILS approach runway zero five left, QNH one zero one four",
+      "atc_translation_ru": "CPA451, разворот влево курс 340, снижение до трёх тысяч футов, ожидайте заход по ILS на ВПП 05L, давление 1014",
+      "expected_readback": "Left heading three four zero, descend to three thousand feet, QNH one zero one four, CPA451",
+      "readback_translation_ru": "Разворот влево курс 340, снижение до трёх тысяч футов, давление 1014, CPA451"
+    },
+    {
+      "step": 14,
+      "phase": "APPROACH",
+      "atc": "CPA451, cleared ILS approach runway zero five left, report outer marker",
+      "atc_translation_ru": "CPA451, заход по ILS на ВПП 05L разрешён, доложите о прохождении дальнего привода",
+      "expected_readback": "Cleared ILS approach runway zero five left, wilco, CPA451",
+      "readback_translation_ru": "Заход по ILS ВПП 05L разрешён, выполним, CPA451"
+    },
+    {
+      "step": 15,
+      "phase": "APPROACH",
+      "atc": "CPA451, go around, I say again, go around, runway incursion, climb to three thousand feet, turn left heading two seven zero",
+      "atc_translation_ru": "CPA451, уход на второй круг, повторяю — уход на второй круг, вторжение на ВПП, набор до трёх тысяч футов, разворот влево курс 270",
+      "expected_readback": "Going around, climbing to three thousand feet, left heading two seven zero, CPA451",
+      "readback_translation_ru": "Уходим на второй круг, набор до трёх тысяч футов, разворот влево курс 270, CPA451"
+    },
+    {
+      "step": 16,
+      "phase": "APPROACH",
+      "atc": "CPA451, runway clear, turn right heading zero nine zero, descend to three thousand feet, expect ILS approach runway zero five left again",
+      "atc_translation_ru": "CPA451, ВПП свободна, разворот вправо курс 090, снижение до трёх тысяч футов, ожидайте повторный заход по ILS на ВПП 05L",
+      "expected_readback": "Right heading zero nine zero, descend to three thousand feet, CPA451",
+      "readback_translation_ru": "Разворот вправо курс 090, снижение до трёх тысяч футов, CPA451"
+    },
+    {
+      "step": 17,
+      "phase": "LANDING",
+      "atc": "CPA451, wind zero five zero degrees, one six knots, runway zero five left, cleared to land",
+      "atc_translation_ru": "CPA451, ветер пятьдесят градусов, шестнадцать узлов, ВПП 05L, посадка разрешена",
+      "expected_readback": "Runway zero five left, cleared to land, CPA451",
+      "readback_translation_ru": "ВПП 05L, посадка разрешена, CPA451"
+    },
+    {
+      "step": 18,
+      "phase": "TAXI-IN",
+      "atc": "CPA451, vacate left at Foxtrot, taxi to stand Bravo one two via taxiway Foxtrot, Hotel, contact Ground on one two one decimal six zero",
+      "atc_translation_ru": "CPA451, освободите влево на Фокстрот, рулите на стоянку B12 по Фокстрот, Хотел, свяжитесь с Руением на 121.60",
+      "expected_readback": "Vacate left at Foxtrot, taxi to stand Bravo one two via Foxtrot, Hotel, Ground on one two one decimal six zero, CPA451",
+      "readback_translation_ru": "Освобождаем влево на Фокстрот, рулим на стоянку B12 по Фокстрот, Хотел, Руение на 121.60, CPA451"
+    }
+  ]
+}

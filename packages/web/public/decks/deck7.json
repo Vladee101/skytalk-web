@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "lesson": {
+    "name": "Сеул — Токио: Полный цикл, нештатные ситуации",
+    "callsign": "KAL711",
+    "aircraft_type": "B737",
+    "route": "RKSI-RJTT",
+    "difficulty": "advanced"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "phase": "PREFLIGHT",
+      "atc": "KAL711, clearance delivery, cleared to Tokyo Haneda via OLMEN departure, flight level three one zero, squawk three five two one, departure frequency one two six decimal five zero",
+      "atc_translation_ru": "KAL711, служба клиренса, клиренс до Токио Ханеда по процедуре вылета OLMEN, эшелон 310, сквок 3521, частота вылета 126.50",
+      "expected_readback": "Cleared to Tokyo Haneda via OLMEN departure, flight level three one zero, squawk three five two one, departure frequency one two six decimal five zero, KAL711",
+      "readback_translation_ru": "Клиренс до Токио Ханеда по OLMEN, эшелон 310, сквок 3521, частота вылета 126.50, KAL711"
+    },
+    {
+      "step": 2,
+      "phase": "PUSHBACK",
+      "atc": "KAL711, pushback and startup approved, face south, caution ground equipment on your left",
+      "atc_translation_ru": "KAL711, отбуксировка и запуск разрешены, ориентация на юг, осторожно — наземная техника слева",
+      "expected_readback": "Pushback and startup approved, face south, KAL711",
+      "readback_translation_ru": "Отбуксировка и запуск разрешены, ориентация на юг, KAL711"
+    },
+    {
+      "step": 3,
+      "phase": "TAXI",
+      "atc": "KAL711, taxi to holding point runway three four left, via taxiway Alpha, Delta, hold short of taxiway Golf",
+      "atc_translation_ru": "KAL711, рулите на исполнительный старт ВПП 34L по Альфа, Дельта, остановитесь перед Гольф",
+      "expected_readback": "Taxi to holding point runway three four left, via Alpha, Delta, hold short of Golf, KAL711",
+      "readback_translation_ru": "Рулим на ВПП 34L по Альфа, Дельта, останавливаемся перед Гольф, KAL711"
+    },
+    {
+      "step": 4,
+      "phase": "TAXI",
+      "atc": "KAL711, hold position, runway three four left, landing traffic",
+      "atc_translation_ru": "KAL711, остановитесь, ВПП 34L, приземляющийся самолёт",
+      "expected_readback": "Holding position, KAL711",
+      "readback_translation_ru": "Останавливаемся, KAL711"
+    },
+    {
+      "step": 5,
+      "phase": "LINE-UP",
+      "atc": "KAL711, runway clear, line up and wait runway three four left",
+      "atc_translation_ru": "KAL711, ВПП свободна, выруливайте на ВПП 34L и ждите",
+      "expected_readback": "Line up and wait runway three four left, KAL711",
+      "readback_translation_ru": "Выруливаем на ВПП 34L, ждём, KAL711"
+    },
+    {
+      "step": 6,
+      "phase": "TAKEOFF",
+      "atc": "KAL711, wind three three zero degrees, one four knots, runway three four left, cleared for takeoff",
+      "atc_translation_ru": "KAL711, ветер триста тридцать градусов, четырнадцать узлов, ВПП 34L, взлёт разрешён",
+      "expected_readback": "Runway three four left, cleared for takeoff, KAL711",
+      "readback_translation_ru": "ВПП 34L, взлёт разрешён, KAL711"
+    },
+    {
+      "step": 7,
+      "phase": "CLIMB",
+      "atc": "KAL711, contact Incheon Departure on one two six decimal five zero",
+      "atc_translation_ru": "KAL711, свяжитесь с Вылетом Инчхона на 126.50",
+      "expected_readback": "One two six decimal five zero, KAL711",
+      "readback_translation_ru": "126.50, KAL711"
+    },
+    {
+      "step": 8,
+      "phase": "CLIMB",
+      "atc": "KAL711, climb and maintain flight level three one zero, traffic information, crossing traffic at flight level two nine zero, two o'clock, seven miles, a Boeing seven seven seven",
+      "atc_translation_ru": "KAL711, набирайте и выдерживайте эшелон 310, информация о трафике — пересекающий самолёт на эшелоне 290, два часа, семь миль, Боинг 777",
+      "expected_readback": "Climb and maintain flight level three one zero, traffic in sight, KAL711",
+      "readback_translation_ru": "Набираем и выдерживаем эшелон 310, трафик наблюдаем, KAL711"
+    },
+    {
+      "step": 9,
+      "phase": "ENROUTE",
+      "atc": "KAL711, contact Fukuoka Control on one three two decimal five five",
+      "atc_translation_ru": "KAL711, свяжитесь с Контролем Фукуоки на 132.55",
+      "expected_readback": "One three two decimal five five, KAL711",
+      "readback_translation_ru": "132.55, KAL711"
+    },
+    {
+      "step": 10,
+      "phase": "ENROUTE",
+      "atc": "KAL711, due to active SIGMET, severe turbulence reported at flight level three one zero, advise able to climb to flight level three seven zero",
+      "atc_translation_ru": "KAL711, действует SIGMET, зафиксирована сильная турбулентность на эшелоне 310, сообщите, можете ли набрать эшелон 370",
+      "expected_readback": "Affirm, able to climb to flight level three seven zero, KAL711",
+      "readback_translation_ru": "Подтверждаем, можем набрать эшелон 370, KAL711"
+    },
+    {
+      "step": 11,
+      "phase": "ENROUTE",
+      "atc": "KAL711, climb and maintain flight level three seven zero, report level",
+      "atc_translation_ru": "KAL711, набирайте и выдерживайте эшелон 370, доложите о выходе на эшелон",
+      "expected_readback": "Climb and maintain flight level three seven zero, wilco, KAL711",
+      "readback_translation_ru": "Набираем и выдерживаем эшелон 370, выполним, KAL711"
+    },
+    {
+      "step": 12,
+      "phase": "DESCENT",
+      "atc": "KAL711, contact Tokyo Control on one two four decimal four zero",
+      "atc_translation_ru": "KAL711, свяжитесь с Токийским Контролем на 124.40",
+      "expected_readback": "One two four decimal four zero, KAL711",
+      "readback_translation_ru": "124.40, KAL711"
+    },
+    {
+      "step": 13,
+      "phase": "DESCENT",
+      "atc": "KAL711, descend and maintain flight level one one zero, reduce speed to two six zero knots, expect ILS approach runway three four right",
+      "atc_translation_ru": "KAL711, снижайтесь и выдерживайте эшелон 110, уменьшите скорость до 260 узлов, ожидайте заход по ILS на ВПП 34R",
+      "expected_readback": "Descend and maintain flight level one one zero, speed two six zero knots, KAL711",
+      "readback_translation_ru": "Снижаемся и выдерживаем эшелон 110, скорость 260 узлов, KAL711"
+    },
+    {
+      "step": 14,
+      "phase": "APPROACH",
+      "atc": "KAL711, contact Tokyo Approach on one one nine decimal one zero",
+      "atc_translation_ru": "KAL711, свяжитесь с Токийским Подходом на 119.10",
+      "expected_readback": "One one nine decimal one zero, KAL711",
+      "readback_translation_ru": "119.10, KAL711"
+    },
+    {
+      "step": 15,
+      "phase": "APPROACH",
+      "atc": "KAL711, turn left heading three zero zero, descend to four thousand feet, cleared ILS approach runway three four right, QNH one zero one five , caution wake turbulence, heavy Boeing seven seven seven on final ahead",
+      "atc_translation_ru": "KAL711, разворот влево курс 300, снижение до четырёх тысяч футов, заход по ILS на ВПП 34R разрешён, давление 1015, осторожно — спутная турбулентность, тяжёлый Боинг 777 на глиссаде впереди",
+      "expected_readback": "Left heading three zero zero, descend to four thousand feet, cleared ILS approach runway three four right, QNH one zero one five, KAL711",
+      "readback_translation_ru": "Разворот влево курс 300, снижение до четырёх тысяч футов, заход по ILS ВПП 34R разрешён, давление 1015, KAL711"
+    },
+    {
+      "step": 16,
+      "phase": "APPROACH",
+      "atc": "KAL711, go around, I say again, go around, wake turbulence separation not established, climb straight ahead to three thousand feet",
+      "atc_translation_ru": "KAL711, уход на второй круг, повторяю — уход на второй круг, интервал по спутной турбулентности не обеспечен, набор прямо по курсу до трёх тысяч футов",
+      "expected_readback": "Going around, climbing straight ahead to three thousand feet, KAL711",
+      "readback_translation_ru": "Уходим на второй круг, набор прямо по курсу до трёх тысяч футов, KAL711"
+    },
+    {
+      "step": 17,
+      "phase": "LANDING",
+      "atc": "KAL711, wind three four zero degrees, one two knots, runway three four right, cleared to land, separation from preceding traffic assured",
+      "atc_translation_ru": "KAL711, ветер триста сорок градусов, двенадцать узлов, ВПП 34R, посадка разрешена, интервал от предшествующего воздушного судна обеспечен",
+      "expected_readback": "Runway three four right, cleared to land, KAL711",
+      "readback_translation_ru": "ВПП 34R, посадка разрешена, KAL711"
+    },
+    {
+      "step": 18,
+      "phase": "TAXI-IN",
+      "atc": "KAL711, vacate left at Charlie, taxi to stand six one via taxiway Charlie, Echo, contact Ground on one two one decimal seven zero",
+      "atc_translation_ru": "KAL711, освободите влево на Чарли, рулите на стоянку 61 по Чарли, Эхо, свяжитесь с Руением на 121.70",
+      "expected_readback": "Vacate left at Charlie, taxi to stand six one via Charlie, Echo, Ground on one two one decimal seven zero, KAL711",
+      "readback_translation_ru": "Освобождаем влево на Чарли, рулим на стоянку 61 по Чарли, Эхо, Руение на 121.70, KAL711"
+    }
+  ]
+}

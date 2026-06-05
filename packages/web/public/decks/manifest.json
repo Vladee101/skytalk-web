@@ -34,6 +34,24 @@
         "name": "Пекин — Москва: Полный цикл, нештатные ситуации",
         "difficulty": "advanced",
         "steps": 18
+    },
+    {
+        "deckId": "deck7",
+        "name": "Сеул — Токио: Полный цикл, нештатные ситуации",
+        "difficulty": "advanced",
+        "steps": 18
+    },
+    {
+        "deckId": "deck8",
+        "name": "Куала-Лумпур — Сингапур: Полный цикл, нештатные ситуации",
+        "difficulty": "advanced",
+        "steps": 18
+    },
+    {
+        "deckId": "deck9",
+        "name": "Гонконг — Тайпей: Полный цикл, нештатные ситуации",
+        "difficulty": "advanced",
+        "steps": 18
     }
     
 ]
