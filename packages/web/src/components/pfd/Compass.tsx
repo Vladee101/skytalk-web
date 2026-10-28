@@ -28,7 +28,7 @@ export default function Compass({ heading }: Props) {
             <div className="relative w-full h-full">
                 {ticks.map(val => {
                     // Normalize display value (0-359)
-                    let displayVal = ((val % 360) + 360) % 360;
+                    const displayVal = ((val % 360) + 360) % 360;
                     // North is N
                     let label = displayVal.toString();
                     if (displayVal === 0) label = "N";

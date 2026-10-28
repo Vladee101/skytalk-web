@@ -107,4 +107,27 @@ describe('POST /api/auth/login — rate limiting', () => {
     });
     expect(res.statusCode).toBe(429);
   });
+
+  it('counts clients separately by X-Forwarded-For from the local proxy', async () => {
+    // The previous test exhausted the bucket for the direct (127.0.0.1) client
+    const res = await app.inject({
+      method: 'POST',
+      url: '/api/auth/login',
+      headers: { 'x-forwarded-for': '203.0.113.7' },
+      payload: { password: 'wrong' },
+    });
+    expect(res.statusCode).toBe(401);
+  });
+
+  it('ignores X-Forwarded-For from a non-local peer', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/api/auth/login',
+      remoteAddress: '198.51.100.9',
+      headers: { 'x-forwarded-for': '203.0.113.7' },
+      payload: { password: 'wrong' },
+    });
+    // Counted as 198.51.100.9 (fresh bucket), not as the spoofed 203.0.113.7
+    expect(res.statusCode).toBe(401);
+  });
 });

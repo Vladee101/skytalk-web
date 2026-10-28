@@ -220,7 +220,7 @@ export default function StudentSession() {
       );
       return { currentStepIndex: idx, lesson: { ...state.lesson, steps } };
     });
-  }, [snapshot?.current_step_index]);
+  }, [snapshot?.current_step_index, snapshot?.current_step_data]);
 
   const { peerStatus, peerRegistered, localPeerId, localStream, remoteStream, micError } = usePeer({
     roomId: roomId ?? '',

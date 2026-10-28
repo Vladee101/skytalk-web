@@ -151,7 +151,7 @@ export default function TutorSession() {
         arrowTimerRef.current = setTimeout(() => setArrowFlash(false), 400);
       }
     },
-    [navigate],
+    [navigate, roomId],
   );
 
   const { snapshot, send, status } = useWebSocket({
@@ -189,7 +189,7 @@ export default function TutorSession() {
       if (prev.length !== count) return initCards(snapshot);
       return prev;
     });
-  }, [snapshot?.current_step_index, snapshot?.current_step_data]);
+  }, [snapshot]);
 
   // Keyboard shortcuts
   useEffect(() => {

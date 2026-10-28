@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { ClientMessage, SendMessage, ServerMessage, StateSnapshot } from '../types/ws';
+import type { SendMessage, ServerMessage, StateSnapshot } from '../types/ws';
 
 export type WsStatus = 'connecting' | 'open' | 'reconnecting' | 'closed';
 

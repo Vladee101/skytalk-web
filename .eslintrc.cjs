@@ -15,4 +15,15 @@ module.exports = {
     'import/no-unresolved': 'off',
   },
   ignorePatterns: ['dist/', 'node_modules/', 'coverage/'],
+  overrides: [
+    {
+      files: ['packages/web/**/*.{ts,tsx}'],
+      env: { browser: true },
+      plugins: ['react-hooks'],
+      rules: {
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'warn',
+      },
+    },
+  ],
 };

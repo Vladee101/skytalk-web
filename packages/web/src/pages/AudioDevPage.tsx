@@ -154,7 +154,6 @@ export default function AudioDevPage() {
         </button>
 
         {/* Hidden audio element for monitoring */}
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <audio ref={audioRef} />
 
         {/* Inbound chain test */}
