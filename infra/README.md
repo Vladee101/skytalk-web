@@ -115,12 +115,17 @@ systemctl reload nginx
 
 ### 8. coturn
 
+Requires the Let's Encrypt cert (step with certbot) and `/etc/skytalk/skytalk.env` with `SKYTALK_TURN_SECRET`.
+From your local machine (repo root):
+
 ```bash
-cp infra/coturn/turnserver.conf /etc/turnserver.conf
-# Edit the file: replace DOMAIN and TURN_SECRET
-systemctl enable coturn
-systemctl start coturn
+scp infra/coturn/turnserver.conf infra/coturn/install-coturn.sh root@your-vps-ip:/root/coturn/
+ssh root@your-vps-ip "bash /root/coturn/install-coturn.sh skytalk.website"
 ```
+
+The script installs coturn, fills in the domain, public IP and TURN secret, and adds a certbot
+deploy hook that copies the cert to `/etc/coturn/certs/` (coturn runs as `turnserver` and
+cannot read `/etc/letsencrypt/live`). Re-running it is safe.
 
 Verify coturn is listening:
 
