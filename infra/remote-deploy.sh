@@ -85,4 +85,7 @@ echo "$COMMIT" > "$OPT_DIR/DEPLOYED_COMMIT"
 ls -1dt "$OPT_DIR"/backup-* 2>/dev/null | tail -n +$((KEEP_BACKUPS + 1)) | xargs -r rm -rf --
 
 echo "==> Deployed $COMMIT"
-echo "    Rollback: cp -a $BACKUP/www/. $WEB_DIR/  and  rm -rf $SERVER_DIR/dist && cp -a $BACKUP/server-dist $SERVER_DIR/dist && systemctl restart skytalk-server"
+echo "    Rollback web:    cp -a $BACKUP/www/. $WEB_DIR/"
+if [[ "$WEB_ONLY" -eq 0 ]]; then
+  echo "    Rollback server: rm -rf $SERVER_DIR/dist && cp -a $BACKUP/server-dist $SERVER_DIR/dist && systemctl restart skytalk-server"
+fi
