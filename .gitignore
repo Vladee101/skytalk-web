@@ -10,3 +10,6 @@ dist/
 coverage/
 .DS_Store
 *.tsbuildinfo
+
+# Local dev launch config (Claude preview) — contains local-only test secrets
+.claude/launch.json
