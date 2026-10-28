@@ -212,7 +212,7 @@ export default function StudentSession() {
   const { peerStatus, peerRegistered, localStream, remoteStream } = usePeer({
     roomId: roomId ?? '',
     role: 'student',
-    iceServers: [],
+    token,
   });
 
   const { pttPressed } = usePTT(send, {

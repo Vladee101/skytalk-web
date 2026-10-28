@@ -4,6 +4,8 @@ import type { ClientMessage, SendMessage, ServerMessage, StateSnapshot } from '.
 export type WsStatus = 'connecting' | 'open' | 'reconnecting' | 'closed';
 
 const BACKOFF_MS = [1000, 2000, 4000, 8000, 16000] as const;
+// Server drops sockets silent for 60 s (room-manager HEARTBEAT_TIMEOUT_MS).
+const PING_INTERVAL_MS = 25_000;
 
 export function useWebSocket(opts: {
   roomId: string;
@@ -29,6 +31,7 @@ export function useWebSocket(opts: {
   const attemptRef = useRef(0);
   const gracefulRef = useRef(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pingRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     gracefulRef.current = false;
@@ -37,6 +40,11 @@ export function useWebSocket(opts: {
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const baseUrl = `${protocol}//${window.location.host}/ws/rooms/${roomId}?token=${encodeURIComponent(token)}`;
+
+    function stopPing() {
+      if (pingRef.current !== null) clearInterval(pingRef.current);
+      pingRef.current = null;
+    }
 
     function connect() {
       setStatus(attemptRef.current === 0 ? 'connecting' : 'reconnecting');
@@ -51,6 +59,12 @@ export function useWebSocket(opts: {
         didOpen = true;
         attemptRef.current = 0;
         setStatus('open');
+        stopPing();
+        pingRef.current = setInterval(() => {
+          if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: 'ping', seq: seqRef.current++ }));
+          }
+        }, PING_INTERVAL_MS);
       };
 
       ws.onmessage = (event) => {
@@ -113,6 +127,7 @@ export function useWebSocket(opts: {
       };
 
       ws.onclose = () => {
+        stopPing();
         if (gracefulRef.current) return;
 
         // Connection was rejected before it opened (HTTP 401/404/410 etc.) — don't retry.
@@ -137,6 +152,7 @@ export function useWebSocket(opts: {
 
     return () => {
       gracefulRef.current = true;
+      stopPing();
       if (timerRef.current !== null) clearTimeout(timerRef.current);
       wsRef.current?.close();
     };

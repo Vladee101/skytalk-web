@@ -156,7 +156,7 @@ export default function TutorSession() {
   const { peerStatus, triggerCall, localStream, remoteStream } = usePeer({
     roomId: roomId ?? '',
     role: 'tutor',
-    iceServers: [],
+    token,
     processStream: (stream) => engineRef.current?.processOutbound(stream) ?? stream,
   });
   triggerCallRef.current = triggerCall;

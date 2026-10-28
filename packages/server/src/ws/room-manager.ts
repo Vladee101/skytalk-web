@@ -31,9 +31,12 @@ class RoomManager {
     this.ensureSweep();
   }
 
-  leave(roomId: string, role: 'tutor' | 'student'): void {
+  leave(roomId: string, role: 'tutor' | 'student', socket: WebSocket): void {
     const room = this.rooms.get(roomId);
     if (!room) return;
+    // A replaced or swept socket closes asynchronously — by then the slot may
+    // already hold a newer connection, which must not be evicted.
+    if (room[role]?.socket !== socket) return;
     room[role] = null;
     if (room.tutor === null && room.student === null) {
       this.rooms.delete(roomId);

@@ -101,7 +101,7 @@ export async function wsRoutes(app: FastifyInstance): Promise<void> {
     });
 
     socket.on('close', () => {
-      manager.leave(row.room_id, role);
+      manager.leave(row.room_id, role, socket);
     });
   });
 }

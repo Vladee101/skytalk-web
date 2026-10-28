@@ -4,10 +4,32 @@ import type { MediaConnection } from 'peerjs';
 
 export type PeerStatus = 'idle' | 'requesting_mic' | 'connecting' | 'connected' | 'error';
 
+/** STUN plus time-limited TURN relay (coturn on the same host, see infra/coturn). */
+async function fetchIceServers(roomId: string, token: string): Promise<RTCIceServer[]> {
+  const host = window.location.hostname;
+  const stun: RTCIceServer = { urls: `stun:${host}:3478` };
+  try {
+    const res = await fetch(
+      `/api/rooms/${encodeURIComponent(roomId)}/turn-creds?token=${encodeURIComponent(token)}`,
+    );
+    if (!res.ok) return [stun];
+    const { username, password } = (await res.json()) as { username: string; password: string };
+    return [
+      stun,
+      { urls: [`turn:${host}:3478?transport=udp`, `turn:${host}:3478?transport=tcp`], username, credential: password },
+      { urls: `turns:${host}:5349?transport=tcp`, username, credential: password },
+    ];
+  } catch {
+    // Without TURN, peers behind symmetric NAT can't connect — but STUN still covers most cases.
+    return [stun];
+  }
+}
+
 export function usePeer(opts: {
   roomId: string;
   role: 'tutor' | 'student';
-  iceServers?: RTCIceServer[];
+  /** Room token — used to fetch TURN credentials. */
+  token: string;
   /** Tutor only — transform the local mic stream before passing it to peer.call(). */
   processStream?: (stream: MediaStream) => MediaStream;
 }): {
@@ -20,7 +42,7 @@ export function usePeer(opts: {
   /** Tutor only — call this when peer_ready arrives from server to initiate the WebRTC call. */
   triggerCall: () => void;
 } {
-  const { roomId, role } = opts;
+  const { roomId, role, token } = opts;
 
   const [peerStatus, setPeerStatus] = useState<PeerStatus>('idle');
   const [peerRegistered, setPeerRegistered] = useState(false);
@@ -31,8 +53,8 @@ export function usePeer(opts: {
   const peerRef = useRef<Peer | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
   const activeCallRef = useRef<MediaConnection | null>(null);
-  // Captured once at effect creation; changes mid-session are not supported.
-  const iceServersRef = useRef(opts.iceServers);
+  // null until TURN credentials are fetched; the peer is not created before that.
+  const [iceServers, setIceServers] = useState<RTCIceServer[] | null>(null);
   const processStreamRef = useRef(opts.processStream);
 
   // Tutor: set inside the effect once peer is open, called by triggerCall().
@@ -49,7 +71,18 @@ export function usePeer(opts: {
   }, []);
 
   useEffect(() => {
-    if (!roomId) return;
+    if (!roomId || !token) return;
+    let cancelled = false;
+    void fetchIceServers(roomId, token).then((servers) => {
+      if (!cancelled) setIceServers(servers);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [roomId, token]);
+
+  useEffect(() => {
+    if (!roomId || !iceServers) return;
 
     let destroyed = false;
     let retryTimer: ReturnType<typeof setTimeout> | null = null;
@@ -58,10 +91,6 @@ export function usePeer(opts: {
     const peerId = `${safeRoomId}${role}`;
     const remoteId = `${safeRoomId}${role === 'tutor' ? 'student' : 'tutor'}`;
     const secure = window.location.protocol === 'https:';
-
-    const resolvedIceServers: RTCIceServer[] = iceServersRef.current ?? [
-      { urls: `stun:${window.location.hostname}:3478` },
-    ];
 
     const MIC_CONSTRAINTS: MediaStreamConstraints = {
       audio: {
@@ -80,7 +109,7 @@ export function usePeer(opts: {
         port: secure ? 443 : 80,
         path: '/peerjs',
         secure,
-        config: { iceServers: resolvedIceServers, iceTransportPolicy: 'all' },
+        config: { iceServers, iceTransportPolicy: 'all' },
       });
       peer.on('error', (err) => {
         console.error('PeerJS error:', err);
@@ -250,7 +279,7 @@ export function usePeer(opts: {
       localStreamRef.current?.getTracks().forEach((t) => t.stop());
       localStreamRef.current = null;
     };
-  }, [roomId, role]);
+  }, [roomId, role, iceServers]);
 
   return { peerStatus, peerRegistered, localStream, remoteStream, micError, triggerCall };
 }
