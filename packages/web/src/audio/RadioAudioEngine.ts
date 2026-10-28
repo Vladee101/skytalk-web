@@ -131,8 +131,10 @@ export class RadioAudioEngine {
     const el = document.createElement('audio');
     el.srcObject = stream;
     el.autoplay = true;
-    // Volume 0 — actual audio is played through the Web Audio graph.
-    el.volume = 0;
+    // Muted — actual audio is played through the Web Audio graph.
+    // (volume = 0 is ignored on iOS, where volume is read-only.)
+    el.muted = true;
+    el.setAttribute('playsinline', '');
     // Avoid some browsers refusing autoplay without user gesture; the element
     // is essentially silent so .play() should succeed.
     el.play().catch(() => { /* ignore — Web Audio path is primary */ });
@@ -148,12 +150,13 @@ export class RadioAudioEngine {
   }
 
   /**
-   * Call on the first user gesture (Space press via usePTT).
+   * Call from a user gesture (audio unlock tap, PTT press).
    * Resumes the AudioContext and starts the static noise loop.
    * Safe to call multiple times — starts the noise source only once.
    */
-  resume(): void {
-    void this.ctx.resume().then(() => {
+  resume(): Promise<void> {
+    // ctx.resume() must be invoked synchronously inside the gesture handler (iOS Safari)
+    return this.ctx.resume().then(() => {
       if (!this.noiseStarted) {
         this.noiseSource.start();
         this.noiseStarted = true;
@@ -205,6 +208,13 @@ export class RadioAudioEngine {
 
   get contextState(): AudioContextState {
     return this.ctx.state;
+  }
+
+  /** Fires when the context is suspended/interrupted (e.g. phone call, app switch) or resumes. */
+  onStateChange(cb: (state: AudioContextState) => void): () => void {
+    const handler = () => cb(this.ctx.state);
+    this.ctx.addEventListener('statechange', handler);
+    return () => this.ctx.removeEventListener('statechange', handler);
   }
 
   close(): void {

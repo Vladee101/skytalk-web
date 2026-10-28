@@ -187,6 +187,36 @@ describe('WebSocket message handlers', () => {
   // Happy-path: broadcast and role-filtering                            //
   // ------------------------------------------------------------------ //
 
+  it('peer_ready: forwarded to the other side with the sender peer_id', async () => {
+    const { roomId, tutorToken, studentToken } = newIds();
+    insertRoom(roomId, tutorToken, studentToken, 'IDLE');
+
+    const { ws: tWs, firstMessage: tSnap } = await injectWs(app, `/ws/rooms/${roomId}?token=${tutorToken}`);
+    const { ws: sWs, firstMessage: sSnap } = await injectWs(app, `/ws/rooms/${roomId}?token=${studentToken}`);
+    await Promise.all([tSnap, sSnap]);
+
+    const tMsg = nextMessage(tWs);
+    sWs.send(JSON.stringify({ type: 'peer_ready', peer_id: 'room-student-a1b2c3d4', seq: 1 }));
+    expect(await tMsg).toEqual({ type: 'peer_ready', peer_id: 'room-student-a1b2c3d4' });
+
+    tWs.terminate();
+    sWs.terminate();
+  });
+
+  it('peer_ready: rejects a peer_id outside the PeerJS charset', async () => {
+    const { roomId, tutorToken, studentToken } = newIds();
+    insertRoom(roomId, tutorToken, studentToken, 'IDLE');
+
+    const { ws: sWs, firstMessage: sSnap } = await injectWs(app, `/ws/rooms/${roomId}?token=${studentToken}`);
+    await sSnap;
+
+    const sMsg = nextMessage(sWs);
+    sWs.send(JSON.stringify({ type: 'peer_ready', peer_id: '../../evil', seq: 7 }));
+    expect(await sMsg).toMatchObject({ type: 'error', code: 'validation_failed', ack_seq: 7 });
+
+    sWs.terminate();
+  });
+
   it('start_lesson: both clients receive state_changed then role-filtered step_changed', async () => {
     const { roomId, tutorToken, studentToken } = newIds();
     insertRoom(roomId, tutorToken, studentToken, 'IDLE');

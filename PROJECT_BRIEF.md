@@ -46,7 +46,7 @@ The web version keeps the **pedagogical principles** (tutor as judge, app as gat
 - Multi-student concurrent sessions. Architecture allows it eventually; MVP optimizes for 1.
 - Speech recognition / automated readback validation. Human judges. App enforces input fields only.
 - Lesson authoring in the web UI. Use the existing desktop tutor app.
-- Mobile UI. Desktop browsers only (1280px+).
+- Mobile tutor UI. The tutor works on a desktop browser (1280px+); the **student** session page supports phones (on-screen PTT, numeric keypad, responsive layout).
 - Recording / playback of past sessions. Stretch goal, not MVP.
 - Internationalization beyond what already exists in the source materials. UI is bilingual (RU/EN) where the user manual is bilingual; otherwise EN.
 - Flashcards mode. v1 has it; web MVP doesn't. Add later if demanded.

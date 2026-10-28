@@ -17,6 +17,9 @@ function applyInputToStore(pending: { value: string; type: string } | null): voi
   }
 }
 import { RadioAudioEngine } from '../audio/RadioAudioEngine';
+import AudioUnlockOverlay from '../components/AudioUnlockOverlay';
+import PttButton from '../components/PttButton';
+import { useAudioUnlock } from '../hooks/useAudioUnlock';
 import { usePTT } from '../hooks/usePTT';
 import { useRadioIntensity } from '../hooks/useRadioIntensity';
 import { usePeer } from '../hooks/usePeer';
@@ -26,6 +29,14 @@ import PFD from '../components/pfd/PFD';
 import { useFlightStore } from '../store/flightStore';
 
 type InputVariant = 'idle' | 'blue' | 'red' | 'green';
+
+// Numeric keypads on phones; frequency needs the decimal point
+const INPUT_MODES: Record<string, 'decimal' | 'numeric'> = {
+  com_frequency: 'decimal',
+  squawk: 'numeric',
+  heading: 'numeric',
+  altitude: 'numeric',
+};
 
 const INPUT_LABELS: Record<string, string> = {
   com_frequency: 'COM Frequency',
@@ -87,6 +98,8 @@ export default function StudentSession() {
   useEffect(() => {
     engineRef.current?.setIntensity(intensity / 100);
   }, [intensity]);
+
+  const { needsUnlock, unlock } = useAudioUnlock(engineRef);
 
   // RAF simulation loop — drives PFD instruments
   useEffect(() => {
@@ -209,13 +222,13 @@ export default function StudentSession() {
     });
   }, [snapshot?.current_step_index]);
 
-  const { peerStatus, peerRegistered, localStream, remoteStream } = usePeer({
+  const { peerStatus, peerRegistered, localPeerId, localStream, remoteStream, micError } = usePeer({
     roomId: roomId ?? '',
     role: 'student',
     token,
   });
 
-  const { pttPressed } = usePTT(send, {
+  const { pttPressed, press, release } = usePTT(send, {
     onFirstGesture: () => engineRef.current?.resume(),
     onPttChange: (pressed) => {
       localStream?.getAudioTracks().forEach((t) => { t.enabled = pressed; });
@@ -225,12 +238,13 @@ export default function StudentSession() {
   // Retry peer_ready every 5 s until the WebRTC peer is connected.
   // A single fire is not reliable: the first message can be lost if the tutor's
   // call machinery isn't ready yet, leaving no way to re-initiate the call.
+  // Also resumes after a dropped call: peerStatus leaves 'connected' and the tutor calls again.
   useEffect(() => {
-    if (!peerRegistered || status !== 'open' || peerStatus === 'connected') return;
-    send({ type: 'peer_ready' });
-    const timer = setInterval(() => send({ type: 'peer_ready' }), 5000);
+    if (!peerRegistered || !localPeerId || status !== 'open' || peerStatus === 'connected') return;
+    send({ type: 'peer_ready', peer_id: localPeerId });
+    const timer = setInterval(() => send({ type: 'peer_ready', peer_id: localPeerId }), 5000);
     return () => clearInterval(timer);
-  }, [peerRegistered, status, peerStatus, send]);
+  }, [peerRegistered, localPeerId, status, peerStatus, send]);
 
   useEffect(() => {
     if (!remoteStream || !engineRef.current) return;
@@ -292,148 +306,162 @@ export default function StudentSession() {
           ? 'text-green-400'
           : 'text-gray-500';
 
-  return (
-    <div className="relative min-h-screen bg-black overflow-hidden text-white">
-      {/* Layer z-0: PFD as full-screen background */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
-        <PFD />
-      </div>
+  const connection = describeConnection(status, peerStatus, micError);
 
-      {/* Top HUD bar: callsign/aircraft/route left · radio/status right */}
-      <div className="absolute top-0 left-0 right-0 z-10 flex items-start justify-between px-4 pt-3 font-mono text-xs leading-5 pointer-events-none select-none">
-        {/* Left: callsign · aircraft type · route */}
-        <div>
+  return (
+    <div className="relative h-[100dvh] bg-black overflow-hidden text-white flex flex-col">
+      {needsUnlock && <AudioUnlockOverlay onUnlock={unlock} />}
+
+      {/* Top HUD: callsign/aircraft/route left · radio right */}
+      <div className="flex-none flex items-start justify-between gap-3 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] pb-2 font-mono text-xs leading-5 select-none">
+        <div className="min-w-0">
           {hudInfo ? (
             <>
               <div className="text-green-400 font-bold">{hudInfo.callsign}</div>
-              <div className="text-green-400">{hudInfo.aircraft_type}</div>
-              <div className="text-green-400">{hudInfo.route}</div>
+              <div className="text-green-400 truncate">
+                {hudInfo.aircraft_type} · {hudInfo.route}
+              </div>
             </>
           ) : (
             <div className="text-green-900">—</div>
           )}
         </div>
 
-        {/* Right: radio frequencies + connection status */}
-        <div className="text-right">
+        <div className="text-right shrink-0">
           <div className="text-green-400">COM1 {radio.com1}</div>
           <div className="text-green-400">XPDR {radio.transponder}</div>
-          <div className="flex items-center gap-2 justify-end mt-1">
-            <span
-              title={`WS: ${status}`}
-              className={
-                status === 'open'
-                  ? 'text-green-500'
-                  : status === 'closed'
-                    ? 'text-red-500'
-                    : 'text-amber-500'
-              }
-            >
-              ●
-            </span>
-            <span
-              title={`Peer: ${peerStatus}`}
-              className={
-                peerStatus === 'connected'
-                  ? 'text-sky-500'
-                  : peerStatus === 'error'
-                    ? 'text-red-500'
-                    : 'text-gray-700'
-              }
-            >
-              ◆
-            </span>
-          </div>
         </div>
       </div>
 
-      {/* Bottom overlay: PTT left · input center · step counter right */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 bg-black/80 border-t border-gray-800 px-6 py-2">
-
-        {/* Radio intensity — absolute bottom-left corner, independent of the main row */}
-        <div className="absolute bottom-2 left-4 flex items-center gap-2 select-none">
-          <label htmlFor="radio-intensity" className="text-[10px] text-gray-700 whitespace-nowrap">
-            Radio {intensity}%
-          </label>
+      {/* Connection status + radio effect intensity */}
+      <div className="flex-none flex items-center justify-between gap-3 px-4 pb-2 text-[11px] select-none">
+        <span
+          className={`flex items-center gap-1.5 min-w-0 truncate ${connection.color}`}
+          title={`WS: ${status} · Peer: ${peerStatus}`}
+        >
+          <span aria-hidden>●</span>
+          {connection.label}
+        </span>
+        <label className="flex items-center gap-2 shrink-0 text-gray-600">
+          Radio {intensity}%
           <input
-            id="radio-intensity"
             type="range"
             min={0}
             max={100}
             value={intensity}
             onChange={(e) => setIntensity(Number(e.target.value))}
-            className="accent-sky-700 w-24"
+            className="accent-sky-700 w-20"
           />
+        </label>
+      </div>
+
+      {/* PFD — square fitted into the remaining space */}
+      <div className="flex-1 min-h-0 flex items-center justify-center px-2 pointer-events-none [container-type:size]">
+        <div className="w-[min(100cqw,100cqh)] h-[min(100cqw,100cqh)]">
+          <PFD />
         </div>
+      </div>
 
-        <div className="flex items-center gap-4 max-w-3xl mx-auto">
-
-          {/* Left: PTT indicator */}
-          <div className="w-44 shrink-0">
-            {snapshot ? (
-              <div
-                className={[
-                  'rounded py-1.5 px-3 text-center text-xs font-medium tracking-widest transition-colors select-none',
-                  pttPressed
-                    ? 'bg-sky-700 text-white'
-                    : 'bg-transparent border border-gray-800 text-gray-600',
-                ].join(' ')}
-              >
-                {pttPressed ? 'TRANSMITTING' : 'HOLD SPACE'}
-              </div>
-            ) : (
-              <div className="text-xs text-center text-gray-600 select-none">
-                {status === 'closed' ? 'Connection lost.' : 'Connecting…'}
-              </div>
-            )}
-          </div>
-
-          {/* Center: input field with floating label */}
-          <div className={`flex-1 flex items-center gap-2 transition-opacity ${inputVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-            <div className="relative flex-1">
-              {inputLabel && (
+      {/* Bottom panel: input row (when required) · PTT + step counter */}
+      <div className="flex-none bg-black/80 border-t border-gray-800 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <div className="max-w-3xl mx-auto space-y-3">
+          {inputVisible && (
+            <form
+              className="flex items-end gap-2"
+              onSubmit={(e) => {
+                e.preventDefault();
+                submitInput();
+              }}
+            >
+              <label className="flex-1 min-w-0">
                 <span
                   className={[
-                    'absolute -top-4 left-0 text-[10px] font-semibold tracking-widest uppercase transition-colors select-none',
+                    'block mb-1 text-[10px] font-semibold tracking-widest uppercase transition-colors select-none',
                     labelColorClass,
                   ].join(' ')}
                 >
-                  {inputLabel}
+                  {inputLabel ?? 'Readback'}
                 </span>
-              )}
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.code === 'Enter') {
-                    e.preventDefault();
-                    submitInput();
-                  }
-                }}
-                disabled={inputDisabled}
-                placeholder="Type readback…"
-                className={[
-                  'w-full rounded border bg-gray-900/90 px-3 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none transition-colors',
-                  inputBorderClass,
-                  inputDisabled ? 'opacity-40' : '',
-                ].join(' ')}
+                <input
+                  ref={inputRef}
+                  type="text"
+                  inputMode={currentInput ? INPUT_MODES[currentInput.type] : undefined}
+                  enterKeyHint="send"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(sanitizeInput(e.target.value, currentInput?.type))}
+                  disabled={inputDisabled}
+                  placeholder="Type value…"
+                  className={[
+                    // text-base (16px) keeps iOS Safari from zooming in on focus
+                    'w-full rounded-lg border bg-gray-900/90 px-3 py-2.5 text-base font-mono text-white placeholder-gray-600 focus:outline-none transition-colors',
+                    inputBorderClass,
+                    inputDisabled ? 'opacity-40' : '',
+                  ].join(' ')}
+                />
+              </label>
+              <button
+                type="submit"
+                disabled={inputDisabled || !inputValue.trim()}
+                className="shrink-0 rounded-lg bg-sky-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-sky-600 disabled:opacity-40"
+              >
+                Send
+              </button>
+            </form>
+          )}
+
+          <div className="flex items-center gap-3">
+            {snapshot ? (
+              <PttButton
+                pressed={pttPressed}
+                onPress={press}
+                onRelease={release}
+                className="flex-1 py-5 sm:py-3 text-sm"
               />
+            ) : (
+              <div className="flex-1 py-3 text-xs text-center text-gray-600 select-none">
+                {status === 'closed' ? 'Connection lost.' : 'Connecting…'}
+              </div>
+            )}
+
+            {/* Step counter / phase */}
+            <div className="shrink-0 text-right font-mono text-xs leading-5 text-green-400 select-none">
+              {stepNum !== null && totalSteps !== null && (
+                <div>
+                  {stepNum} / {totalSteps}
+                </div>
+              )}
+              {stepView && <div>{stepView.phase.replace(/-/g, ' ')}</div>}
             </div>
           </div>
-
-          {/* Right: step counter / phase */}
-          <div className="w-44 shrink-0 flex items-center justify-end select-none">
-            <span className="text-xs text-green-400 font-mono text-right">
-              {stepNum !== null && totalSteps !== null ? `${stepNum} / ${totalSteps}` : ''}
-              {stepView ? `  ${stepView.phase.replace(/-/g, ' ')}` : ''}
-            </span>
-          </div>
         </div>
-
       </div>
-
     </div>
   );
+}
+
+/** Russian-locale iOS decimal keypads type ',' — a frequency's only separator is '.'. */
+function sanitizeInput(value: string, type: string | undefined): string {
+  return type === 'com_frequency' ? value.replace(/,/g, '.') : value;
+}
+
+function describeConnection(
+  status: string,
+  peerStatus: string,
+  micError: string | null,
+): { label: string; color: string } {
+  if (status === 'closed') return { label: 'Server disconnected', color: 'text-red-500' };
+  if (status !== 'open') return { label: 'Reconnecting to server…', color: 'text-amber-500' };
+  switch (peerStatus) {
+    case 'connected':
+      return { label: 'Voice connected', color: 'text-green-500' };
+    case 'requesting_mic':
+      return { label: 'Allow microphone access', color: 'text-amber-500' };
+    case 'error':
+      return { label: `Voice error${micError ? `: ${micError}` : ''}`, color: 'text-red-500' };
+    default:
+      return { label: 'Connecting voice…', color: 'text-amber-500' };
+  }
 }

@@ -10,7 +10,8 @@ export default function PFD() {
     const { speed, altitude, heading, pitch, roll } = pfd;
 
     return (
-        <div className="w-[80vh] h-[80vh] relative bg-black rounded-xl overflow-hidden shadow-2xl border-4 border-slate-800">
+        // Square sized by the parent (StudentSession fits it into the free space)
+        <div className="w-full h-full relative bg-black rounded-xl overflow-hidden shadow-2xl border-4 border-slate-800">
             {/* Layer 1: Horizon (Background) */}
             <ArtificialHorizon pitch={pitch} roll={roll} />
 

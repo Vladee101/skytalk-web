@@ -2,6 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import type { Step } from '@skytalk/core';
 import { RadioAudioEngine } from '../audio/RadioAudioEngine';
+import AudioUnlockOverlay from '../components/AudioUnlockOverlay';
+import PttButton from '../components/PttButton';
+import { useAudioUnlock } from '../hooks/useAudioUnlock';
 import { usePeer } from '../hooks/usePeer';
 import { usePTT } from '../hooks/usePTT';
 import { useWebSocket } from '../hooks/useWebSocket';
@@ -85,7 +88,7 @@ export default function TutorSession() {
   const [arrowFlash, setArrowFlash] = useState(false);
 
   const engineRef = useRef<RadioAudioEngine | null>(null);
-  const triggerCallRef = useRef<(() => void) | null>(null);
+  const triggerCallRef = useRef<((remotePeerId: string) => void) | null>(null);
   const arrowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -96,6 +99,8 @@ export default function TutorSession() {
       engineRef.current = null;
     };
   }, []);
+
+  const { needsUnlock, unlock } = useAudioUnlock(engineRef);
 
   const modalOpen = showEndModal || showSkipModal || showResetModal;
 
@@ -134,7 +139,9 @@ export default function TutorSession() {
           setStudentTransmitting(msg.pressed);
         }
       } else if (msg.type === 'peer_ready') {
-        triggerCallRef.current?.();
+        // Fallback id: students on a cached pre-update page register a fixed id
+        const fallbackId = `${(roomId ?? '').replace(/[^a-zA-Z0-9]/g, '')}student`;
+        triggerCallRef.current?.(msg.peer_id ?? fallbackId);
       } else if (msg.type === 'lesson_ended') {
         if (roomId) removeRoomFromStorage(roomId);
         navigate('/tutor/dashboard');
@@ -161,7 +168,7 @@ export default function TutorSession() {
   });
   triggerCallRef.current = triggerCall;
 
-  const { pttPressed } = usePTT(send, {
+  const { pttPressed, press, release } = usePTT(send, {
     onFirstGesture: () => engineRef.current?.resume(),
     onPttChange: (pressed) => localStream?.getAudioTracks().forEach((t) => { t.enabled = pressed; }),
   });
@@ -240,6 +247,7 @@ export default function TutorSession() {
 
   return (
     <div className="min-h-screen bg-gray-950 text-white flex flex-col">
+      {needsUnlock && <AudioUnlockOverlay onUnlock={unlock} />}
       {/* Top bar */}
       <div className="border-b border-gray-800 bg-gray-900 px-6 py-3 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -271,13 +279,19 @@ export default function TutorSession() {
               title={`Peer: ${peerStatus}`}
               className={
                 peerStatus === 'connected'
-                  ? 'text-sky-500'
+                  ? 'text-green-500'
                   : peerStatus === 'error'
                     ? 'text-red-500'
-                    : 'text-gray-700'
+                    : 'text-amber-500'
               }
             >
-              ◆
+              {peerStatus === 'connected'
+                ? 'Voice connected'
+                : peerStatus === 'error'
+                  ? 'Voice error'
+                  : peerStatus === 'requesting_mic'
+                    ? 'Allow microphone'
+                    : 'Waiting for student voice…'}
             </span>
             <span
               className={
@@ -399,18 +413,9 @@ export default function TutorSession() {
           </section>
         )}
 
-        {/* PTT indicator */}
+        {/* PTT — hold Space or the button */}
         {snapshot && (
-          <div
-            className={[
-              'rounded-lg px-4 py-3 text-center text-sm font-medium transition-colors select-none',
-              pttPressed
-                ? 'bg-sky-700 text-white'
-                : 'bg-gray-900 border border-gray-800 text-gray-500',
-            ].join(' ')}
-          >
-            {pttPressed ? 'TRANSMITTING' : 'HOLD SPACE TO TRANSMIT'}
-          </div>
+          <PttButton pressed={pttPressed} onPress={press} onRelease={release} className="w-full py-3 text-sm" />
         )}
 
         {/* Start lesson button (IDLE state) */}

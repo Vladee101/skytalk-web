@@ -25,7 +25,7 @@ export type SendMessage = DistributiveOmit<ClientMessage, 'seq'>;
 
 export type ClientMessage =
   | ({ type: 'ping' } & WithSeq)
-  | ({ type: 'peer_ready' } & WithSeq)
+  | ({ type: 'peer_ready'; peer_id: string } & WithSeq)
   | ({ type: 'ptt'; pressed: boolean } & WithSeq)
   | ({ type: 'submit_input'; value: string } & WithSeq)
   | ({ type: 'right_arrow' } & WithSeq)
@@ -67,7 +67,7 @@ export type ServerMessage =
       attempt_count: number;
     }
   | { type: 'peer_ptt'; pressed: boolean; by: 'tutor' | 'student' }
-  | { type: 'peer_ready' }
+  | { type: 'peer_ready'; peer_id?: string }
   | { type: 'repeat_signal' }
   | { type: 'lesson_reset'; triggered_by: 'tutor' | 'student' }
   | {

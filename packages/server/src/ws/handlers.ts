@@ -22,7 +22,9 @@ const Base = z.object({ seq: z.number().optional() });
 
 const IncomingMessage = z.discriminatedUnion('type', [
   Base.extend({ type: z.literal('ping') }),
-  Base.extend({ type: z.literal('peer_ready') }),
+  // peer_id: the sender's PeerJS id, random per page load so a reload never collides with
+  // the stale id the PeerServer still holds. Charset matches PeerJS id rules.
+  Base.extend({ type: z.literal('peer_ready'), peer_id: z.string().regex(/^[A-Za-z0-9_-]{1,64}$/).optional() }),
   Base.extend({ type: z.literal('ptt'), pressed: z.boolean() }),
   Base.extend({ type: z.literal('start_lesson') }),
   Base.extend({ type: z.literal('submit_input'), value: z.string() }),
@@ -194,9 +196,9 @@ export function dispatchMessage(roomId: string, role: 'tutor' | 'student', raw: 
   }
 
   // peer_ready: student notifies server when their PeerJS peer is registered.
-  // Server forwards to tutor so tutor knows it's safe to initiate the WebRTC call.
+  // Server forwards to tutor so tutor knows it's safe to initiate the WebRTC call — and whom to call.
   if (msg.type === 'peer_ready') {
-    manager.sendToPeer(roomId, role, { type: 'peer_ready' });
+    manager.sendToPeer(roomId, role, { type: 'peer_ready', peer_id: msg.peer_id });
     return;
   }
 
