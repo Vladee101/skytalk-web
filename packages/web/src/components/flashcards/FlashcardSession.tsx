@@ -69,12 +69,12 @@ export const FlashcardSession: React.FC<FlashcardSessionProps> = ({ lesson, onEx
                     </div>
                     <div className="space-y-3 pt-2">
                         <a
-                            href="https://t.me/SkyTalk_Radio"
+                            href="https://t.me/Thinkee"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="block w-full py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-bold text-center transition-colors"
                         >
-                            Telegram: @SkyTalk_Radio
+                            Telegram: @Thinkee
                         </a>
                         <a
                             href="mailto:skytalk101@proton.me"
@@ -144,7 +144,7 @@ export const FlashcardSession: React.FC<FlashcardSessionProps> = ({ lesson, onEx
                         </h2>
                         {/* Persistent CTA — desktop only */}
                         <a
-                            href="https://t.me/SkyTalk_Radio"
+                            href="https://t.me/Thinkee"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hidden sm:block px-3 py-1.5 rounded-lg bg-sky-600/20 border border-sky-600/50 text-sky-400 hover:bg-sky-600/30 transition-colors text-xs font-bold whitespace-nowrap"

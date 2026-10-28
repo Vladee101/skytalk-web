@@ -53,7 +53,7 @@ export default function FlashcardsIndex() {
                     <p className="text-xs text-slate-500 mt-0.5">Авиационная фразеология ICAO</p>
                 </div>
                 <a
-                    href="https://t.me/SkyTalk_Radio"
+                    href="https://t.me/Thinkee"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-3 py-1.5 rounded-lg bg-sky-600/20 border border-sky-600/50 text-sky-400 hover:bg-sky-600/30 transition-colors text-xs font-bold whitespace-nowrap"

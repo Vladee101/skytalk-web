@@ -151,6 +151,8 @@
         .ck-rval { color: var(--green); font-size: 1rem; font-weight: bold; }
         .ck-sep { color: var(--border); font-size: 1.4rem; }
         .ck-dots { display: flex; gap: 6px; align-items: center; }
+        .ck-status { color: var(--green); font-size: .65rem; letter-spacing: 1px; white-space: nowrap; }
+        @media (max-width: 600px) { .ck-status-text { display: none; } }
 
         /* PFD */
         .ck-pfd-wrap {
@@ -405,6 +407,15 @@
         }
         footer p { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 8px; }
         .footer-slogan { color: var(--text-dim); font-style: italic; margin-top: 20px; }
+        .footer-credit {
+            color: var(--text-dim); font-size: 0.8125rem;
+            margin-top: 24px; opacity: 0.6;
+        }
+        .footer-credit a {
+            color: inherit; text-decoration: none; border-bottom: 1px solid transparent;
+            transition: opacity 0.2s;
+        }
+        .footer-credit a:hover { opacity: 0.75; }
 
         /* ── DIVIDER ── */
         .section-divider {
@@ -480,8 +491,8 @@
             </div>
             <div class="step-card">
                 <span class="step-num">02 // НАЖАТЬ</span>
-                <h3>Зажать пробел</h3>
-                <p>Удерживать <strong>ПРОБЕЛ</strong> — имитация нажатия кнопки PTT на штурвале. Это активирует микрофон и блокирует ввод.</p>
+                <h3>Зажать PTT</h3>
+                <p>Удерживать <strong>ПРОБЕЛ</strong> на компьютере или кнопку <strong>HOLD TO TALK</strong> на экране телефона — имитация нажатия кнопки PTT на штурвале. Это активирует микрофон и блокирует ввод.</p>
             </div>
             <div class="step-card">
                 <span class="step-num">03 // ГОВОРИТЬ</span>
@@ -491,7 +502,7 @@
             <div class="step-card">
                 <span class="step-num">04 // ВВОД</span>
                 <h3>Данные в поле</h3>
-                <p>Если поле мигает синим — ввести требуемое значение (частоту, код, курс или высоту) и нажать <strong>ENTER</strong>.</p>
+                <p>Если поле мигает синим — ввести требуемое значение (частоту, код, курс или высоту) и нажать <strong>ENTER</strong> или кнопку <strong>SEND</strong>.</p>
             </div>
             <div class="step-card">
                 <span class="step-num">05 // ЖДАТЬ</span>
@@ -527,8 +538,7 @@
                     </div>
                     <div class="ck-sep">|</div>
                     <div class="ck-dots">
-                        <span style="color:var(--green);font-size:.75rem;">●</span>
-                        <span style="color:var(--sky);font-size:.75rem;">◆</span>
+                        <span class="ck-status">●<span class="ck-status-text"> VOICE CONNECTED</span></span>
                     </div>
                 </div>
             </div>
@@ -564,10 +574,10 @@
             </div>
 
             <div class="ck-bar">
-                <div class="ck-ptt">HOLD SPACE</div>
+                <div class="ck-ptt">HOLD TO TALK</div>
                 <div class="ck-field">
                     <div class="ck-field-label">SQUAWK</div>
-                    <div class="ck-field-val">ENTER VALUE</div>
+                    <div class="ck-field-val">TYPE VALUE</div>
                 </div>
                 <div class="ck-intensity">
                     <span class="ck-int-label">RADIO 60%</span>
@@ -585,7 +595,7 @@
             <div class="state-card blue">
                 <div class="state-icon">🔵</div>
                 <h3>Мигает синим</h3>
-                <p>Ожидается ввод. Введите значение и нажмите ENTER.</p>
+                <p>Ожидается ввод. Введите значение и нажмите ENTER или SEND.</p>
             </div>
             <div class="state-card green">
                 <div class="state-icon">🟢</div>
@@ -636,7 +646,7 @@
         <div class="static-demo">
             <div class="static-desc">
                 <h3>Регулятор статики</h3>
-                <p>Ползунок <strong>Radio %</strong> в нижней части экрана управляет громкостью радиошума — того, что слышите вы когда говорит инструктор.</p>
+                <p>Ползунок <strong>Radio %</strong> на экране урока управляет громкостью радиошума — того, что слышите вы когда говорит инструктор.</p>
                 <p style="margin-top:12px;">0% — чистый голос. 60–70% — реалистичный эфир. 100% — тяжелые условия для продвинутой тренировки. Инструктор всегда слышит вас чисто — ползунок влияет только на вас.</p>
             </div>
             <div class="static-visual">
@@ -660,16 +670,16 @@
     <div class="container">
         <span class="section-tag">// УПРАВЛЕНИЕ</span>
         <h2>Клавиши</h2>
-        <p class="lead">Два действия студента. Всё остальное — голос и ожидание.</p>
+        <p class="lead">Два действия студента. Всё остальное — голос и ожидание. На телефоне вместо клавиш — кнопки на экране.</p>
 
         <div class="key-list">
             <div class="key-row">
                 <div class="key-badge">ПРОБЕЛ</div>
-                <div class="key-desc">Удерживать во время передачи — имитация PTT. Отключает ввод пока зажат.</div>
+                <div class="key-desc">Удерживать во время передачи — имитация PTT. Отключает ввод пока зажат. На телефоне — удерживать кнопку <strong>HOLD TO TALK</strong>.</div>
             </div>
             <div class="key-row">
                 <div class="key-badge">ENTER</div>
-                <div class="key-desc">Отправить введенное значение.</div>
+                <div class="key-desc">Отправить введенное значение. На телефоне — кнопка <strong>SEND</strong>.</div>
             </div>
         </div>
     </div>
@@ -687,7 +697,7 @@
         <div class="tips-grid">
             <div class="tip-card">
                 <h4>👂 Сначала слушать</h4>
-                <p>Не торопитесь нажимать ПРОБЕЛ. Сначала полностью поймите команду, затем отвечайте.</p>
+                <p>Не торопитесь нажимать PTT. Сначала полностью поймите команду, затем отвечайте.</p>
             </div>
             <div class="tip-card">
                 <h4>🔢 Фонетика цифр</h4>
@@ -713,7 +723,7 @@
 
         <div class="mistakes">
             <div class="mistake"><strong>Пропуск нулей</strong> — "118.7" вместо "118.70" не пройдет валидацию.</div>
-            <div class="mistake"><strong>Ввод во время передачи</strong> — пока ПРОБЕЛ зажат, клавиатура заблокирована.</div>
+            <div class="mistake"><strong>Ввод во время передачи</strong> — пока PTT зажат, поле ввода заблокировано.</div>
     
             <div class="mistake"><strong>Слишком быстрый ответ</strong> — пауза после команды естественна и правильна. Диспетчер ждет.</div>
         </div>
@@ -737,27 +747,27 @@
         <div class="trouble-list">
             <div class="trouble-row">
                 <div class="trouble-q">Нет звука от инструктора</div>
-                <div class="trouble-a">Нажмите ПРОБЕЛ хотя бы один раз — это активирует аудиосистему браузера. Проверьте что браузер разрешил доступ к микрофону. Если не помогло — перезагрузите страницу (Ctrl+Shift+R).</div>
+                <div class="trouble-a">При входе в урок нажмите кнопку <strong>TAP TO ENABLE AUDIO</strong> — без этого браузер не воспроизводит звук. Если кнопка появилась снова (например, после звонка на телефоне) — нажмите её ещё раз. Проверьте что браузер разрешил доступ к микрофону. Если не помогло — перезагрузите страницу.</div>
             </div>
             <div class="trouble-row">
                 <div class="trouble-q">Инструктор не слышит вас</div>
-                <div class="trouble-a">Убедитесь что удерживаете ПРОБЕЛ во время речи. Проверьте индикатор TRANSMITTING в нижней полосе экрана. Проверьте разрешение микрофона в настройках браузера.</div>
+                <div class="trouble-a">Убедитесь что удерживаете PTT (пробел или кнопку HOLD TO TALK) во время речи — кнопка подсвечивается и показывает TRANSMITTING. Вверху экрана должен быть статус <strong>Voice connected</strong>. Проверьте разрешение микрофона в настройках браузера.</div>
             </div>
             <div class="trouble-row">
                 <div class="trouble-q">Поле ввода не реагирует</div>
-                <div class="trouble-a">Дождитесь синего мигания — без него поле неактивно. Убедитесь что не зажат ПРОБЕЛ. Кликните в поле мышью.</div>
+                <div class="trouble-a">Дождитесь синего мигания — без него поле неактивно. Убедитесь что не зажат PTT. Нажмите на поле.</div>
             </div>
             <div class="trouble-row">
                 <div class="trouble-q">Нет зеленой / красной вспышки</div>
-                <div class="trouble-a">Убедитесь что нажали ENTER после ввода. Проверьте формат: точка вместо запятой, ведущие нули для частот, 4 цифры для squawk.</div>
+                <div class="trouble-a">Убедитесь что нажали ENTER или SEND после ввода. Проверьте формат: точка вместо запятой, ведущие нули для частот, 4 цифры для squawk.</div>
             </div>
             <div class="trouble-row">
                 <div class="trouble-q">Страница не подключается</div>
-                <div class="trouble-a">Ссылка действительна 24 часа. Попросите инструктора создать новую комнату. Используйте Chrome или Edge для лучшей совместимости.</div>
+                <div class="trouble-a">Ссылка действительна 24 часа. Попросите инструктора создать новую комнату. Используйте актуальный Chrome или Edge на компьютере, Chrome или Safari на телефоне.</div>
             </div>
             <div class="trouble-row">
                 <div class="trouble-q">Статика слишком громкая</div>
-                <div class="trouble-a">Передвиньте ползунок Radio % влево в нижней части экрана.</div>
+                <div class="trouble-a">Передвиньте ползунок Radio % на экране урока влево.</div>
             </div>
         </div>
     </div>
@@ -779,9 +789,10 @@
     <div class="footer-contacts">
         <a href="mailto:skytalk101@proton.me">skytalk101@proton.me</a>
         <span class="footer-dot">·</span>
-        <a href="https://t.me/SkyTalk_Radio">t.me/SkyTalk_Radio</a>
+        <a href="https://t.me/Thinkee">t.me/Thinkee</a>
     </div>
     <p class="footer-slogan">Летайте безопасно, общайтесь чётко.</p>
+    <p class="footer-credit">Built by <a href="https://softwarean.com" target="_blank" rel="noopener noreferrer">Softwarean™</a></p>
 </footer>
 
 
