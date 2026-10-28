@@ -148,7 +148,7 @@ Run from your local machine (repo root):
 
 ```bash
 # Set your VPS user@host
-export SKYTALK_DEPLOY_HOST=skytalk@your-vps-ip
+export SKYTALK_DEPLOY_HOST=root@your-vps-ip
 ./infra/deploy.sh
 ```
 
@@ -164,10 +164,33 @@ curl https://skytalk.DOMAIN/api/health
 ## Ongoing deploys
 
 ```bash
-./infra/deploy.sh [user@host]
+./infra/deploy.sh [--web-only] [--deps-installed] [user@host]
 ```
 
-The script builds all packages locally, rsyncs server dist and web dist to the VPS, and restarts `skytalk-server`. The PeerJS process is not restarted (it has no deployable code — restart manually only if the `peer` package version changes).
+Run from Git Bash on Windows or any Unix shell. One SSH session, so a password is asked once.
+
+1. Builds the **committed** `HEAD` in a temporary git worktree — uncommitted changes never ship.
+2. Packs server dist, web dist and `infra/remote-deploy.sh` into an archive and pipes it into `ssh`.
+3. On the VPS, `remote-deploy.sh`:
+   - backs up the current web and server builds to `/opt/skytalk/backup-<timestamp>` (keeps the newest 5);
+   - copies the web build over `/var/www/skytalk` (old hashed assets stay, so open tabs keep working);
+   - replaces `/opt/skytalk/server/dist`, restarts `skytalk-server` and checks `/api/health` —
+     if the server doesn't come up, the previous server build is restored automatically;
+   - writes the deployed commit to `/opt/skytalk/DEPLOYED_COMMIT`.
+
+Options:
+
+- `--web-only` — frontend only (landing, flashcards, UI); the server is not restarted, lessons are not interrupted.
+- `--deps-installed` — server npm dependencies changed. `node_modules` are not shipped (pnpm's are
+  platform-specific), so the deploy refuses to continue when `dependencies` in
+  `packages/server/package.json` differ from the last deploy. Install them in
+  `/opt/skytalk/server/node_modules` on the VPS first, then re-run with this flag.
+
+Set `SKYTALK_DEPLOY_URL=https://skytalk.website` to also check health from outside after the deploy.
+
+Rollback by hand: the script prints the exact `cp` commands for the backup it just made.
+
+The PeerJS process is not restarted (it has no deployable code — restart manually only if the `peer` package version changes). nginx and coturn configs are not deployed by this script.
 
 ---
 

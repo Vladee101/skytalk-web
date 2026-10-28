@@ -637,7 +637,8 @@ skytalk-web/
     │   ├── skytalk-server.service
     │   └── skytalk-peerserver.service
     ├── coturn/turnserver.conf
-    └── deploy.sh                   # idempotent rsync + reload script
+    ├── deploy.sh                   # build clean HEAD, ship archive over one SSH session
+    └── remote-deploy.sh            # runs on the VPS: backup, swap, restart, health check, rollback
 ```
 
 ## 10. Deployment flow
@@ -655,14 +656,20 @@ skytalk-web/
 ### Ongoing deploys
 
 ```bash
-# On dev machine
-pnpm -r build
-./infra/deploy.sh
+# On dev machine (Git Bash on Windows works — no rsync needed)
+./infra/deploy.sh [--web-only] [user@host]
 # deploy.sh:
-#   rsync packages/server/dist + node_modules → VPS:/opt/skytalk/server
-#   rsync packages/web/dist                  → VPS:/var/www/skytalk
-#   ssh VPS 'systemctl restart skytalk-server'
+#   build committed HEAD in a temporary git worktree (uncommitted changes never ship)
+#   tar server dist + web dist + infra/remote-deploy.sh, pipe it into one `ssh` session
+# remote-deploy.sh (on the VPS):
+#   backup → /opt/skytalk/backup-<ts> (newest 5 kept)
+#   web dist → /var/www/skytalk, server dist → /opt/skytalk/server/dist
+#   systemctl restart skytalk-server, health check, automatic rollback of the server on failure
 ```
+
+Server `node_modules` are not shipped (pnpm's are platform-specific symlinks). If the server's
+runtime dependencies change, the deploy stops before touching anything; install them on the VPS
+and re-run with `--deps-installed`.
 
 No CI/CD for MVP. Manual deploy from local. Add GitHub Actions later if pace warrants it.
 
